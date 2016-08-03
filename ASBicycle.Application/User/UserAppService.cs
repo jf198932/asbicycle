@@ -152,8 +152,11 @@ namespace ASBicycle.User
             if(userInput.School_id != null)
                 user.School_id = userInput.School_id;
             user.Weixacc = userInput.Weixacc;
-            if(!userInput.Img.IsNullOrEmpty())
+            if (!userInput.Img.IsNullOrEmpty())
+            {
                 user.Img = userInput.Img;
+                user.Certification = 3;//认证通过
+            }
             user.Email = userInput.Email;
 
             await _userRepository.UpdateAsync(user);
