@@ -1,0 +1,21 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>UploadTest</title>
+</head>
+<body>
+<div>
+    <form action='@Url.Action("UploadFile")' method="post" enctype="multipart/form-data">
+        <input type="file" name="file"/>
+        <input type="submit"/>
+    </form>
+</div>
+</body>
+</html>

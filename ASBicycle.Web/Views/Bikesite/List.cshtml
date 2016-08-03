@@ -1,0 +1,116 @@
+﻿
+@{
+    ViewBag.Title = "桩点管理 | NextCMS Admin";
+}
+
+<div class="fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="table-toolbar">
+                <div class="btn-group">
+                    <a href="javascript:void(0);" class="btn blue" onclick="Create('@Url.Action("Create")')"><i class="fa fa-plus"></i> 添加</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table datatable table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th width="80">
+                    序号
+                </th>
+                <th>
+                    名称
+                </th>
+                <th>
+                    校园
+                </th>
+                <th>
+                    类型
+                </th>
+                <th>
+                    GPS
+                </th>
+                <th>
+                    半径
+                </th>
+                <th>
+                    自行车数量
+                </th>
+                <th>
+                    可租用数量
+                </th>
+                <th>
+                    操作
+                </th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+@Html.Partial("Modal")
+
+@section scripts{
+    <script>
+        var oTable = null;
+
+        $(function() {
+            var actionUrl = "@Url.Action("InitDataTable")?rand=" + Math.random();
+            var aoColumns = [
+                { "sName": "sort" },
+                { "sName": "name" },
+                { "sName": "school_name" },
+                {
+                    "sName": "type",
+                    "fnRender": function (oObj) {
+                        var render;
+                        var t = oObj.aData[3];
+                        if (t === "1") {
+                            render = '普通';
+                        } else if (t === "2") {
+                            render = '防盗';
+                        } else {
+                            render = '租车';
+                        }
+
+                        return render;
+                    }
+                },
+                { "sName": "gps_point" },
+                { "sName": "radius" },
+                { "sName": "bike_count" },
+                { "sName": "available_count" },
+                {
+                    "sName": "action",
+                    "fnRender": function(oObj) {
+                        var editUrl = '@Url.Action("Edit")';
+                        var deleteUrl = '@Url.Action("Delete")';
+                        return TableManaged.btnEdit(editUrl, oObj.aData[oObj.aData.length - 1]) + ' ' + TableManaged.btnDelete(deleteUrl, oObj.aData[oObj.aData.length - 1]);
+                    }
+                }
+            ];
+
+            oTable = TableManaged.init($(".datatable"), actionUrl, aoColumns);
+        });
+
+        //新增
+        function Create(actionUrl) {
+            ShowModal(actionUrl, {}, "新增桩点");
+        }
+
+        //编辑
+        function Edit(actionUrl, id) {
+            var param = { id: id };
+            ShowModal(actionUrl, param, "编辑桩点");
+        }
+
+        //保存
+        function Save() {
+            SaveModal(oTable);
+        }
+    </script>
+}
