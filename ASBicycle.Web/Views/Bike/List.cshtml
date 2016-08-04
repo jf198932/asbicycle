@@ -212,6 +212,13 @@
                     return false;
                 }
             });
+
+            $('#search_form').keypress(function (e) {
+                if (e.which === 13) {
+                    TableManaged.search('@Url.Action("InitDataTable")');
+                    //return false;
+                }
+            });
         });
 
         //新增

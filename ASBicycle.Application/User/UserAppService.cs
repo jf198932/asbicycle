@@ -71,14 +71,10 @@ namespace ASBicycle.User
             {
                 var cacheCheckCode = _cacheManager.GetCache("CheckCode");
                 var checkCode = await cacheCheckCode.GetOrDefaultAsync(checkLoginInput.Phone);
-                if (checkCode == null)
+                if (checkCode == null || checkLoginInput.CheckCode == ((CheckCodeOutput)checkCode).CheckCode)
                 {
                     throw new UserFriendlyException("验证码错误");
 
-                }
-                if (checkLoginInput.CheckCode == ((CheckCodeOutput)checkCode).CheckCode)
-                {
-                    throw new UserFriendlyException("验证码错误");
                 }
             }
             

@@ -61,7 +61,7 @@ namespace ASBicycle.Web.Controllers.School
                     .OrderBy(s => s.Id)
                     .Skip(param.iDisplayStart)
                     .Take(param.iDisplayLength);
-            var total = _bikeRepository.Count();
+            var total = temp.Count();
             var filterResult = query.Select(t => new BikeModel
             {
                 Id = t.Id,
