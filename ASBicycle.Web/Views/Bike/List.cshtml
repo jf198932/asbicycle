@@ -1,10 +1,10 @@
-﻿@using System.Configuration
+﻿@model ASBicycle.Web.Models.School.BikeModel
 
 @{
     ViewBag.Title = "车辆管理 | NextCMS Admin";
 }
-
-<div class="fluid">
+@Html.Partial("_Search", Model.Search)
+@*<div class="fluid">
     <div class="row">
         <div class="col-md-4">
             <div class="table-toolbar">
@@ -16,50 +16,9 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
 
-<div class="table-responsive">
-    <table class="table datatable table-striped table-bordered table-hover">
-        <thead>
-            <tr>
-                <th width="80">
-                    序号
-                </th>
-                <th>
-                    序列号
-                </th>
-                <th>
-                    名称
-                </th>
-                <th>
-                    类型
-                </th>
-                <th>
-                    状态
-                </th>
-                <th>
-                    桩点名称
-                </th>
-                <th>
-                    会员名称
-                </th>
-                <th>
-                    位置
-                </th>
-                <th>
-                    电量
-                </th>
-                <th>
-                    桩点停靠
-                </th>
-                <th>
-                    操作
-                </th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-</div>
+@Html.Partial("_List")
 
 @Html.Partial("Modal")
 @Html.Partial("_ImprotBike")
@@ -220,7 +179,7 @@
                     uploadDiv.find(".filehidden").val("");
                     uploadDiv.find(".filestate").show().text("");
 
-                    
+
                     var dataform = new FormData();
                     //dataform.append('selectedNode', data.form[0].selectedNode.value);
                     dataform.append('files', data.files[0]);
@@ -282,6 +241,10 @@
         function CloseImportExcelModal() {
             $('#modal-form-importexcel').modal('hide');
             TableManaged.reset($("#modal-content-uploadexcel"));
+        }
+
+        function DownTemplate() {
+            window.location.href = '@Url.Action("TemplateBike", "Bike")';
         }
     </script>
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using Abp.Domain.Uow;
@@ -40,19 +41,23 @@ namespace ASBicycle.Web.Controllers.School
             return RedirectToAction("List");
         }
         [AdminLayout]
-        [AdminPermission(PermissionCustomMode.Enforce)]
+        //[AdminPermission(PermissionCustomMode.Enforce)]
         public ActionResult List()
         {
-            return View();
+            BikeModel model = new BikeModel();
+            return View(model);
         }
 
         [DontWrapResult, UnitOfWork]
         public virtual ActionResult InitDataTable(DataTableParameter param)
         {
-
-            var query =
-                _bikeRepository.GetAll()
-                    .Where(b=>b.Ble_type == 1)
+            var expr = BuildSearchCriteria();
+            var temp = _bikeRepository.GetAll();
+            if (expr != null)
+            {
+                temp = temp.Where(expr);
+            }
+            var query = temp
                     .OrderBy(s => s.Id)
                     .Skip(param.iDisplayStart)
                     .Take(param.iDisplayLength);
@@ -330,6 +335,47 @@ namespace ASBicycle.Web.Controllers.School
             }
             return true;
         }
+
+        #region 构建查询表达式
+        /// <summary>
+        /// 构建查询表达式
+        /// </summary>
+        /// <returns></returns>
+        private Expression<Func<Entities.Bike, Boolean>> BuildSearchCriteria()
+        {
+            DynamicLambda<Entities.Bike> bulider = new DynamicLambda<Entities.Bike>();
+            Expression<Func<Entities.Bike, Boolean>> expr = null;
+            if (!string.IsNullOrEmpty(Request["Ble_serial"]))
+            {
+                var data = Request["Ble_serial"].Trim();
+                Expression<Func<Entities.Bike, Boolean>> tmp = t => t.Ble_serial.Contains(data);
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["Ble_name"]))
+            {
+                var data = Request["Ble_name"].Trim();
+                Expression<Func<Entities.Bike, Boolean>> tmp = t => t.Ble_name.Contains(data);
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["Vlock_status"]) && Request["Vlock_status"].Trim() != "-1")
+            {
+                var data = Convert.ToInt32(Request["Vlock_status"].Trim());
+                Expression<Func<Entities.Bike, Boolean>> tmp = t => t.Vlock_status == data;
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["Ble_type"]) && Request["Ble_type"].Trim() != "0")
+            {
+                var data = Convert.ToInt32(Request["Ble_type"].Trim());
+                Expression<Func<Entities.Bike, Boolean>> tmp = t => t.Ble_type >= data;
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            //Expression<Func<Entities.Bike, Boolean>> tmpSolid = t => t.IsDeleted == false;
+            //expr = bulider.BuildQueryAnd(expr, tmpSolid);
+
+            return expr;
+        }
+
+        #endregion
         #endregion
     }
 }

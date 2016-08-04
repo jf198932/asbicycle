@@ -2371,6 +2371,7 @@
     <Compile Include="Controllers\School\BikesiteController.cs" />
     <Compile Include="Controllers\School\SchoolController.cs" />
     <Compile Include="Controllers\School\UserController.cs" />
+    <Compile Include="Extension\DynamicLambda.cs" />
     <Compile Include="Extension\Fliter\AdminLayoutAttribute.cs" />
     <Compile Include="Extension\Fliter\AdminPermissionAttribute.cs" />
     <Compile Include="Extension\Fliter\SetButton.cs" />
@@ -2459,6 +2460,8 @@
     <Content Include="Views\Role\GetPermission.cshtml" />
     <Content Include="Views\Role\_FormModalPermission.cshtml" />
     <Content Include="Views\Bike\_ImprotBike.cshtml" />
+    <Content Include="Views\Bike\_Search.cshtml" />
+    <Content Include="Views\Bike\_List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

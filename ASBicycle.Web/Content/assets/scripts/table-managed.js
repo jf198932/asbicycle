@@ -49,13 +49,19 @@ var TableManaged = {
     },
 
     search: function (searchUrl) {
-        var filterdata = $(".search-form").serialize();
+        var filterdata = $("form").serialize();
         var actionUrl = searchUrl + "?rand=" + Math.random() + "&" + filterdata;
         this.oTable.fnReloadAjax(actionUrl);
     },
     //清除表单数据
     reset:function(obj){
         obj.find(':input').not(':button, :submit, :reset').val('').removeAttr('checked').removeAttr('selected');
+        var slist = obj.find('select');
+        for (var i = 0; i < slist.length; i++) {
+            if (slist[i].options.length > 0) {
+                slist[i].selectedIndex = 0;
+            }
+        }
     },
     //编辑
     btnEdit: function (actionUrl, id) {
