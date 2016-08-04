@@ -37,6 +37,10 @@ namespace ASBicycle.Entities.Authen
         public string ModifyBy { get; set; }
         public DateTime? ModifyTime { get; set; }
 
+        public int? School_id { get; set; }
+        [ForeignKey("School_id")]
+        public virtual School School { get; set; }
+
         [ForeignKey("ParentId")]
         public virtual Module ParentModule { get; set; }
         public virtual ICollection<Module> ChildModule { get; set; }

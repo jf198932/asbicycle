@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Web.Mvc;
 using System.Web.Security;
 using Abp.Domain.Repositories;
@@ -68,9 +69,13 @@ namespace ASBicycle.Web.Controllers
             {
                 var now = DateTime.Now.ToLocalTime();
                 var despwd = DESProvider.EncryptString(model.Password);
+                var tenant = ConfigurationManager.AppSettings["TenantId"];
                 var user =
                     _backUserRepository.GetAll()
-                        .FirstOrDefault(u => u.LoginName.ToLower() == model.UserNameOrEmail.ToLower() && u.LoginPwd == despwd);
+                        .FirstOrDefault(
+                            u =>
+                                u.LoginName.ToLower() == model.UserNameOrEmail.ToLower() && u.LoginPwd == despwd &&
+                                u.School.TenancyName == tenant);
                 if (user == null)
                     return Json(null);
 
