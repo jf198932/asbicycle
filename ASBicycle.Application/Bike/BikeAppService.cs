@@ -28,7 +28,7 @@ namespace ASBicycle.Bike
             if(model == null)
                 throw new UserFriendlyException("没有该车辆");
             var result = model.MapTo<BikeOutput>();
-            result.School_name = model.User.School == null ? "":model.User.School.Name;
+            //result.School_name = model.User.School == null ? "":model.User.School.Name;
             result.Bikesite_name = model.Bikesite == null ? "":model.Bikesite.Name;
 
             return result;

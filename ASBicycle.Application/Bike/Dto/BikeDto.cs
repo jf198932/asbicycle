@@ -20,5 +20,7 @@ namespace ASBicycle.Bike.Dto
         public string Bike_img { get; set; }
 
         public string Bikesite_name { get; set; }
+        //public int School_id { get; set; }
+        //public string School_name { get; set; }
     }
 }

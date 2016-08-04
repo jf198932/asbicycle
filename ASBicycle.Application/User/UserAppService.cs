@@ -289,6 +289,7 @@ namespace ASBicycle.User
             bike.User_id = null;
             bike.Vlock_status = null;
             bike.Bikesite_id = null;
+            bike.Bike_img = null;
             bike.Insite_status = null;
             bike.Position = null;
 
