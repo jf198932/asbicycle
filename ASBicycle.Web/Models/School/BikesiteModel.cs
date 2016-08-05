@@ -13,6 +13,8 @@ namespace ASBicycle.Web.Models.School
             Updated_at = DateTime.Now;
             SchoolList = new List<SelectListItem>();
             TypeList = new List<SelectListItem>();
+
+            Search = new BikesiteSearchModel();
         }
         public int Id { get; set; }
         public DateTime? Created_at { get; set; }
@@ -32,7 +34,30 @@ namespace ASBicycle.Web.Models.School
         public int? School_id { get; set; }
         public string School_name { get; set; }
 
+        public BikesiteSearchModel Search { get; set; }
+
         public List<SelectListItem> SchoolList { get; set; }
+        public List<SelectListItem> TypeList { get; set; }
+    }
+
+    public class BikesiteSearchModel
+    {
+        public BikesiteSearchModel()
+        {
+            TypeList = new List<SelectListItem>{
+                new SelectListItem { Text = "--- 请选择 ---", Value = "0", Selected = true},
+                new SelectListItem {Text = "普通", Value = "1"},
+                new SelectListItem {Text = "防盗", Value = "2"},
+                new SelectListItem {Text = "租车", Value = "3"}
+            };
+        }
+
+        [Display(Name = "类型")]
+        public int? Type { get; set; }
+
+        [Display(Name = "名称")]
+        public string Name { get; set; }
+
         public List<SelectListItem> TypeList { get; set; }
     }
 }

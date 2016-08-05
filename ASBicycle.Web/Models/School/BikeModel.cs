@@ -69,7 +69,7 @@ namespace ASBicycle.Web.Models.School
                 new SelectListItem {Text = "报警", Value = "5"}
             };
             TypeList = new List<SelectListItem>() {
-                new SelectListItem { Text = "--- 请选择 ---", Value = "0"},
+                new SelectListItem { Text = "--- 请选择 ---", Value = "0", Selected = true},
                 new SelectListItem {Text = "追踪器", Value = "1"},
                 new SelectListItem {Text = "智能锁", Value = "2"}
             };

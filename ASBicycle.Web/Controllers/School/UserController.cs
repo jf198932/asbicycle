@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using Abp.Domain.Uow;
@@ -34,16 +35,17 @@ namespace ASBicycle.Web.Controllers.School
         [AdminPermission(PermissionCustomMode.Enforce)]
         public ActionResult ListU()
         {
-            return View("List");
+            var model = new UserModel();
+            return View("List", model);
         }
 
         [DontWrapResult, UnitOfWork]
         public virtual ActionResult InitDataTable(DataTableParameter param)
         {
-
-            var query =
-                _userRepository.GetAll().OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
-            var total = _userRepository.Count();
+            var expr = BuildSearchCriteria();
+            var temp = _userRepository.GetAll().Where(expr);
+            var query = temp.OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
+            var total = temp.Count();
             var filterResult = query.Select(t => new UserModel
             {
                 Id = t.Id,
@@ -70,8 +72,6 @@ namespace ASBicycle.Web.Controllers.School
                                 t.Name,
                                 t.Nickname,
                                 t.School_name,
-                                t.Credits.ToString(),
-                                t.Balance.ToString(),
                                 t.Certification.ToString(),
                                 t.Id.ToString()
                             };
@@ -161,7 +161,45 @@ namespace ASBicycle.Web.Controllers.School
                 new SelectListItem {Text = "认证失败", Value = "4"}
             });
         }
+        #region 构建查询表达式
+        /// <summary>
+        /// 构建查询表达式
+        /// </summary>
+        /// <returns></returns>
+        private Expression<Func<Entities.User, Boolean>> BuildSearchCriteria()
+        {
+            DynamicLambda<Entities.User> bulider = new DynamicLambda<Entities.User>();
+            Expression<Func<Entities.User, Boolean>> expr = null;
+            if (!string.IsNullOrEmpty(Request["Name"]))
+            {
+                var data = Request["Name"].Trim();
+                Expression<Func<Entities.User, Boolean>> tmp = t => t.Name.Contains(data);
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["Phone"]))
+            {
+                var data = Request["Phone"].Trim();
+                Expression<Func<Entities.User, Boolean>> tmp = t => t.Phone.Contains(data);
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["Nickname"]))
+            {
+                var data = Request["Nickname"].Trim();
+                Expression<Func<Entities.User, Boolean>> tmp = t => t.Nickname.Contains(data);
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["Certification"]) && Request["Certification"].Trim() != "0")
+            {
+                var data = Convert.ToInt32(Request["Certification"].Trim());
+                Expression<Func<Entities.User, Boolean>> tmp = t => t.Certification == data;
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            Expression<Func<Entities.User, Boolean>> tmpSolid = t => t.School_id == SchoolId;
+            expr = bulider.BuildQueryAnd(expr, tmpSolid);
 
+            return expr;
+        }
+        #endregion
         #endregion
     }
 }

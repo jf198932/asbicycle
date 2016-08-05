@@ -29,19 +29,19 @@ namespace ASBicycle.Web.Controllers
         private readonly IRepository<Module> _moduleUserRepository;
         private readonly IRepository<UserRole> _userRoleRepository;
         private readonly IRepository<RoleModulePermission> _roleModulePermissionRepository;
-        private readonly IBikeAppService _bikeAppService;
+        private readonly IRepository<Entities.School> _schoolAppService;
 
         public HomeController(IRepository<BackUser> backUserRepository, 
             IRepository<Module> moduleUserRepository, 
             IRepository<UserRole> userRoleRepository, 
             IRepository<RoleModulePermission> roleModulePermissionRepository,
-            IBikeAppService bikeAppService)
+            IRepository<Entities.School> schoolAppService)
         {
             _backUserRepository = backUserRepository;
             _moduleUserRepository = moduleUserRepository;
             _userRoleRepository = userRoleRepository;
             _roleModulePermissionRepository = roleModulePermissionRepository;
-            _bikeAppService = bikeAppService;
+            _schoolAppService = schoolAppService;
         }
         //[AdminLayout]
         public ActionResult Index()
@@ -70,12 +70,22 @@ namespace ASBicycle.Web.Controllers
                 var now = DateTime.Now.ToLocalTime();
                 var despwd = DESProvider.EncryptString(model.Password);
                 var tenant = ConfigurationManager.AppSettings["TenantId"];
+                var schoolid = 0;
+                
+                var school = _schoolAppService.GetAll().FirstOrDefault(t => t.TenancyName == tenant);
+
+                if (school != null)
+                {
+                    schoolid = school.Id;
+                }
+                
                 var user =
                     _backUserRepository.GetAll()
                         .FirstOrDefault(
                             u =>
-                                u.LoginName.ToLower() == model.UserNameOrEmail.ToLower() && u.LoginPwd == despwd &&
-                                u.School.TenancyName == tenant);
+                                u.LoginName.ToLower() == model.UserNameOrEmail.ToLower() 
+                                && u.LoginPwd == despwd 
+                                && u.School_id == schoolid);
                 if (user == null)
                     return Json(null);
 
@@ -102,7 +112,7 @@ namespace ASBicycle.Web.Controllers
                                 Icon = t.Permission == null ? "" : t.Permission.Icon
                             }));
 
-                var moduleList = _moduleUserRepository.GetAll().ToList();
+                var moduleList = _moduleUserRepository.GetAll().Where(t=> t.School_id == schoolid).ToList();
                 //菜单列表
                 SortMenuForTree(null, moduleIdList, moduleList, currentUser.Menus);
 

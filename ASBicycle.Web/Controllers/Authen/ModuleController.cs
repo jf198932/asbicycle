@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using Abp.Domain.Repositories;
@@ -37,16 +38,17 @@ namespace ASBicycle.Web.Controllers.Authen
         //[AdminPermission(PermissionCustomMode.Enforce)]
         public ActionResult List()
         {
-            return View();
+            var model = new ModuleModel();
+            return View(model);
         }
 
         [DontWrapResult, UnitOfWork]
         public virtual ActionResult InitDataTable(DataTableParameter param)
         {
-
-            var query =
-                _moduleRepository.GetAll().OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
-            var total = _moduleRepository.Count();
+            var expr = BuildSearchCriteria();
+            var temp = _moduleRepository.GetAll().Where(expr);
+            var query = temp.OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
+            var total = temp.Count();
             var filterResult = query.Select(t => new ModuleModel
             {
                 Id = t.Id,
@@ -267,7 +269,46 @@ namespace ASBicycle.Web.Controllers.Authen
             //    _schoolRepository.GetAll().Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() }));
 
         }
+        #region 构建查询表达式
+        /// <summary>
+        /// 构建查询表达式
+        /// </summary>
+        /// <returns></returns>
+        private Expression<Func<Module, Boolean>> BuildSearchCriteria()
+        {
+            DynamicLambda<Module> bulider = new DynamicLambda<Module>();
+            Expression<Func<Module, Boolean>> expr = null;
+            if (!string.IsNullOrEmpty(Request["Name"]))
+            {
+                var data = Request["Name"].Trim();
+                Expression<Func<Module, Boolean>> tmp = t => t.Name.Contains(data);
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["Code"]))
+            {
+                var data = Request["Code"].Trim();
+                Expression<Func<Module, Boolean>> tmp = t => t.Code.Contains(data);
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["IsMenu"]) && Request["IsMenu"].Trim() != "-1")
+            {
+                var data = Convert.ToInt32(Request["IsMenu"].Trim()) == 1;
+                Expression<Func<Module, Boolean>> tmp = t => t.IsMenu == data;
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["Enabled"]) && Request["Enabled"].Trim() != "-1")
+            {
+                var data = Convert.ToInt32(Request["Enabled"].Trim()) == 1;
+                Expression<Func<Module, Boolean>> tmp = t => t.Enabled == data;
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            Expression<Func<Module, Boolean>> tmpSolid = t => t.School_id == SchoolId;
+            expr = bulider.BuildQueryAnd(expr, tmpSolid);
 
+            return expr;
+        }
+
+        #endregion
         #endregion
     }
 }

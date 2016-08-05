@@ -23,6 +23,7 @@ namespace ASBicycle.Web.Models.Common
         public int LoginCount { get; set; }
         public DateTime? RegisterTime { get; set; }
         public DateTime? LastLoginTime { get; set; }
+        public int? School_id { get; set; }
 
         public List<SideBarMenuModel> Menus { get; set; }
 

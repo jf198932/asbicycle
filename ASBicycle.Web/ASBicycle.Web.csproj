@@ -2462,6 +2462,12 @@
     <Content Include="Views\Bike\_ImprotBike.cshtml" />
     <Content Include="Views\Bike\_Search.cshtml" />
     <Content Include="Views\Bike\_List.cshtml" />
+    <Content Include="Views\BackUser\_Search.cshtml" />
+    <Content Include="Views\BackUser\_List.cshtml" />
+    <Content Include="Views\Bikesite\_Search.cshtml" />
+    <Content Include="Views\Bikesite\_List.cshtml" />
+    <Content Include="Views\User\_List.cshtml" />
+    <Content Include="Views\User\_Search.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2505,7 +2511,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>6234</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

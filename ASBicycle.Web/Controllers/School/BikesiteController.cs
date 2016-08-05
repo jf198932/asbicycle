@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web.Mvc;
 using Abp.Domain.Uow;
 using Abp.Web.Models;
@@ -35,19 +36,20 @@ namespace ASBicycle.Web.Controllers.School
         [AdminPermission(PermissionCustomMode.Enforce)]
         public ActionResult List()
         {
-            return View();
+            var model = new BikesiteModel();
+            return View(model);
         }
 
         [DontWrapResult, UnitOfWork]
         public virtual ActionResult InitDataTable(DataTableParameter param)
         {
-
-            var query =
-                _bikesiteRepository.GetAll()
+            var expr = BuildSearchCriteria();
+            var temp = _bikesiteRepository.GetAll().Where(expr);
+            var query = temp
                     .OrderBy(s => s.Id)
                     .Skip(param.iDisplayStart)
                     .Take(param.iDisplayLength);
-            var total = _bikesiteRepository.Count();
+            var total = temp.Count();
             var filterResult = query.Select(t => new BikesiteModel
             {
                 Id = t.Id,
@@ -72,8 +74,6 @@ namespace ASBicycle.Web.Controllers.School
                                 t.Type.ToString(),
                                 t.Gps_point,
                                 t.Radius.ToString(),
-                                t.Bike_count.ToString(),
-                                t.Available_count.ToString(),
                                 t.Id.ToString()
                             };
 
@@ -165,6 +165,33 @@ namespace ASBicycle.Web.Controllers.School
             });
         }
 
+        #region 构建查询表达式
+        /// <summary>
+        /// 构建查询表达式
+        /// </summary>
+        /// <returns></returns>
+        private Expression<Func<Entities.Bikesite, Boolean>> BuildSearchCriteria()
+        {
+            DynamicLambda<Entities.Bikesite> bulider = new DynamicLambda<Entities.Bikesite>();
+            Expression<Func<Entities.Bikesite, Boolean>> expr = null;
+            if (!string.IsNullOrEmpty(Request["Name"]))
+            {
+                var data = Request["Name"].Trim();
+                Expression<Func<Entities.Bikesite, Boolean>> tmp = t => t.Name.Contains(data);
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["Type"]) && Request["Type"].Trim() != "0")
+            {
+                var data = Convert.ToInt32(Request["Type"].Trim());
+                Expression<Func<Entities.Bikesite, Boolean>> tmp = t => t.Type == data;
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            Expression<Func<Entities.Bikesite, Boolean>> tmpSolid = t => t.School_id == SchoolId;
+            expr = bulider.BuildQueryAnd(expr, tmpSolid);
+
+            return expr;
+        }
+        #endregion
         #endregion
     }
 }

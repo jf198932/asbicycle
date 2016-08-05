@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace ASBicycle.Web.Models.Authen
@@ -10,6 +11,8 @@ namespace ASBicycle.Web.Models.Authen
             Enabled = true;
             IsMenu = true;
             ParentModuleItems = new List<SelectListItem>();
+
+            Search = new ModuleSearchModel();
         }
 
         public int Id { get; set; }
@@ -27,6 +30,37 @@ namespace ASBicycle.Web.Models.Authen
         public bool IsMenu { get; set; }
         public bool Enabled { get; set; }
 
+        public ModuleSearchModel Search { get; set; }
+
         public List<SelectListItem> ParentModuleItems { get; set; }
+    }
+
+    public class ModuleSearchModel
+    {
+        public ModuleSearchModel()
+        {
+            EnabledList = new List<SelectListItem> {
+                new SelectListItem { Text = "--- 请选择 ---", Value = "-1", Selected = true },
+                new SelectListItem {Text = "禁用", Value = "0"},
+                new SelectListItem {Text = "启用", Value = "1"}
+            };
+
+            IsMenuList = new List<SelectListItem> {
+                new SelectListItem { Text = "--- 请选择 ---", Value = "-1", Selected = true },
+                new SelectListItem {Text = "否", Value = "0"},
+                new SelectListItem {Text = "是", Value = "1"}
+            };
+        }
+        [Display(Name = "菜单(模块)名称")]
+        public string Name { get; set; }
+        [Display(Name = "编码")]
+        public string Code { get; set; }
+        [Display(Name = "菜单")]
+        public bool IsMenu { get; set; }
+        [Display(Name = "启用")]
+        public bool Enabled { get; set; }
+
+        public List<SelectListItem> IsMenuList { get; set; }
+        public List<SelectListItem> EnabledList { get; set; }
     }
 }

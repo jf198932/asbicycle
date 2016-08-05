@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "车辆管理 | NextCMS Admin";
 }
-@Html.Partial("_Search", Model.Search)
+
 @*<div class="fluid">
     <div class="row">
         <div class="col-md-4">
@@ -17,7 +17,7 @@
         </div>
     </div>
 </div>*@
-
+@Html.Partial("_Search", Model.Search)
 @Html.Partial("_List")
 
 @Html.Partial("Modal")

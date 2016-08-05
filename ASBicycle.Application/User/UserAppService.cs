@@ -98,6 +98,7 @@ namespace ASBicycle.User
                 {
                     Phone = checkLoginInput.Phone,
                     Certification = 1,//未申请
+                    School_id = 1,//todo 默认厦大
                     Remember_token = DateTime.Now.ToString("yyyyMMddhhmmssffff") + checkLoginInput.Phone,
                     Created_at = DateTime.Now,
                     Updated_at = DateTime.Now

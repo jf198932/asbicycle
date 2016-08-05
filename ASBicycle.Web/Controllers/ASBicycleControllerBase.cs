@@ -28,10 +28,12 @@ namespace ASBicycle.Web.Controllers
         //    _roleModulePermissionRepository = roleModulePermissionRepository;
         //    SetButton();
         //}
+        protected int? SchoolId = null;
 
         protected ASBicycleControllerBase()
         {
             LocalizationSourceName = ASBicycleConsts.LocalizationSourceName;
+            SchoolId = ViewBag.SchoolId;
             //SetButton();
         }
 

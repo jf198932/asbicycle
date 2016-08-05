@@ -60,6 +60,7 @@ namespace ASBicycle.Web.Extension.Fliter
                 //var ticket = FormsAuthentication.Decrypt(cookie.Value);
                 //var currentUser = JsonSerializationHelper.DeserializeWithType<BackLoginModel>(ticket.UserData);
                 ((ViewResult)filterContext.Result).ViewBag.LoginName = session.LoginName;
+                ((ViewResult)filterContext.Result).ViewBag.SchoolId = session.School_id;
                 var controller = filterContext.RouteData.Values["controller"].ToString().ToLower();
                 var action = filterContext.RouteData.Values["action"].ToString().ToLower();
 

@@ -1,56 +1,10 @@
-﻿
+﻿@model ASBicycle.Web.Models.School.UserModel
 @{
     ViewBag.Title = "会员管理 | NextCMS Admin";
 }
 
-<div class="fluid">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="table-toolbar">
-                <div class="btn-group">
-                    <a href="javascript:void(0);" class="btn blue" onclick="Create('@Url.Action("Create")')"><i class="fa fa-plus"></i> 添加</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="table-responsive">
-    <table class="table datatable table-striped table-bordered table-hover">
-        <thead>
-            <tr>
-                <th width="80">
-                    序号
-                </th>
-                <th>
-                    手机号
-                </th>
-                <th>
-                    用户名
-                </th>
-                <th>
-                    昵称
-                </th>
-                <th>
-                    学校
-                </th>
-                <th>
-                    积分
-                </th>
-                <th>
-                    余额
-                </th>
-                <th>
-                    认证状态
-                </th>
-                <th>
-                    操作
-                </th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-</div>
+@Html.Partial("_Search", Model.Search)
+@Html.Partial("_List")
 
 @Html.Partial("Modal")
 
@@ -65,7 +19,7 @@
                 { "sName": "phone" },
                 { "sName": "name" },
                 { "sName": "nickname" },
-                { "sName": "school_name" }, 
+                { "sName": "school_name" },
                 { "sName": "Credits" },
                 { "sName": "Balance" },
                 {
@@ -97,6 +51,13 @@
             ];
 
             oTable = TableManaged.init($(".datatable"), actionUrl, aoColumns);
+
+            $('#search_form').keypress(function (e) {
+                if (e.which === 13) {
+                    TableManaged.search('@Url.Action("InitDataTable")');
+                    //return false;
+                }
+            });
         });
 
         //新增

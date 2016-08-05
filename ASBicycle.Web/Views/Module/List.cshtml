@@ -1,55 +1,13 @@
-﻿@{
+﻿@model ASBicycle.Web.Models.Authen.ModuleModel
+@{
     ViewBag.Title = "管理 | NextCMS Admin";
 }
 
-<div class="fluid">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="table-toolbar">
-                <div class="btn-group">
-                    <a href="javascript:void(0);" class="btn blue" onclick="Create('@Url.Action("Create")')"><i class="fa fa-plus"></i> 添加</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="table-responsive">
-    <table class="table datatable table-striped table-bordered table-hover">
-        <thead>
-            <tr>
-                <th width="80">
-                    序号
-                </th>
-                <th>
-                    模块(菜单)名称
-                </th>
-                <th>
-                    模块编码
-                </th>
-                <th>
-                    上级模块
-                </th>
-                <th>
-                    链接地址
-                </th>
-                <th>
-                    排序
-                </th>
-                <th>
-                    菜单
-                </th>
-                <th>
-                    启用
-                </th>
-                <th>
-                    操作
-                </th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-</div>
+@Html.Partial("_Search", Model.Search)
+@Html.Partial("_List")
+
+
 
 @Html.Partial("Modal")
 
@@ -123,6 +81,13 @@
             ];
 
             oTable = TableManaged.init($(".datatable"), actionUrl, aoColumns);
+
+            $('#search_form').keypress(function (e) {
+                if (e.which === 13) {
+                    TableManaged.search('@Url.Action("InitDataTable")');
+                    //return false;
+                }
+            });
         });
 
         //新增

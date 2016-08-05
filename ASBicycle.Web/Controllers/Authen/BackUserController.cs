@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web.Mvc;
 using System.Web.Security;
 using Abp.Domain.Repositories;
@@ -37,16 +38,19 @@ namespace ASBicycle.Web.Controllers.Authen
         //[AdminPermission(PermissionCustomMode.Enforce)]
         public ActionResult List()
         {
-            return View();
+            var model = new BackUserModel();
+            return View(model);
         }
 
         [DontWrapResult, UnitOfWork]
         public virtual ActionResult InitDataTable(DataTableParameter param)
         {
+            var expr = BuildSearchCriteria();
+            var temp = _backUserRepository.GetAll().Where(expr);
 
             var query =
-                _backUserRepository.GetAll().OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
-            var total = _backUserRepository.Count();
+                temp.OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
+            var total = temp.Count();
             var filterResult = query.Select(t => new BackUserModel
             {
                 Id = t.Id,
@@ -194,6 +198,40 @@ namespace ASBicycle.Web.Controllers.Authen
 
         }
 
+        #region 构建查询表达式
+        /// <summary>
+        /// 构建查询表达式
+        /// </summary>
+        /// <returns></returns>
+        private Expression<Func<BackUser, Boolean>> BuildSearchCriteria()
+        {
+            DynamicLambda<BackUser> bulider = new DynamicLambda<BackUser>();
+            Expression<Func<BackUser, Boolean>> expr = null;
+            if (!string.IsNullOrEmpty(Request["LoginName"]))
+            {
+                var data = Request["LoginName"].Trim();
+                Expression<Func<BackUser, Boolean>> tmp = t => t.LoginName.Contains(data);
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["FullName"]))
+            {
+                var data = Request["FullName"].Trim();
+                Expression<Func<BackUser, Boolean>> tmp = t => t.FullName.Contains(data);
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["Enabled"]) && Request["Enabled"].Trim() != "-1")
+            {
+                var data = Convert.ToInt32(Request["Enabled"].Trim()) == 1;
+                Expression<Func<BackUser, Boolean>> tmp = t => t.Enabled == data;
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            Expression<Func<BackUser, Boolean>> tmpSolid = t => t.School_id == SchoolId;
+            expr = bulider.BuildQueryAnd(expr, tmpSolid);
+
+            return expr;
+        }
+
+        #endregion
         #endregion
     }
 }
