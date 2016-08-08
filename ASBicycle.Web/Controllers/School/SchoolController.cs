@@ -8,6 +8,7 @@ using Abp.Web.Models;
 using ASBicycle.School;
 using ASBicycle.User.Dto;
 using ASBicycle.Web.Extension.Fliter;
+using ASBicycle.Web.Helper;
 using ASBicycle.Web.Models.Common;
 using ASBicycle.Web.Models.School;
 using AutoMapper;
@@ -27,77 +28,16 @@ namespace ASBicycle.Web.Controllers.School
         //[AdminLayout]
         public ActionResult Index()
         {
-            return RedirectToAction("List");
+            return RedirectToAction("Info");
         }
-        [AdminLayout]
-        [AdminPermission(PermissionCustomMode.Enforce)]
-        public ActionResult List()
+        [AdminLayout, UnitOfWork]
+        //[AdminPermission(PermissionCustomMode.Enforce)]
+        public ActionResult Info()
         {
-            return View();
-        }
-
-        [DontWrapResult, UnitOfWork]
-        public virtual ActionResult InitDataTable(DataTableParameter param)
-        {
-
-            var query =
-                _schoolRepository.GetAll().OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
-            var total = _schoolRepository.Count();
-            var filterResult = query.Select(t => new SchoolModel
-            {
-                Id = t.Id,
-                Name = t.Name,
-                Areacode = t.Areacode,
-                Gps_point = t.Gps_point,
-                Site_count = t.Site_count,
-                Bike_count = t.Bike_count,
-                Time_charge = t.Time_charge
-            }).ToList();
-            int sortId = param.iDisplayStart + 1;
-            var result = from t in filterResult
-                            select new[]
-                                {
-                                sortId++.ToString(),
-                                t.Name,
-                                t.Areacode,
-                                t.Gps_point,
-                                t.Site_count.ToString(),
-                                t.Bike_count.ToString(),
-                                t.Time_charge.ToString(),
-                                t.Id.ToString()
-                            };
-
-            return DataTableJsonResult(param.sEcho, param.iDisplayStart, total, total, result);
-        }
-
-        public ActionResult Create()
-        {
-            var model = new SchoolModel();
-            return PartialView(model);
-        }
-
-        [HttpPost, UnitOfWork, DontWrapResult]
-        public virtual ActionResult Create(SchoolModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                Mapper.CreateMap<SchoolModel, Entities.School> ();
-                var school = Mapper.Map<Entities.School>(model);
-                school = _schoolRepository.Insert(school);
-
-                //SuccessNotification("添加成功");
-                return Json(model);
-            }
-            return Json(null);
-        }
-        [UnitOfWork]
-        public virtual ActionResult Edit(int id)
-        {
+            var id = CommonHelper.GetSchoolId();
             Mapper.CreateMap<Entities.School, SchoolModel>();
-            var model = Mapper.Map<SchoolModel>(_schoolRepository.Get(id));
-            //var model = role.ToModel();
-
-            return PartialView(model);
+            var model = Mapper.Map<SchoolModel>(_schoolRepository.FirstOrDefault(t=>t.Id == id));
+            return View(model);
         }
 
         [HttpPost, UnitOfWork, DontWrapResult]
@@ -124,16 +64,6 @@ namespace ASBicycle.Web.Controllers.School
                 return Json(model);
             }
             return Json(null);
-        }
-
-        [HttpPost, UnitOfWork]
-        public virtual ActionResult Delete(int id)
-        {
-            _schoolRepository.Delete(s => s.Id == id);
-            //var role = _roleService.GetRoleById(id);
-            //_roleService.DeleteRole(role);
-
-            return Json(new { success = true });
         }
     }
 }

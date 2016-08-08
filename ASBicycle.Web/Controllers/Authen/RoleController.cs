@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web.Mvc;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
@@ -8,6 +9,7 @@ using Abp.UI;
 using Abp.Web.Models;
 using ASBicycle.Entities.Authen;
 using ASBicycle.Web.Extension.Fliter;
+using ASBicycle.Web.Helper;
 using ASBicycle.Web.Models.Authen;
 using ASBicycle.Web.Models.Common;
 using AutoMapper;
@@ -42,16 +44,17 @@ namespace ASBicycle.Web.Controllers.Authen
         //[AdminPermission(PermissionCustomMode.Enforce)]
         public ActionResult List()
         {
-            return View();
+            var model = new RoleModel();
+            return View(model);
         }
 
         [DontWrapResult, UnitOfWork]
         public virtual ActionResult InitDataTable(DataTableParameter param)
         {
-
-            var query =
-                _roleRepository.GetAll().OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
-            var total = _roleRepository.Count();
+            var expr = BuildSearchCriteria();
+            var temp = _roleRepository.GetAll().Where(expr);
+            var query = temp.OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
+            var total = temp.Count();
             var filterResult = query.Select(t => new RoleModel
             {
                 Id = t.Id,
@@ -88,8 +91,9 @@ namespace ASBicycle.Web.Controllers.Authen
             if (ModelState.IsValid)
             {
                 Mapper.CreateMap<RoleModel, Role>();
-                var user = Mapper.Map<Role>(model);
-                user = _roleRepository.Insert(user);
+                var role = Mapper.Map<Role>(model);
+                role.School_id = CommonHelper.GetSchoolId();
+                _roleRepository.Insert(role);
 
                 //SuccessNotification("添加成功");
                 return Json(model);
@@ -230,6 +234,7 @@ namespace ASBicycle.Web.Controllers.Authen
                 {
                     ModuleId = item.Id,
                     ParentId = item.ParentId,
+                    LinkUrl = item.LinkUrl ?? "",
                     ModuleName = item.Name,
                     Code = item.Code
                 };
@@ -326,5 +331,35 @@ namespace ASBicycle.Web.Controllers.Authen
             CurrentUnitOfWork.SaveChanges();
             return Json(newModulePermissionList);
         }
+
+        #region 构建查询表达式
+        /// <summary>
+        /// 构建查询表达式
+        /// </summary>
+        /// <returns></returns>
+        private Expression<Func<Role, Boolean>> BuildSearchCriteria()
+        {
+            DynamicLambda<Role> bulider = new DynamicLambda<Role>();
+            Expression<Func<Role, Boolean>> expr = null;
+            if (!string.IsNullOrEmpty(Request["Name"]))
+            {
+                var data = Request["Name"].Trim();
+                Expression<Func<Role, Boolean>> tmp = t => t.Name.Contains(data);
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["Enabled"]) && Request["Enabled"].Trim() != "-1")
+            {
+                var data = Convert.ToInt32(Request["Enabled"].Trim()) == 1;
+                Expression<Func<Role, Boolean>> tmp = t => t.Enabled == data;
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            var id = CommonHelper.GetSchoolId();
+            Expression<Func<Role, Boolean>> tmpSolid = t => t.School_id == id;
+            expr = bulider.BuildQueryAnd(expr, tmpSolid);
+
+            return expr;
+        }
+
+        #endregion
     }
 }

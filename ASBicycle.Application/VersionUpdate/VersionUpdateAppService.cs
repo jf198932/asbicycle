@@ -17,7 +17,7 @@ namespace ASBicycle.VersionUpdate
             {
                 versionCode = 1,
                 versionName = "0.0.1",
-                mustUpdate = 1,
+                upgrade = 1,
                 versionUrl = ""
             };
             return aa;

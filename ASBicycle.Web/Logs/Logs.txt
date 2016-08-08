@@ -18945,3 +18945,836 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
    在 System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
    在 System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
    在 System.Web.Http.Controllers.ExceptionFilterResult.<ExecuteAsync>d__0.MoveNext()
+DEBUG 2016-08-08 11:31:18,599 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 11:31:19,694 [1    ] Abp.Modules.AbpModuleManager             - Found 14 ABP modules in total.
+DEBUG 2016-08-08 11:31:19,697 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:31:19,698 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:31:19,698 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:31:19,699 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:31:19,699 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:31:19,699 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:31:19,699 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:31:19,699 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:31:19,699 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:31:19,699 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:31:19,699 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:31:19,699 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:31:19,699 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:31:19,699 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:31:19,703 [1    ] Abp.Modules.AbpModuleManager             - 14 modules loaded.
+DEBUG 2016-08-08 11:31:20,474 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 11:31:20,480 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 11:31:20,483 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 11:31:20,566 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 11:31:20,726 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 11:31:21,259 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 11:31:21,259 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 11:31:21,372 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 11:31:21,373 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 11:31:21,386 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 11:31:21,386 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 11:31:21,408 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 11:31:21,409 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 11:31:21,410 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 11:31:21,410 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 11:31:21,411 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 11:31:21,412 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 11:31:21,413 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+DEBUG 2016-08-08 11:35:53,210 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 11:35:53,988 [1    ] Abp.Modules.AbpModuleManager             - Found 14 ABP modules in total.
+DEBUG 2016-08-08 11:35:53,990 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:35:53,993 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:35:53,993 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:35:53,993 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:35:53,993 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:35:53,993 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:35:53,994 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:35:53,994 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:35:53,994 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:35:53,994 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:35:53,994 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:35:53,994 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:35:53,994 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:35:53,994 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 11:35:54,005 [1    ] Abp.Modules.AbpModuleManager             - 14 modules loaded.
+DEBUG 2016-08-08 11:35:54,330 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 11:35:54,365 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 11:35:54,366 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 11:35:54,367 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 11:35:54,519 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 11:35:54,932 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 11:35:54,932 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 11:35:55,037 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 11:35:55,038 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 11:35:55,050 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 11:35:55,050 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 11:35:55,069 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 11:35:55,070 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 11:35:55,070 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 11:35:55,071 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 11:35:55,072 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 11:35:55,072 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 11:35:55,073 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+DEBUG 2016-08-08 14:20:17,604 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 14:20:18,454 [1    ] Abp.Modules.AbpModuleManager             - Found 14 ABP modules in total.
+DEBUG 2016-08-08 14:20:18,456 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:20:18,458 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:20:18,458 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:20:18,458 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:20:18,458 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:20:18,458 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:20:18,458 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:20:18,459 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:20:18,459 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:20:18,459 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:20:18,459 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:20:18,459 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:20:18,459 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:20:18,459 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:20:18,463 [1    ] Abp.Modules.AbpModuleManager             - 14 modules loaded.
+DEBUG 2016-08-08 14:20:19,116 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 14:20:19,122 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 14:20:19,122 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 14:20:19,137 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 14:20:19,298 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 14:20:19,847 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 14:20:19,847 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 14:20:19,964 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 14:20:19,965 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 14:20:19,978 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 14:20:19,979 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 14:20:20,002 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 14:20:20,003 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 14:20:20,004 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 14:20:20,005 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 14:20:20,005 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 14:20:20,006 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 14:20:20,007 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+DEBUG 2016-08-08 14:36:11,564 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 14:36:12,398 [1    ] Abp.Modules.AbpModuleManager             - Found 14 ABP modules in total.
+DEBUG 2016-08-08 14:36:12,402 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:36:12,407 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:36:12,407 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:36:12,407 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:36:12,407 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:36:12,408 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:36:12,408 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:36:12,408 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:36:12,408 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:36:12,408 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:36:12,408 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:36:12,408 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:36:12,409 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:36:12,409 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:36:12,419 [1    ] Abp.Modules.AbpModuleManager             - 14 modules loaded.
+DEBUG 2016-08-08 14:36:13,023 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 14:36:13,029 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 14:36:13,029 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 14:36:13,031 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 14:36:13,182 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 14:36:13,712 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 14:36:13,712 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 14:36:13,828 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 14:36:13,829 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 14:36:13,843 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 14:36:13,843 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 14:36:13,863 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 14:36:13,864 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 14:36:13,866 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 14:36:13,867 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 14:36:13,868 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 14:36:13,868 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 14:36:13,869 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+DEBUG 2016-08-08 14:39:10,984 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 14:39:11,749 [1    ] Abp.Modules.AbpModuleManager             - Found 14 ABP modules in total.
+DEBUG 2016-08-08 14:39:11,752 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:39:11,754 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:39:11,755 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:39:11,755 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:39:11,755 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:39:11,755 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:39:11,755 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:39:11,755 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:39:11,755 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:39:11,755 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:39:11,756 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:39:11,756 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:39:11,756 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:39:11,756 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:39:11,769 [1    ] Abp.Modules.AbpModuleManager             - 14 modules loaded.
+DEBUG 2016-08-08 14:39:12,120 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 14:39:12,140 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 14:39:12,141 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 14:39:12,142 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 14:39:12,303 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 14:39:12,740 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 14:39:12,740 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 14:39:12,846 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 14:39:12,849 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 14:39:12,861 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 14:39:12,862 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 14:39:12,882 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 14:39:12,882 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 14:39:12,883 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 14:39:12,884 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 14:39:12,884 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 14:39:12,885 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 14:39:12,886 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+DEBUG 2016-08-08 14:57:41,822 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 14:57:42,832 [1    ] Abp.Modules.AbpModuleManager             - Found 15 ABP modules in total.
+DEBUG 2016-08-08 14:57:42,834 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:57:42,836 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:57:42,837 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:57:42,837 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:57:42,837 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:57:42,837 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:57:42,837 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.OData.AbpWebApiODataModule, Abp.Web.Api.OData, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:57:42,837 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:57:42,837 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:57:42,837 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:57:42,837 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:57:42,837 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:57:42,838 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:57:42,838 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:57:42,838 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 14:57:42,842 [1    ] Abp.Modules.AbpModuleManager             - 15 modules loaded.
+DEBUG 2016-08-08 14:57:43,622 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 14:57:43,628 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 14:57:43,628 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 14:57:43,630 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 14:57:43,783 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 14:57:44,350 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 14:57:44,350 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 14:57:44,464 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 14:57:44,466 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 14:57:44,477 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 14:57:44,478 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 14:57:44,497 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 14:57:44,498 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 14:57:44,499 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 14:57:44,500 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 14:57:44,501 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 14:57:44,501 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 14:57:44,502 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+ERROR 2016-08-08 14:59:58,681 [8    ] eb.Controllers.Authen.BackUserController - 无法将 null 转换为“int”，因为后者是不可以为 null 的值类型
+Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: 无法将 null 转换为“int”，因为后者是不可以为 null 的值类型
+   在 CallSite.Target(Closure , CallSite , Object )
+   在 System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   在 ASBicycle.Web.Controllers.Authen.BackUserController.BuildSearchCriteria() 位置 D:\GitHub\asbicycle\ASBicycle.Web\Controllers\Authen\BackUserController.cs:行号 228
+   在 ASBicycle.Web.Controllers.Authen.BackUserController.InitDataTable(DataTableParameter param) 位置 D:\GitHub\asbicycle\ASBicycle.Web\Controllers\Authen\BackUserController.cs:行号 48
+   在 Castle.Proxies.BackUserControllerProxy.InitDataTable_callback(DataTableParameter param)
+   在 Castle.Proxies.Invocations.BackUserController_InitDataTable.InvokeMethodOnTarget()
+   在 Castle.DynamicProxy.AbstractInvocation.Proceed()
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.PerformSyncUow(IInvocation invocation, UnitOfWorkOptions options)
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.PerformUow(IInvocation invocation, UnitOfWorkOptions options)
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.Intercept(IInvocation invocation)
+   在 Castle.DynamicProxy.AbstractInvocation.Proceed()
+   在 Castle.Proxies.BackUserControllerProxy.InitDataTable(DataTableParameter param)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+DEBUG 2016-08-08 15:12:34,521 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 15:12:35,607 [1    ] Abp.Modules.AbpModuleManager             - Found 15 ABP modules in total.
+DEBUG 2016-08-08 15:12:35,610 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:12:35,612 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:12:35,612 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:12:35,612 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:12:35,612 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:12:35,612 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:12:35,612 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.OData.AbpWebApiODataModule, Abp.Web.Api.OData, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:12:35,613 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:12:35,613 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:12:35,613 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:12:35,613 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:12:35,613 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:12:35,613 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:12:35,613 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:12:35,613 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:12:35,617 [1    ] Abp.Modules.AbpModuleManager             - 15 modules loaded.
+DEBUG 2016-08-08 15:12:36,347 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 15:12:36,352 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 15:12:36,353 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 15:12:36,354 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 15:12:36,504 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 15:12:37,092 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 15:12:37,092 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 15:12:37,210 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 15:12:37,213 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 15:12:37,225 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 15:12:37,226 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 15:12:37,244 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 15:12:37,245 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 15:12:37,246 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 15:12:37,247 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 15:12:37,248 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 15:12:37,249 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 15:12:37,250 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+DEBUG 2016-08-08 15:17:37,628 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 15:17:38,708 [1    ] Abp.Modules.AbpModuleManager             - Found 15 ABP modules in total.
+DEBUG 2016-08-08 15:17:38,711 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:17:38,712 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:17:38,713 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:17:38,713 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:17:38,713 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:17:38,713 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:17:38,713 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.OData.AbpWebApiODataModule, Abp.Web.Api.OData, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:17:38,713 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:17:38,713 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:17:38,713 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:17:38,713 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:17:38,713 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:17:38,714 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:17:38,714 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:17:38,714 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:17:38,717 [1    ] Abp.Modules.AbpModuleManager             - 15 modules loaded.
+DEBUG 2016-08-08 15:17:39,431 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 15:17:39,437 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 15:17:39,438 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 15:17:39,439 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 15:17:39,595 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 15:17:40,166 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 15:17:40,166 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 15:17:40,288 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 15:17:40,289 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 15:17:40,303 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 15:17:40,303 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 15:17:40,320 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 15:17:40,320 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 15:17:40,321 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 15:17:40,322 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 15:17:40,322 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 15:17:40,323 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 15:17:40,324 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+DEBUG 2016-08-08 15:19:16,903 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 15:19:17,859 [1    ] Abp.Modules.AbpModuleManager             - Found 15 ABP modules in total.
+DEBUG 2016-08-08 15:19:17,862 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:19:17,864 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:19:17,864 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:19:17,864 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:19:17,864 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:19:17,864 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:19:17,864 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.OData.AbpWebApiODataModule, Abp.Web.Api.OData, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:19:17,865 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:19:17,865 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:19:17,865 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:19:17,865 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:19:17,865 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:19:17,865 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:19:17,865 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:19:17,865 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:19:17,869 [1    ] Abp.Modules.AbpModuleManager             - 15 modules loaded.
+DEBUG 2016-08-08 15:19:18,575 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 15:19:18,581 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 15:19:18,582 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 15:19:18,583 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 15:19:18,732 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 15:19:19,362 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 15:19:19,363 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 15:19:19,499 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 15:19:19,502 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 15:19:19,518 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 15:19:19,518 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 15:19:19,540 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 15:19:19,541 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 15:19:19,541 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 15:19:19,542 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 15:19:19,543 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 15:19:19,544 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 15:19:19,544 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+DEBUG 2016-08-08 15:21:30,642 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 15:21:31,596 [1    ] Abp.Modules.AbpModuleManager             - Found 15 ABP modules in total.
+DEBUG 2016-08-08 15:21:31,598 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:21:31,600 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:21:31,600 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:21:31,600 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:21:31,601 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:21:31,601 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:21:31,601 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.OData.AbpWebApiODataModule, Abp.Web.Api.OData, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:21:31,601 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:21:31,601 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:21:31,601 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:21:31,601 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:21:31,601 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:21:31,601 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:21:31,601 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:21:31,601 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:21:31,605 [1    ] Abp.Modules.AbpModuleManager             - 15 modules loaded.
+DEBUG 2016-08-08 15:21:32,423 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 15:21:32,428 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 15:21:32,429 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 15:21:32,430 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 15:21:32,585 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 15:21:33,147 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 15:21:33,147 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 15:21:33,274 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 15:21:33,275 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 15:21:33,289 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 15:21:33,290 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 15:21:33,307 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 15:21:33,308 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 15:21:33,309 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 15:21:33,309 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 15:21:33,310 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 15:21:33,311 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 15:21:33,312 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+DEBUG 2016-08-08 15:24:11,795 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 15:24:12,772 [1    ] Abp.Modules.AbpModuleManager             - Found 15 ABP modules in total.
+DEBUG 2016-08-08 15:24:12,774 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:24:12,776 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:24:12,776 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:24:12,777 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:24:12,777 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:24:12,777 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:24:12,777 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.OData.AbpWebApiODataModule, Abp.Web.Api.OData, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:24:12,777 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:24:12,777 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:24:12,777 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:24:12,777 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:24:12,777 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:24:12,777 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:24:12,777 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:24:12,777 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:24:12,781 [1    ] Abp.Modules.AbpModuleManager             - 15 modules loaded.
+DEBUG 2016-08-08 15:24:13,510 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 15:24:13,517 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 15:24:13,517 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 15:24:13,518 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 15:24:13,661 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 15:24:14,233 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 15:24:14,233 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 15:24:14,346 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 15:24:14,348 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 15:24:14,363 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 15:24:14,363 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 15:24:14,379 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 15:24:14,380 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 15:24:14,381 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 15:24:14,382 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 15:24:14,382 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 15:24:14,383 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 15:24:14,384 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+DEBUG 2016-08-08 15:34:56,015 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 15:34:56,958 [1    ] Abp.Modules.AbpModuleManager             - Found 15 ABP modules in total.
+DEBUG 2016-08-08 15:34:56,961 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:34:56,962 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:34:56,963 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:34:56,963 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:34:56,963 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:34:56,963 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:34:56,963 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.OData.AbpWebApiODataModule, Abp.Web.Api.OData, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:34:56,963 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:34:56,963 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:34:56,963 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:34:56,963 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:34:56,963 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:34:56,963 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:34:56,963 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:34:56,964 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:34:56,968 [1    ] Abp.Modules.AbpModuleManager             - 15 modules loaded.
+DEBUG 2016-08-08 15:34:57,697 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 15:34:57,704 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 15:34:57,704 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 15:34:57,708 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 15:34:57,869 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 15:34:58,487 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 15:34:58,487 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 15:34:58,603 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 15:34:58,604 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 15:34:58,617 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 15:34:58,618 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 15:34:58,633 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 15:34:58,634 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 15:34:58,635 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 15:34:58,636 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 15:34:58,636 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 15:34:58,637 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 15:34:58,638 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+ERROR 2016-08-08 15:35:34,261 [8    ] eb.Controllers.Authen.BackUserController - LINQ to Entities does not recognize the method 'System.Nullable`1[System.Int32] GetSchoolId()' method, and this method cannot be translated into a store expression.
+System.NotSupportedException: LINQ to Entities does not recognize the method 'System.Nullable`1[System.Int32] GetSchoolId()' method, and this method cannot be translated into a store expression.
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.DefaultTranslator.Translate(ExpressionConverter parent, MethodCallExpression call)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.TypedTranslate(ExpressionConverter parent, MethodCallExpression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TypedTranslator`1.Translate(ExpressionConverter parent, Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TranslateExpression(Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.EqualsTranslator.TypedTranslate(ExpressionConverter parent, BinaryExpression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TypedTranslator`1.Translate(ExpressionConverter parent, Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TranslateExpression(Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TranslateLambda(LambdaExpression lambda, DbExpression input)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TranslateLambda(LambdaExpression lambda, DbExpression input, DbExpressionBinding& binding)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.OneLambdaTranslator.Translate(ExpressionConverter parent, MethodCallExpression call, DbExpression& source, DbExpressionBinding& sourceBinding, DbExpression& lambda)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.OneLambdaTranslator.Translate(ExpressionConverter parent, MethodCallExpression call)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.SequenceMethodTranslator.Translate(ExpressionConverter parent, MethodCallExpression call, SequenceMethod sequenceMethod)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.TypedTranslate(ExpressionConverter parent, MethodCallExpression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TypedTranslator`1.Translate(ExpressionConverter parent, Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TranslateExpression(Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.AggregateTranslator.Translate(ExpressionConverter parent, MethodCallExpression call)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.SequenceMethodTranslator.Translate(ExpressionConverter parent, MethodCallExpression call, SequenceMethod sequenceMethod)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.TypedTranslate(ExpressionConverter parent, MethodCallExpression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TypedTranslator`1.Translate(ExpressionConverter parent, Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TranslateExpression(Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.Convert()
+   在 System.Data.Entity.Core.Objects.ELinq.ELinqQueryState.GetExecutionPlan(Nullable`1 forMergeOption)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.<>c__DisplayClass7.<GetResults>b__6()
+   在 System.Data.Entity.Core.Objects.ObjectContext.ExecuteInTransaction[T](Func`1 func, IDbExecutionStrategy executionStrategy, Boolean startLocalTransaction, Boolean releaseConnectionOnSuccess)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.<>c__DisplayClass7.<GetResults>b__5()
+   在 System.Data.Entity.Infrastructure.DefaultExecutionStrategy.Execute[TResult](Func`1 operation)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.GetResults(Nullable`1 forMergeOption)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.<System.Collections.Generic.IEnumerable<T>.GetEnumerator>b__0()
+   在 System.Data.Entity.Internal.LazyEnumerator`1.MoveNext()
+   在 System.Linq.Enumerable.Single[TSource](IEnumerable`1 source)
+   在 System.Data.Entity.Core.Objects.ELinq.ObjectQueryProvider.<GetElementFunction>b__3[TResult](IEnumerable`1 sequence)
+   在 System.Data.Entity.Core.Objects.ELinq.ObjectQueryProvider.ExecuteSingle[TResult](IEnumerable`1 query, Expression queryRoot)
+   在 System.Data.Entity.Core.Objects.ELinq.ObjectQueryProvider.System.Linq.IQueryProvider.Execute[TResult](Expression expression)
+   在 System.Data.Entity.Internal.Linq.DbQueryProvider.Execute[TResult](Expression expression)
+   在 System.Linq.Queryable.Count[TSource](IQueryable`1 source)
+   在 ASBicycle.Web.Controllers.Authen.BackUserController.InitDataTable(DataTableParameter param) 位置 D:\GitHub\asbicycle\ASBicycle.Web\Controllers\Authen\BackUserController.cs:行号 53
+   在 Castle.Proxies.BackUserControllerProxy.InitDataTable_callback(DataTableParameter param)
+   在 Castle.Proxies.Invocations.BackUserController_InitDataTable.InvokeMethodOnTarget()
+   在 Castle.DynamicProxy.AbstractInvocation.Proceed()
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.PerformSyncUow(IInvocation invocation, UnitOfWorkOptions options)
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.PerformUow(IInvocation invocation, UnitOfWorkOptions options)
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.Intercept(IInvocation invocation)
+   在 Castle.DynamicProxy.AbstractInvocation.Proceed()
+   在 Castle.Proxies.BackUserControllerProxy.InitDataTable(DataTableParameter param)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+DEBUG 2016-08-08 15:37:27,717 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 15:37:28,666 [1    ] Abp.Modules.AbpModuleManager             - Found 15 ABP modules in total.
+DEBUG 2016-08-08 15:37:28,669 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:37:28,671 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:37:28,671 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:37:28,671 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:37:28,671 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:37:28,671 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:37:28,671 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.OData.AbpWebApiODataModule, Abp.Web.Api.OData, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:37:28,671 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:37:28,671 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:37:28,671 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:37:28,672 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:37:28,672 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:37:28,672 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:37:28,672 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:37:28,672 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:37:28,675 [1    ] Abp.Modules.AbpModuleManager             - 15 modules loaded.
+DEBUG 2016-08-08 15:37:29,379 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 15:37:29,385 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 15:37:29,386 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 15:37:29,387 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 15:37:29,536 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 15:37:30,101 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 15:37:30,101 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 15:37:30,213 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 15:37:30,215 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 15:37:30,227 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 15:37:30,227 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 15:37:30,244 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 15:37:30,245 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 15:37:30,245 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 15:37:30,246 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 15:37:30,247 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 15:37:30,248 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 15:37:30,249 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+ERROR 2016-08-08 15:38:09,592 [7    ] le.Web.Controllers.Authen.RoleController - LINQ to Entities does not recognize the method 'System.Nullable`1[System.Int32] GetSchoolId()' method, and this method cannot be translated into a store expression.
+System.NotSupportedException: LINQ to Entities does not recognize the method 'System.Nullable`1[System.Int32] GetSchoolId()' method, and this method cannot be translated into a store expression.
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.DefaultTranslator.Translate(ExpressionConverter parent, MethodCallExpression call)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.TypedTranslate(ExpressionConverter parent, MethodCallExpression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TypedTranslator`1.Translate(ExpressionConverter parent, Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TranslateExpression(Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.EqualsTranslator.TypedTranslate(ExpressionConverter parent, BinaryExpression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TypedTranslator`1.Translate(ExpressionConverter parent, Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TranslateExpression(Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TranslateLambda(LambdaExpression lambda, DbExpression input)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TranslateLambda(LambdaExpression lambda, DbExpression input, DbExpressionBinding& binding)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.OneLambdaTranslator.Translate(ExpressionConverter parent, MethodCallExpression call, DbExpression& source, DbExpressionBinding& sourceBinding, DbExpression& lambda)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.OneLambdaTranslator.Translate(ExpressionConverter parent, MethodCallExpression call)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.SequenceMethodTranslator.Translate(ExpressionConverter parent, MethodCallExpression call, SequenceMethod sequenceMethod)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.TypedTranslate(ExpressionConverter parent, MethodCallExpression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TypedTranslator`1.Translate(ExpressionConverter parent, Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TranslateExpression(Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.AggregateTranslator.Translate(ExpressionConverter parent, MethodCallExpression call)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.SequenceMethodTranslator.Translate(ExpressionConverter parent, MethodCallExpression call, SequenceMethod sequenceMethod)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.MethodCallTranslator.TypedTranslate(ExpressionConverter parent, MethodCallExpression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TypedTranslator`1.Translate(ExpressionConverter parent, Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.TranslateExpression(Expression linq)
+   在 System.Data.Entity.Core.Objects.ELinq.ExpressionConverter.Convert()
+   在 System.Data.Entity.Core.Objects.ELinq.ELinqQueryState.GetExecutionPlan(Nullable`1 forMergeOption)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.<>c__DisplayClass7.<GetResults>b__6()
+   在 System.Data.Entity.Core.Objects.ObjectContext.ExecuteInTransaction[T](Func`1 func, IDbExecutionStrategy executionStrategy, Boolean startLocalTransaction, Boolean releaseConnectionOnSuccess)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.<>c__DisplayClass7.<GetResults>b__5()
+   在 System.Data.Entity.Infrastructure.DefaultExecutionStrategy.Execute[TResult](Func`1 operation)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.GetResults(Nullable`1 forMergeOption)
+   在 System.Data.Entity.Core.Objects.ObjectQuery`1.<System.Collections.Generic.IEnumerable<T>.GetEnumerator>b__0()
+   在 System.Data.Entity.Internal.LazyEnumerator`1.MoveNext()
+   在 System.Linq.Enumerable.Single[TSource](IEnumerable`1 source)
+   在 System.Data.Entity.Core.Objects.ELinq.ObjectQueryProvider.<GetElementFunction>b__3[TResult](IEnumerable`1 sequence)
+   在 System.Data.Entity.Core.Objects.ELinq.ObjectQueryProvider.ExecuteSingle[TResult](IEnumerable`1 query, Expression queryRoot)
+   在 System.Data.Entity.Core.Objects.ELinq.ObjectQueryProvider.System.Linq.IQueryProvider.Execute[TResult](Expression expression)
+   在 System.Data.Entity.Internal.Linq.DbQueryProvider.Execute[TResult](Expression expression)
+   在 System.Linq.Queryable.Count[TSource](IQueryable`1 source)
+   在 ASBicycle.Web.Controllers.Authen.RoleController.InitDataTable(DataTableParameter param) 位置 D:\GitHub\asbicycle\ASBicycle.Web\Controllers\Authen\RoleController.cs:行号 57
+   在 Castle.Proxies.RoleControllerProxy.InitDataTable_callback(DataTableParameter param)
+   在 Castle.Proxies.Invocations.RoleController_InitDataTable.InvokeMethodOnTarget()
+   在 Castle.DynamicProxy.AbstractInvocation.Proceed()
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.PerformSyncUow(IInvocation invocation, UnitOfWorkOptions options)
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.PerformUow(IInvocation invocation, UnitOfWorkOptions options)
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.Intercept(IInvocation invocation)
+   在 Castle.DynamicProxy.AbstractInvocation.Proceed()
+   在 Castle.Proxies.RoleControllerProxy.InitDataTable(DataTableParameter param)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+DEBUG 2016-08-08 15:40:56,970 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 15:40:57,913 [1    ] Abp.Modules.AbpModuleManager             - Found 15 ABP modules in total.
+DEBUG 2016-08-08 15:40:57,917 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:40:57,918 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:40:57,918 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:40:57,918 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:40:57,918 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:40:57,918 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:40:57,918 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.OData.AbpWebApiODataModule, Abp.Web.Api.OData, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:40:57,918 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:40:57,918 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:40:57,918 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:40:57,918 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:40:57,918 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:40:57,920 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:40:57,920 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:40:57,920 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 15:40:57,924 [1    ] Abp.Modules.AbpModuleManager             - 15 modules loaded.
+DEBUG 2016-08-08 15:40:58,640 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 15:40:58,645 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 15:40:58,646 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 15:40:58,647 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 15:40:58,795 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 15:40:59,418 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 15:40:59,418 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 15:40:59,534 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 15:40:59,536 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 15:40:59,549 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 15:40:59,549 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 15:40:59,564 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 15:40:59,565 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 15:40:59,566 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 15:40:59,567 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 15:40:59,567 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 15:40:59,568 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 15:40:59,569 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+DEBUG 2016-08-08 16:41:48,104 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 16:41:49,235 [1    ] Abp.Modules.AbpModuleManager             - Found 15 ABP modules in total.
+DEBUG 2016-08-08 16:41:49,238 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 16:41:49,240 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 16:41:49,240 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 16:41:49,240 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 16:41:49,240 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 16:41:49,240 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 16:41:49,240 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.OData.AbpWebApiODataModule, Abp.Web.Api.OData, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 16:41:49,240 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 16:41:49,240 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 16:41:49,240 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 16:41:49,241 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 16:41:49,241 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 16:41:49,241 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 16:41:49,241 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 16:41:49,241 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 16:41:49,246 [1    ] Abp.Modules.AbpModuleManager             - 15 modules loaded.
+DEBUG 2016-08-08 16:41:50,108 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 16:41:50,114 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 16:41:50,114 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 16:41:50,115 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 16:41:50,268 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 16:41:50,833 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 16:41:50,833 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 16:41:50,952 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 16:41:50,953 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 16:41:50,970 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 16:41:50,970 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 16:41:50,990 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 16:41:50,991 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 16:41:50,992 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 16:41:50,993 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 16:41:50,994 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 16:41:50,995 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 16:41:50,997 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+DEBUG 2016-08-08 17:10:27,589 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 17:10:28,565 [1    ] Abp.Modules.AbpModuleManager             - Found 15 ABP modules in total.
+DEBUG 2016-08-08 17:10:28,568 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:10:28,569 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:10:28,570 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:10:28,570 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:10:28,570 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:10:28,570 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:10:28,570 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.OData.AbpWebApiODataModule, Abp.Web.Api.OData, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:10:28,570 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:10:28,570 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:10:28,570 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:10:28,570 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:10:28,570 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:10:28,570 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:10:28,570 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:10:28,571 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:10:28,574 [1    ] Abp.Modules.AbpModuleManager             - 15 modules loaded.
+DEBUG 2016-08-08 17:10:29,372 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 17:10:29,385 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 17:10:29,386 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 17:10:29,387 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 17:10:29,547 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 17:10:30,102 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 17:10:30,102 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 17:10:30,211 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 17:10:30,213 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 17:10:30,228 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 17:10:30,229 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 17:10:30,246 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 17:10:30,247 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 17:10:30,248 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 17:10:30,248 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 17:10:30,249 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 17:10:30,250 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 17:10:30,251 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.
+ERROR 2016-08-08 17:13:16,577 [19   ] .Web.Controllers.School.SchoolController - There is no such an entity with given primary key. Entity type: ASBicycle.Entities.School, primary key: 0
+Abp.AbpException: There is no such an entity with given primary key. Entity type: ASBicycle.Entities.School, primary key: 0
+   在 Abp.Domain.Repositories.AbpRepositoryBase`2.Get(TPrimaryKey id)
+   在 Castle.Proxies.SchoolRepositoryProxy.Get_callback(Int32 id)
+   在 Castle.Proxies.Invocations.AbpRepositoryBase`2_Get_5.InvokeMethodOnTarget()
+   在 Castle.DynamicProxy.AbstractInvocation.Proceed()
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.PerformSyncUow(IInvocation invocation, UnitOfWorkOptions options)
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.PerformUow(IInvocation invocation, UnitOfWorkOptions options)
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.Intercept(IInvocation invocation)
+   在 Castle.DynamicProxy.AbstractInvocation.Proceed()
+   在 Castle.Proxies.SchoolRepositoryProxy.Get(Int32 id)
+   在 ASBicycle.Web.Controllers.School.SchoolController.Edit(SchoolModel model) 位置 D:\GitHub\asbicycle\ASBicycle.Web\Controllers\School\SchoolController.cs:行号 46
+   在 Castle.Proxies.SchoolControllerProxy.Edit_callback(SchoolModel model)
+   在 Castle.Proxies.Invocations.SchoolController_Edit.InvokeMethodOnTarget()
+   在 Castle.DynamicProxy.AbstractInvocation.Proceed()
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.PerformSyncUow(IInvocation invocation, UnitOfWorkOptions options)
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.PerformUow(IInvocation invocation, UnitOfWorkOptions options)
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.Intercept(IInvocation invocation)
+   在 Castle.DynamicProxy.AbstractInvocation.Proceed()
+   在 Castle.Proxies.SchoolControllerProxy.Edit(SchoolModel model)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+ERROR 2016-08-08 17:16:33,909 [19   ] .Web.Controllers.School.SchoolController - There is no such an entity with given primary key. Entity type: ASBicycle.Entities.School, primary key: 0
+Abp.AbpException: There is no such an entity with given primary key. Entity type: ASBicycle.Entities.School, primary key: 0
+   在 Abp.Domain.Repositories.AbpRepositoryBase`2.Get(TPrimaryKey id)
+   在 Castle.Proxies.SchoolRepositoryProxy.Get_callback(Int32 id)
+   在 Castle.Proxies.Invocations.AbpRepositoryBase`2_Get_5.InvokeMethodOnTarget()
+   在 Castle.DynamicProxy.AbstractInvocation.Proceed()
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.PerformSyncUow(IInvocation invocation, UnitOfWorkOptions options)
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.PerformUow(IInvocation invocation, UnitOfWorkOptions options)
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.Intercept(IInvocation invocation)
+   在 Castle.DynamicProxy.AbstractInvocation.Proceed()
+   在 Castle.Proxies.SchoolRepositoryProxy.Get(Int32 id)
+   在 ASBicycle.Web.Controllers.School.SchoolController.Edit(SchoolModel model) 位置 D:\GitHub\asbicycle\ASBicycle.Web\Controllers\School\SchoolController.cs:行号 46
+   在 Castle.Proxies.SchoolControllerProxy.Edit_callback(SchoolModel model)
+   在 Castle.Proxies.Invocations.SchoolController_Edit.InvokeMethodOnTarget()
+   在 Castle.DynamicProxy.AbstractInvocation.Proceed()
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.PerformSyncUow(IInvocation invocation, UnitOfWorkOptions options)
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.PerformUow(IInvocation invocation, UnitOfWorkOptions options)
+   在 Abp.Domain.Uow.UnitOfWorkInterceptor.Intercept(IInvocation invocation)
+   在 Castle.DynamicProxy.AbstractInvocation.Proceed()
+   在 Castle.Proxies.SchoolControllerProxy.Edit(SchoolModel model)
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+DEBUG 2016-08-08 17:26:32,713 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2016-08-08 17:26:33,724 [1    ] Abp.Modules.AbpModuleManager             - Found 15 ABP modules in total.
+DEBUG 2016-08-08 17:26:33,726 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:26:33,728 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:26:33,728 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkModule, Abp.EntityFramework, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:26:33,728 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Hangfire.AbpHangfireModule, Abp.HangFire, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:26:33,728 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Owin.AbpOwinModule, Abp.Owin, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:26:33,728 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.AbpWebApiModule, Abp.Web.Api, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:26:33,728 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.WebApi.OData.AbpWebApiODataModule, Abp.Web.Api.OData, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:26:33,728 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebModule, Abp.Web, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:26:33,728 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.Mvc.AbpWebMvcModule, Abp.Web.Mvc, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:26:33,728 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.SignalR.AbpWebSignalRModule, Abp.Web.SignalR, Version=0.9.1.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:26:33,729 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleApplicationModule, ASBicycle.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:26:33,729 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleCoreModule, ASBicycle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:26:33,729 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleDataModule, ASBicycle.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:26:33,729 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.Web.ASBicycleWebModule, ASBicycle.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:26:33,729 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: ASBicycle.ASBicycleWebApiModule, ASBicycle.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2016-08-08 17:26:33,733 [1    ] Abp.Modules.AbpModuleManager             - 15 modules loaded.
+DEBUG 2016-08-08 17:26:34,483 [1    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2016-08-08 17:26:34,490 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2016-08-08 17:26:34,490 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2016-08-08 17:26:34,492 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: ASBicycle
+DEBUG 2016-08-08 17:26:34,668 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2016-08-08 17:26:35,289 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 5 classes defines auto mapping attributes
+DEBUG 2016-08-08 17:26:35,289 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Track.Dto.TrackOutput
+DEBUG 2016-08-08 17:26:35,400 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.School.Dto.SitebeaconDto
+DEBUG 2016-08-08 17:26:35,402 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeDto
+DEBUG 2016-08-08 17:26:35,415 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bike.Dto.BikeOutput
+DEBUG 2016-08-08 17:26:35,416 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - ASBicycle.Bikesite.Dto.BikesiteListOutput
+DEBUG 2016-08-08 17:26:35,432 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.XInGe.IXinGeAppService' with service name 'app/xinGe'.
+DEBUG 2016-08-08 17:26:35,434 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.VersionUpdate.IVersionUpdateAppService' with service name 'app/versionUpdate'.
+DEBUG 2016-08-08 17:26:35,434 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.User.IUserAppService' with service name 'app/user'.
+DEBUG 2016-08-08 17:26:35,435 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Track.ITrackAppService' with service name 'app/track'.
+DEBUG 2016-08-08 17:26:35,436 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.School.ISchoolAppService' with service name 'app/school'.
+DEBUG 2016-08-08 17:26:35,437 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bike.IBikeAppService' with service name 'app/bike'.
+DEBUG 2016-08-08 17:26:35,437 [1    ] Abp.Logging.LogHelper                    - Dynamic web api controller is created for type 'ASBicycle.Bikesite.IBikesiteAppService' with service name 'app/bikesite'.

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Mvc;
 using System.Web.Security;
 using Abp.Authorization;
@@ -60,9 +61,8 @@ namespace ASBicycle.Web.Extension.Fliter
                 //var ticket = FormsAuthentication.Decrypt(cookie.Value);
                 //var currentUser = JsonSerializationHelper.DeserializeWithType<BackLoginModel>(ticket.UserData);
                 ((ViewResult)filterContext.Result).ViewBag.LoginName = session.LoginName;
-                ((ViewResult)filterContext.Result).ViewBag.SchoolId = session.School_id;
                 var controller = filterContext.RouteData.Values["controller"].ToString().ToLower();
-                var action = filterContext.RouteData.Values["action"].ToString().ToLower();
+                //var action = filterContext.RouteData.Values["action"].ToString().ToLower();
 
                 var permission = session.Buttons;
 

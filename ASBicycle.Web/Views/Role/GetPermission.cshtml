@@ -26,7 +26,7 @@
         {
             <tr>
                 <td>@(sortOrder++)</td>
-                @if (modulePermissionData.ParentId != null)
+                @if (modulePermissionData.LinkUrl != "")
                 {
                     <td style="text-align: right;">[ @modulePermissionData.ModuleName ]</td>
                 }
@@ -41,16 +41,23 @@
                     }
                     else
                     {
-                        @Html.CheckBox("modulectx", modulePermissionData.Selected, new { @class = "parentallpermissioncheck-" + modulePermissionData.ModuleId + " module-" + modulePermissionData.ModuleId + " permission-" + modulePermissionData.ModuleId, @value = modulePermissionData.ModuleId, onclick = "CheckParentModulePermission(this.checked, " + modulePermissionData.ModuleId + ")" })
+                        if (modulePermissionData.LinkUrl != "")
+                        {
+                            @Html.CheckBox("modulectx", modulePermissionData.Selected, new { @class = "parentpermissioncheck-" + modulePermissionData.ModuleId + " module-" + modulePermissionData.ModuleId + " permission-" + modulePermissionData.ModuleId, @value = modulePermissionData.ModuleId, onclick = "CheckParentPermission(this.checked, " + modulePermissionData.ModuleId + ", " + modulePermissionData.ModuleId + ")" })
+                        }
+                        else
+                        {
+                            @Html.CheckBox("modulectx", modulePermissionData.Selected, new { @class = "parentallpermissioncheck-" + modulePermissionData.ModuleId + " module-" + modulePermissionData.ModuleId + " permission-" + modulePermissionData.ModuleId, @value = modulePermissionData.ModuleId, onclick = "CheckParentModulePermission(this.checked, " + modulePermissionData.ModuleId + ")" })
+                        }
                     }
                 </td>
-                @if (modulePermissionData.ParentId != null)
+                @if (modulePermissionData.LinkUrl != "")
                 {
                     foreach (var item in modulePermissionData.PermissionDataList)
                     {
                         <td>
                             @if (item.Enabled)
-                        {
+                            {
                                 @Html.CheckBox("permissioncheck", item.Selected, new { @class = "childpermissioncheck-" + @modulePermissionData.ModuleId + " module-" + modulePermissionData.ParentId + " permission-" + modulePermissionData.ModuleId, @value = item.PermissionId, onclick = "CheckChildPermission(" + modulePermissionData.ModuleId + ", " + modulePermissionData.ParentId + ")" })
                             }
                         </td>

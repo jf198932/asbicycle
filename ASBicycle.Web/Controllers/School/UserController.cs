@@ -9,6 +9,7 @@ using Abp.Web.Models;
 using ASBicycle.School;
 using ASBicycle.User;
 using ASBicycle.Web.Extension.Fliter;
+using ASBicycle.Web.Helper;
 using ASBicycle.Web.Models.Common;
 using ASBicycle.Web.Models.School;
 using AutoMapper;
@@ -32,7 +33,7 @@ namespace ASBicycle.Web.Controllers.School
             return RedirectToAction("ListU");
         }
         [AdminLayout]
-        [AdminPermission(PermissionCustomMode.Enforce)]
+        //[AdminPermission(PermissionCustomMode.Enforce)]
         public ActionResult ListU()
         {
             var model = new UserModel();
@@ -125,7 +126,7 @@ namespace ASBicycle.Web.Controllers.School
                 user.Balance = model.Balance;
                 user.Updated_at = DateTime.Now;
 
-                user = _userRepository.Update(user);
+                _userRepository.Update(user);
                 //role = model.ToEntity(role);
                 //_roleService.UpdateRole(role);
 
@@ -194,7 +195,8 @@ namespace ASBicycle.Web.Controllers.School
                 Expression<Func<Entities.User, Boolean>> tmp = t => t.Certification == data;
                 expr = bulider.BuildQueryAnd(expr, tmp);
             }
-            Expression<Func<Entities.User, Boolean>> tmpSolid = t => t.School_id == SchoolId;
+            var id = CommonHelper.GetSchoolId();
+            Expression<Func<Entities.User, Boolean>> tmpSolid = t => t.School_id == id;
             expr = bulider.BuildQueryAnd(expr, tmpSolid);
 
             return expr;

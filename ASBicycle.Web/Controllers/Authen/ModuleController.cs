@@ -9,6 +9,7 @@ using Abp.Domain.Uow;
 using Abp.Web.Models;
 using ASBicycle.Entities.Authen;
 using ASBicycle.Web.Extension.Fliter;
+using ASBicycle.Web.Helper;
 using ASBicycle.Web.Models.Authen;
 using ASBicycle.Web.Models.Common;
 using AutoMapper;
@@ -57,7 +58,7 @@ namespace ASBicycle.Web.Controllers.Authen
                 Icon = t.Icon,
                 ParentId = t.ParentId,
                 ParentName = t.ParentModule != null ? t.ParentModule.Name : "",
-                LinkUrl = t.LinkUrl,
+                LinkUrl = t.LinkUrl ?? "",
                 OrderSort = t.OrderSort,
                 IsMenu = t.IsMenu,
                 Enabled = t.Enabled,
@@ -96,23 +97,24 @@ namespace ASBicycle.Web.Controllers.Authen
             if (ModelState.IsValid)
             {
                 Mapper.CreateMap<ModuleModel, Module>();
-                var user = Mapper.Map<Module>(model);
+                var module = Mapper.Map<Module>(model);
+                module.School_id = CommonHelper.GetSchoolId();
                 if (!string.IsNullOrEmpty(model.LinkUrl))
                 {
                     string[] link = model.LinkUrl.Split('/');
                     if (link.Length > 2)
                     {
-                        user.Area = link[0];
-                        user.Controller = link[1];
-                        user.Action = link[2];
+                        module.Area = link[0];
+                        module.Controller = link[1];
+                        module.Action = link[2];
                     }
                     else
                     {
-                        user.Controller = link[0];
-                        user.Action = link[1];
+                        module.Controller = link[0];
+                        module.Action = link[1];
                     }
                 }
-                _moduleRepository.Insert(user);
+                _moduleRepository.Insert(module);
                 //SuccessNotification("添加成功");
                 return Json(model);
             }
@@ -248,6 +250,7 @@ namespace ASBicycle.Web.Controllers.Authen
                     .OrderBy(m => m.OrderSort)
                     .Select(m => new SelectListItem {Text = m.Name, Value = m.Id.ToString()}));
             model.ParentModuleItems.Insert(0, new SelectListItem {Text = "--根模块--", Value = ""});
+
             //model.RoleList.Add(
             //    _schoolRepository.GetAll().Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() }));
 
@@ -302,7 +305,8 @@ namespace ASBicycle.Web.Controllers.Authen
                 Expression<Func<Module, Boolean>> tmp = t => t.Enabled == data;
                 expr = bulider.BuildQueryAnd(expr, tmp);
             }
-            Expression<Func<Module, Boolean>> tmpSolid = t => t.School_id == SchoolId;
+            var id = CommonHelper.GetSchoolId();
+            Expression<Func<Module, Boolean>> tmpSolid = t => t.School_id == id;
             expr = bulider.BuildQueryAnd(expr, tmpSolid);
 
             return expr;

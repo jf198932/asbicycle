@@ -9,6 +9,7 @@ using Abp.Web.Models;
 using ASBicycle.Bikesite;
 using ASBicycle.School;
 using ASBicycle.Web.Extension.Fliter;
+using ASBicycle.Web.Helper;
 using ASBicycle.Web.Models.Common;
 using ASBicycle.Web.Models.School;
 using AutoMapper;
@@ -33,7 +34,7 @@ namespace ASBicycle.Web.Controllers.School
             return RedirectToAction("List");
         }
         [AdminLayout]
-        [AdminPermission(PermissionCustomMode.Enforce)]
+        //[AdminPermission(PermissionCustomMode.Enforce)]
         public ActionResult List()
         {
             var model = new BikesiteModel();
@@ -94,7 +95,7 @@ namespace ASBicycle.Web.Controllers.School
             {
                 Mapper.CreateMap<BikesiteModel, Entities.Bikesite>();
                 var bikesite = Mapper.Map<Entities.Bikesite>(model);
-                bikesite = _bikesiteRepository.Insert(bikesite);
+                _bikesiteRepository.Insert(bikesite);
 
                 //SuccessNotification("添加成功");
                 return Json(model);
@@ -186,7 +187,8 @@ namespace ASBicycle.Web.Controllers.School
                 Expression<Func<Entities.Bikesite, Boolean>> tmp = t => t.Type == data;
                 expr = bulider.BuildQueryAnd(expr, tmp);
             }
-            Expression<Func<Entities.Bikesite, Boolean>> tmpSolid = t => t.School_id == SchoolId;
+            var id = CommonHelper.GetSchoolId();
+            Expression<Func<Entities.Bikesite, Boolean>> tmpSolid = t => t.School_id == id;
             expr = bulider.BuildQueryAnd(expr, tmpSolid);
 
             return expr;

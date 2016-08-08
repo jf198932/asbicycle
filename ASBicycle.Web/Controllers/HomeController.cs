@@ -69,10 +69,10 @@ namespace ASBicycle.Web.Controllers
             {
                 var now = DateTime.Now.ToLocalTime();
                 var despwd = DESProvider.EncryptString(model.Password);
-                var tenant = ConfigurationManager.AppSettings["TenantId"];
+                var tenant = string.IsNullOrEmpty(model.TenancyName) ? "default" : model.TenancyName.ToLower();
                 var schoolid = 0;
                 
-                var school = _schoolAppService.GetAll().FirstOrDefault(t => t.TenancyName == tenant);
+                var school = _schoolAppService.GetAll().FirstOrDefault(t => t.TenancyName.ToLower() == tenant);
 
                 if (school != null)
                 {

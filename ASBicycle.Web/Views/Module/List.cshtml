@@ -69,7 +69,7 @@
                         var deleteUrl = '@Url.Action("Delete")';
                         var setButtonUrl = '@Url.Action("SetButton")';
                         var btnArray = "";
-                        if (oObj.aData[3] !== "") {
+                        if (oObj.aData[4] !== "") {
                             btnArray += "<a href=\"javascript:void(0);\" class=\"btn btn-xs green\" onclick=\"SetButton('" + setButtonUrl + "','" + oObj.aData[oObj.aData.length - 1] + "')\"><i class=\"fa fa-gears\"></i> 设置按钮</a>";
                         }
                         btnArray += " <a href=\"javascript:void(0);\" class=\"btn btn-xs purple\" onclick=\"Edit('" + editUrl + "','" + oObj.aData[oObj.aData.length - 1] + "')\"><i class=\"fa fa-edit\"></i> 编辑</a>";

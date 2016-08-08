@@ -8,8 +8,10 @@ namespace ASBicycle.VersionUpdate.Dto
         public int versionCode { get; set; }
         //版本名称
         public string versionName { get; set; }
-
-        public int mustUpdate { get; set; }
+        /// <summary>
+        /// 1.不升级  2 可升级   3 强制升级
+        /// </summary>
+        public int upgrade { get; set; }
 
         public string versionUrl { get; set; }
     }

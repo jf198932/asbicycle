@@ -1,46 +1,13 @@
-﻿@{
+﻿@model ASBicycle.Web.Models.Authen.RoleModel
+@{
     ViewBag.Title = "角色管理 | NextCMS Admin";
 }
 
-<div class="fluid">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="table-toolbar">
-                <div class="btn-group">
-                    <a href="javascript:void(0);" class="btn blue" onclick="Create('@Url.Action("Create")')"><i class="fa fa-plus"></i> 添加</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="table-responsive">
-    <table class="table datatable table-striped table-bordered table-hover">
-        <thead>
-            <tr>
-                <th width="80">
-                    序号
-                </th>
-                <th>
-                    角色名称
-                </th>
-                <th>
-                    描述
-                </th>
-                <th>
-                    排序
-                </th>
-                <th>
-                    启用
-                </th>
-                <th>
-                    操作
-                </th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-</div>
+@Html.Partial("_Search", Model.Search)
+@Html.Partial("_List")
+
+
 
 @Html.Partial("Modal")
 @Html.Partial("_FormModalPermission")

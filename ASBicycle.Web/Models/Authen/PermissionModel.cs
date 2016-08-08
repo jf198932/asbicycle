@@ -1,10 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 using ASBicycle.Web.Models.Common;
 
 namespace ASBicycle.Web.Models.Authen
 {
     public class PermissionModel
     {
+        public PermissionModel()
+        {
+            Search = new PermissionSearchModel();
+        }
+
         public int Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
@@ -12,6 +19,29 @@ namespace ASBicycle.Web.Models.Authen
         public string Icon { get; set; }
         public string Description { get; set; }
         public bool Enabled { get; set; }
+
+        public PermissionSearchModel Search { get; set; }
+    }
+
+    public class PermissionSearchModel
+    {
+        public PermissionSearchModel()
+        {
+            EnabledList = new List<SelectListItem> {
+                new SelectListItem { Text = "--- 请选择 ---", Value = "-1", Selected = true },
+                new SelectListItem {Text = "禁用", Value = "0"},
+                new SelectListItem {Text = "启用", Value = "1"}
+            };
+        }
+        [Display(Name = "按钮名称")]
+        public string Name { get; set; }
+        [Display(Name = "编码")]
+        public string Code { get; set; }
+        [Display(Name = "启用")]
+        public bool Enabled { get; set; }
+
+        public List<SelectListItem> EnabledList { get; set; }
+
     }
 
     public class ButtonModel

@@ -11,6 +11,8 @@ namespace ASBicycle.Web.Models
 
         [AllowHtml]
         public string UserNameOrEmail { get; set; }
+        [AllowHtml]
+        public string TenancyName { get; set; }
 
         [AllowHtml]
         public string Password { get; set; }

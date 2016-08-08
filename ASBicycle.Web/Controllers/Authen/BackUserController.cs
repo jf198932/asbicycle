@@ -94,6 +94,7 @@ namespace ASBicycle.Web.Controllers.Authen
             {
                 Mapper.CreateMap<BackUserModel, BackUser>();
                 var user = Mapper.Map<BackUser>(model);
+                user.School_id = CommonHelper.GetSchoolId();
                 user.LoginPwd = DESProvider.EncryptString("123456");//初始密码
                 foreach (var roleId in model.SelectedRoleList)
                 {
@@ -225,7 +226,8 @@ namespace ASBicycle.Web.Controllers.Authen
                 Expression<Func<BackUser, Boolean>> tmp = t => t.Enabled == data;
                 expr = bulider.BuildQueryAnd(expr, tmp);
             }
-            Expression<Func<BackUser, Boolean>> tmpSolid = t => t.School_id == SchoolId;
+            var id = CommonHelper.GetSchoolId();
+            Expression<Func<BackUser, Boolean>> tmpSolid = t => t.School_id == id;
             expr = bulider.BuildQueryAnd(expr, tmpSolid);
 
             return expr;

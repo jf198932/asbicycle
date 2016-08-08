@@ -2364,6 +2364,7 @@
     <Compile Include="Controllers\Authen\BackUserController.cs" />
     <Compile Include="Controllers\Authen\ModuleController.cs" />
     <Compile Include="Controllers\Authen\PermissionController.cs" />
+    <Compile Include="Controllers\Authen\TenancyController.cs" />
     <Compile Include="Controllers\Common\CommonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ASBicycleControllerBase.cs" />
@@ -2379,6 +2380,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\CommonHelper.cs" />
     <Compile Include="Helper\DESProvider.cs" />
     <Compile Include="Helper\ExcelHelper.cs" />
     <Compile Include="Helper\MD5Provider.cs" />
@@ -2420,10 +2422,6 @@
     <Content Include="Views\Shared\ThemeSetting.cshtml" />
     <Content Include="Views\Shared\Breadcrumb.cshtml" />
     <Content Include="Views\Shared\Footer.cshtml" />
-    <Content Include="Views\School\List.cshtml" />
-    <Content Include="Views\School\_CreateOrUpdate.cshtml" />
-    <Content Include="Views\School\Create.cshtml" />
-    <Content Include="Views\School\Edit.cshtml" />
     <Content Include="Views\Bikesite\List.cshtml" />
     <Content Include="Views\Bikesite\Create.cshtml" />
     <Content Include="Views\Bikesite\Edit.cshtml" />
@@ -2468,6 +2466,17 @@
     <Content Include="Views\Bikesite\_List.cshtml" />
     <Content Include="Views\User\_List.cshtml" />
     <Content Include="Views\User\_Search.cshtml" />
+    <Content Include="Views\Module\_List.cshtml" />
+    <Content Include="Views\Module\_Search.cshtml" />
+    <Content Include="Views\Permission\_Search.cshtml" />
+    <Content Include="Views\Permission\_List.cshtml" />
+    <Content Include="Views\Role\_Search.cshtml" />
+    <Content Include="Views\Role\_List.cshtml" />
+    <Content Include="Views\Tenancy\List.cshtml" />
+    <Content Include="Views\Tenancy\_CreateOrUpdate.cshtml" />
+    <Content Include="Views\Tenancy\Create.cshtml" />
+    <Content Include="Views\Tenancy\Edit.cshtml" />
+    <Content Include="Views\School\Info.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

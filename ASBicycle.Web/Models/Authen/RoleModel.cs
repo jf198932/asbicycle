@@ -1,9 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace ASBicycle.Web.Models.Authen
 {
     public class RoleModel
     {
+        public RoleModel()
+        {
+            Search = new RoleSearchModel();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -15,5 +23,25 @@ namespace ASBicycle.Web.Models.Authen
         public int? ModifyId { get; set; }
         public string ModifyBy { get; set; }
         public DateTime? ModifyTime { get; set; }
+
+        public RoleSearchModel Search { get; set; }
+    }
+
+    public class RoleSearchModel
+    {
+        public RoleSearchModel()
+        {
+            EnabledList = new List<SelectListItem> {
+                new SelectListItem { Text = "--- 请选择 ---", Value = "-1", Selected = true },
+                new SelectListItem {Text = "禁用", Value = "0"},
+                new SelectListItem {Text = "启用", Value = "1"}
+            };
+        }
+        [Display(Name = "角色名称")]
+        public string Name { get; set; }
+        [Display(Name = "启用")]
+        public bool Enabled { get; set; }
+
+        public List<SelectListItem> EnabledList { get; set; }
     }
 }

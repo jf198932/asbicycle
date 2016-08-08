@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using Abp.Domain.Repositories;
@@ -8,6 +9,7 @@ using Abp.Domain.Uow;
 using Abp.Web.Models;
 using ASBicycle.Entities.Authen;
 using ASBicycle.Web.Extension.Fliter;
+using ASBicycle.Web.Helper;
 using ASBicycle.Web.Models.Authen;
 using ASBicycle.Web.Models.Common;
 using AutoMapper;
@@ -32,16 +34,17 @@ namespace ASBicycle.Web.Controllers.Authen
         //[AdminPermission(PermissionCustomMode.Enforce)]
         public ActionResult List()
         {
-            return View();
+            var model = new PermissionModel();
+            return View(model);
         }
 
         [DontWrapResult, UnitOfWork]
         public virtual ActionResult InitDataTable(DataTableParameter param)
         {
-
-            var query =
-                _permissionRepository.GetAll().OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
-            var total = _permissionRepository.Count();
+            var expr = BuildSearchCriteria();
+            var temp = _permissionRepository.GetAll().Where(expr);
+            var query = temp.OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
+            var total = temp.Count();
             var filterResult = query.Select(t => new PermissionModel
             {
                 Id = t.Id,
@@ -82,8 +85,9 @@ namespace ASBicycle.Web.Controllers.Authen
             if (ModelState.IsValid)
             {
                 Mapper.CreateMap<PermissionModel, Permission>();
-                var user = Mapper.Map<Permission>(model);
-                user = _permissionRepository.Insert(user);
+                var permission = Mapper.Map<Permission>(model);
+                permission.School_id = CommonHelper.GetSchoolId();
+                _permissionRepository.Insert(permission);
 
                 //SuccessNotification("添加成功");
                 return Json(model);
@@ -133,5 +137,41 @@ namespace ASBicycle.Web.Controllers.Authen
 
             return Json(new { success = true });
         }
+
+        #region 构建查询表达式
+        /// <summary>
+        /// 构建查询表达式
+        /// </summary>
+        /// <returns></returns>
+        private Expression<Func<Permission, Boolean>> BuildSearchCriteria()
+        {
+            DynamicLambda<Permission> bulider = new DynamicLambda<Permission>();
+            Expression<Func<Permission, Boolean>> expr = null;
+            if (!string.IsNullOrEmpty(Request["Name"]))
+            {
+                var data = Request["Name"].Trim();
+                Expression<Func<Permission, Boolean>> tmp = t => t.Name.Contains(data);
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["Code"]))
+            {
+                var data = Request["Code"].Trim();
+                Expression<Func<Permission, Boolean>> tmp = t => t.Code.Contains(data);
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["Enabled"]) && Request["Enabled"].Trim() != "-1")
+            {
+                var data = Convert.ToInt32(Request["Enabled"].Trim()) == 1;
+                Expression<Func<Permission, Boolean>> tmp = t => t.Enabled == data;
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            var id = CommonHelper.GetSchoolId();
+            Expression<Func<Permission, Boolean>> tmpSolid = t => t.School_id == id;
+            expr = bulider.BuildQueryAnd(expr, tmpSolid);
+
+            return expr;
+        }
+
+        #endregion
     }
 }

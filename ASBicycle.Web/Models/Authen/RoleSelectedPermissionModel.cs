@@ -27,6 +27,8 @@ namespace ASBicycle.Web.Models.Authen
 
         public int ModuleId { get; set; }
 
+        public string LinkUrl { get; set; }
+
         public int? ParentId { get; set; }
 
         public string ModuleName { get; set; }

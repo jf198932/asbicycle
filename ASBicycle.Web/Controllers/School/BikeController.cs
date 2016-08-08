@@ -109,8 +109,9 @@ namespace ASBicycle.Web.Controllers.School
             {
                 Mapper.CreateMap<BikeModel, Entities.Bike>();
                 var bike = Mapper.Map<Entities.Bike>(model);
+                //bike.School_id = CommonHelper.GetSchoolId();
                 bike.Insite_status = model.Bikesite_id == null ? 2 : 1;
-                bike = _bikeRepository.Insert(bike);
+                _bikeRepository.Insert(bike);
 
                 //SuccessNotification("添加成功");
                 return Json(model);
@@ -365,7 +366,8 @@ namespace ASBicycle.Web.Controllers.School
                 Expression<Func<Entities.Bike, Boolean>> tmp = t => t.Ble_type >= data;
                 expr = bulider.BuildQueryAnd(expr, tmp);
             }
-            Expression<Func<Entities.Bike, Boolean>> tmpSolid = t => t.School_id == SchoolId;
+            var id = CommonHelper.GetSchoolId();
+            Expression<Func<Entities.Bike, Boolean>> tmpSolid = t => t.School_id == id;
             expr = bulider.BuildQueryAnd(expr, tmpSolid);
 
             return expr;

@@ -22,5 +22,7 @@ namespace ASBicycle.Web.Models.School
         public int? Bike_count { get; set; }
         public int? Time_charge { get; set; }
         public DateTime? Refresh_date { get; set; }
+        [Required(ErrorMessage = "租户名称不能为空")]
+        public string TenancyName { get; set; }
     }
 }

@@ -29,6 +29,7 @@ namespace ASBicycle.Web.Models.Authen
         public string Description { get; set; }
         public bool IsMenu { get; set; }
         public bool Enabled { get; set; }
+        public int? School_id { get; set; }
 
         public ModuleSearchModel Search { get; set; }
 
