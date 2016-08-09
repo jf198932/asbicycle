@@ -147,7 +147,7 @@ namespace ASBicycle.Web.Controllers.Authen
         {
             //角色 - 菜单
             var model = new RoleSelectedModuleModel();
-
+            var schoolid = CommonHelper.GetSchoolId();
             #region 角色
 
             var role = _roleRepository.Get(id);
@@ -160,7 +160,7 @@ namespace ASBicycle.Web.Controllers.Authen
             //菜单列表
             model.ModuleDataList =
                 _moduleRepository.GetAll()
-                    .Where(m => m.IsMenu && m.Enabled)
+                    .Where(m => m.IsMenu && m.Enabled && m.School_id == schoolid)
                     .Select(m => new ModuleModel1
                     {
                         ModuleId = m.Id,
@@ -204,13 +204,13 @@ namespace ASBicycle.Web.Controllers.Authen
                 if (!selectedModuleId.Contains(temp))
                     selectedModuleId.Add(temp);
             }
-
+            var schoolid = CommonHelper.GetSchoolId();
             //权限列表
             var model = new RoleSelectedPermissionModel();
             //table头
             model.HeaderPermissionList =
                 _permissionRepository.GetAll()
-                .Where(p => p.Enabled)
+                .Where(p => p.Enabled && p.School_id == schoolid)
                 .Select(p => new PermissionModel1
                 {
                     PermissionId = p.Id,

@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "校园管理 | NextCMS Admin";
+    ViewBag.Title = "租户(学校)管理 | NextCMS Admin";
 }
 
 <div class="fluid">
@@ -87,13 +87,13 @@
 
         //新增
         function Create(actionUrl) {
-            ShowModal(actionUrl, {}, "新增学校");
+            ShowModal(actionUrl, {}, "新增租户(学校)");
         }
 
         //编辑
         function Edit(actionUrl, id) {
             var param = { id: id };
-            ShowModal(actionUrl, param, "编辑学校");
+            ShowModal(actionUrl, param, "编辑租户(学校)");
         }
 
         //保存

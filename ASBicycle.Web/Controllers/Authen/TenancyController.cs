@@ -39,7 +39,8 @@ namespace ASBicycle.Web.Controllers.Authen
         {
 
             var query =
-                _schoolRepository.GetAll().OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
+                _schoolRepository.GetAll().Where(t=> t.TenancyName.ToLower() != "default")
+                .OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
             var total = _schoolRepository.Count();
             var filterResult = query.Select(t => new SchoolModel
             {
@@ -82,7 +83,7 @@ namespace ASBicycle.Web.Controllers.Authen
             {
                 Mapper.CreateMap<SchoolModel, Entities.School>();
                 var school = Mapper.Map<Entities.School>(model);
-                school = _schoolRepository.Insert(school);
+                _schoolRepository.Insert(school);
 
                 //SuccessNotification("添加成功");
                 return Json(model);
@@ -115,7 +116,7 @@ namespace ASBicycle.Web.Controllers.Authen
                 school.Refresh_date = DateTime.Now;
                 school.Updated_at = DateTime.Now;
 
-                school = _schoolRepository.Update(school);
+                _schoolRepository.Update(school);
                 //role = model.ToEntity(role);
                 //_roleService.UpdateRole(role);
 
@@ -133,6 +134,17 @@ namespace ASBicycle.Web.Controllers.Authen
             //_roleService.DeleteRole(role);
 
             return Json(new { success = true });
+        }
+
+        [UnitOfWork, DontWrapResult]
+        public virtual ActionResult CheckTenancyNameExists(string tenancyName)
+        {
+            var model = _schoolRepository.FirstOrDefault(t => t.TenancyName.ToLower() == tenancyName.ToLower());
+            if (model != null)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 }

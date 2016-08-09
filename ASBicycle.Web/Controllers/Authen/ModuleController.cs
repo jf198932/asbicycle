@@ -244,9 +244,10 @@ namespace ASBicycle.Web.Controllers.Authen
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
+            var schoolid = CommonHelper.GetSchoolId();
             model.ParentModuleItems.AddRange(
                 _moduleRepository.GetAll()
-                    .Where(m => m.Enabled && m.IsMenu)
+                    .Where(m => m.Enabled && m.IsMenu && m.School_id == schoolid)
                     .OrderBy(m => m.OrderSort)
                     .Select(m => new SelectListItem {Text = m.Name, Value = m.Id.ToString()}));
             model.ParentModuleItems.Insert(0, new SelectListItem {Text = "--根模块--", Value = ""});
@@ -261,9 +262,10 @@ namespace ASBicycle.Web.Controllers.Authen
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
+            var schoolid = CommonHelper.GetSchoolId();
             model.ButtonList =
                 _permissionRepository.GetAll()
-                    .Where(r => r.Enabled)
+                    .Where(r => r.Enabled && r.School_id == schoolid)
                     .OrderBy(r => r.OrderSort)
                     .Select(r => new KeyValueModel { Text = r.Name, Value = r.Id.ToString() })
                     .ToList();

@@ -188,9 +188,10 @@ namespace ASBicycle.Web.Controllers.Authen
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
+            var schoolid = CommonHelper.GetSchoolId();
             model.RoleList =
                 _roleRepository.GetAll()
-                    .Where(r => r.Enabled)
+                    .Where(r => r.Enabled && r.School_id == schoolid)
                     .OrderBy(r => r.OrderSort)
                     .Select(r => new KeyValueModel {Text = r.Name, Value = r.Id.ToString()})
                     .ToList();

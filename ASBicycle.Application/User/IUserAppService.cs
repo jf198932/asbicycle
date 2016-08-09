@@ -93,5 +93,9 @@ namespace ASBicycle.User
         [HttpPost]
         Task<UserUploadOutput> UploadUserPic();
 
+        [HttpPost]
+        Task<UserOutput> UserLogin(CheckLoginInput checkLoginInput);
+        [HttpPost]
+        Task<UserOutput> UserRegister(RegisterUserInput modelIntput);
     }
 }

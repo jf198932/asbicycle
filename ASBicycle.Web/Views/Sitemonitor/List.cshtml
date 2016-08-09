@@ -1,6 +1,6 @@
-﻿@model ASBicycle.Web.Models.School.UserModel
+﻿@model ASBicycle.Web.Models.School.SitemonitorModel
 @{
-    ViewBag.Title = "会员管理 | NextCMS Admin";
+    ViewBag.Title = "小桩管理 | NextCMS Admin";
 }
 
 @Html.Partial("_Search", Model.Search)
@@ -16,23 +16,17 @@
             var actionUrl = "@Url.Action("InitDataTable")?rand=" + Math.random();
             var aoColumns = [
                 { "sName": "sort" },
-                { "sName": "phone" },
                 { "sName": "name" },
-                { "sName": "nickname" },
-                { "sName": "school_name" },
+                { "sName": "bikesite_name" },
                 {
-                    "sName": "Certification",
+                    "sName": "status",
                     "fnRender": function (oObj) {
                         var render;
                         var t = oObj.aData[oObj.aData.length-2];
                         if (t === "1") {
-                            render = '未申请';
-                        } else if (t === "2") {
-                            render = '已申请';
-                        } else if (t === "3") {
-                            render = '已认证';
+                            render = '启用';
                         } else {
-                            render = '认证失败';
+                            render = '禁用';
                         }
 
                         return render;
@@ -60,13 +54,13 @@
 
         //新增
         function Create(actionUrl) {
-            ShowModal(actionUrl, {}, "新增会员");
+            ShowModal(actionUrl, {}, "新增小桩");
         }
 
         //编辑
         function Edit(actionUrl, id) {
             var param = { id: id };
-            ShowModal(actionUrl, param, "编辑会员");
+            ShowModal(actionUrl, param, "编辑小桩");
         }
 
         //保存

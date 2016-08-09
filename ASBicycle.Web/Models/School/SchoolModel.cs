@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace ASBicycle.Web.Models.School
 {
@@ -23,6 +24,7 @@ namespace ASBicycle.Web.Models.School
         public int? Time_charge { get; set; }
         public DateTime? Refresh_date { get; set; }
         [Required(ErrorMessage = "租户名称不能为空")]
+        [Remote("CheckTenancyNameExists", "Tenancy", ErrorMessage = "租户名称不能重复")]
         public string TenancyName { get; set; }
     }
 }

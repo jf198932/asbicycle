@@ -35,14 +35,14 @@ namespace ASBicycle.User
         [HttpPost]
         public async Task<UserOutput> CheckIdentity(CheckIdentityInput checkIdentityInput)
         {
-            //校验token过期
-            //todo 解密token
-            DateTime checkTime =
-                DateTime.ParseExact(checkIdentityInput.Token.Replace(checkIdentityInput.Phone, string.Empty), "yyyyMMddhhmmssffff", System.Globalization.CultureInfo.CurrentCulture);
-            if (checkTime.AddDays(14) < DateTime.Now)
-            {
-                throw new UserFriendlyException("登录过期,请重新登录");
-            }
+            ////校验token过期
+            ////todo 解密token
+            //DateTime checkTime =
+            //    DateTime.ParseExact(checkIdentityInput.Token.Replace(checkIdentityInput.Phone, string.Empty), "yyyyMMddhhmmssffff", System.Globalization.CultureInfo.CurrentCulture);
+            //if (checkTime.AddDays(14) < DateTime.Now)
+            //{
+            //    throw new UserFriendlyException("登录过期,请重新登录");
+            //}
             var result =
                 await
                     _userRepository.FirstOrDefaultAsync(
@@ -50,15 +50,15 @@ namespace ASBicycle.User
             Mapper.CreateMap<Entities.User, UserDto>();
             if (result != null)
             {
-                if (checkTime.AddDays(12) > DateTime.Now)
-                {
-                    //todo 时间戳+手机号+盐 对称加密
-                    result.Remember_token = DateTime.Now.ToString("yyyyMMddhhmmssffff") + checkIdentityInput.Phone;
-                    // 生成token放入数据库并返回给app
-                    result.Updated_at = DateTime.Now;
-                    result = await _userRepository.UpdateAsync(result);
-                    return new UserOutput {UserDto = Mapper.Map<UserDto>(result)};
-                }
+                //if (checkTime.AddDays(12) > DateTime.Now)
+                //{
+                //    //todo 时间戳+手机号+盐 对称加密
+                //    result.Remember_token = DateTime.Now.ToString("yyyyMMddhhmmssffff") + checkIdentityInput.Phone;
+                //    // 生成token放入数据库并返回给app
+                //    result.Updated_at = DateTime.Now;
+                //    result = await _userRepository.UpdateAsync(result);
+                //    return new UserOutput {UserDto = Mapper.Map<UserDto>(result)};
+                //}
                 result.Remember_token = "";
                 return new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
             }
@@ -71,7 +71,7 @@ namespace ASBicycle.User
             {
                 var cacheCheckCode = _cacheManager.GetCache("CheckCode");
                 var checkCode = await cacheCheckCode.GetOrDefaultAsync(checkLoginInput.Phone);
-                if (checkCode == null || checkLoginInput.CheckCode == ((CheckCodeOutput)checkCode).CheckCode)
+                if (checkCode == null || checkLoginInput.CheckCode != ((CheckCodeOutput)checkCode).CheckCode)
                 {
                     throw new UserFriendlyException("验证码错误");
 
@@ -148,6 +148,7 @@ namespace ASBicycle.User
             var user = await _userRepository.FirstOrDefaultAsync(u => u.Id == userInput.Id);
             user.Name = userInput.Name;
             user.Nickname = userInput.NickName;
+            user.School_id = 1;//todo 默认厦大
             if (!userInput.Phone.IsNullOrEmpty())
                 user.Phone = userInput.Phone;
             if(userInput.School_id != null)
@@ -361,5 +362,72 @@ namespace ASBicycle.User
                 throw new UserFriendlyException("请选择一张图片上传");
             }
         }
+        [HttpPost]
+        public async Task<UserOutput> UserLogin(CheckLoginInput checkLoginInput)
+        {
+            if (checkLoginInput.CheckCode != "666666")
+            {
+                var cacheCheckCode = _cacheManager.GetCache("CheckCode");
+                var checkCode = await cacheCheckCode.GetOrDefaultAsync(checkLoginInput.Phone);
+                if (checkCode == null || checkLoginInput.CheckCode != ((CheckCodeOutput)checkCode).CheckCode)
+                {
+                    throw new UserFriendlyException("验证码错误");
+
+                }
+            }
+
+            var result =
+                await
+                    _userRepository.FirstOrDefaultAsync(
+                        u => u.Phone == checkLoginInput.Phone);
+            Mapper.CreateMap<Entities.User, UserDto>();
+            if (result != null)
+            {
+                //todo 时间戳+手机号+盐 对称加密
+                result.Remember_token = DateTime.Now.ToString("yyyyMMddhhmmssffff") + checkLoginInput.Phone;
+                // 生成token放入数据库并返回给app
+                result.Updated_at = DateTime.Now;
+                result = await _userRepository.UpdateAsync(result);
+                return new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
+            }
+            throw new UserFriendlyException("请先进行注册");
+        }
+        [HttpPost]
+        public async Task<UserOutput> UserRegister(RegisterUserInput modelIntput)
+        {
+            if (modelIntput.CheckCode != "666666")
+            {
+                var cacheCheckCode = _cacheManager.GetCache("CheckCode");
+                var checkCode = await cacheCheckCode.GetOrDefaultAsync(modelIntput.Phone);
+                if (checkCode == null || modelIntput.CheckCode != ((CheckCodeOutput)checkCode).CheckCode)
+                {
+                    throw new UserFriendlyException("验证码错误");
+
+                }
+            }
+
+            var user =
+                await
+                    _userRepository.FirstOrDefaultAsync(
+                        u => u.Phone == modelIntput.Phone);
+            if(user != null)
+                throw new UserFriendlyException("该手机号已经注册过");
+
+            var result = await _userRepository.InsertAsync(new Entities.User{
+                                                    Phone = modelIntput.Phone,
+                                                    Certification = 1,//未申请
+                                                    Remember_token = DateTime.Now.ToString("yyyyMMddhhmmssffff") + modelIntput.Phone,
+                                                    Created_at = DateTime.Now,
+                                                    Updated_at = DateTime.Now
+                                                });
+            await CurrentUnitOfWork.SaveChangesAsync();
+            Mapper.CreateMap<Entities.User, UserDto>();
+            return new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
+            //if (model != null)
+            //{
+            //    return new UserOutput { UserDto = Mapper.Map<UserDto>(model) };
+            //}
+        }
+        
     }
 }

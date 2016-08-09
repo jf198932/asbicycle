@@ -109,6 +109,7 @@
     <Compile Include="Entities\Refound.cs" />
     <Compile Include="Entities\School.cs" />
     <Compile Include="Entities\Sitebeacon.cs" />
+    <Compile Include="Entities\Sitemonitor.cs" />
     <Compile Include="Entities\Track.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="IAppFolders.cs" />

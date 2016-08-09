@@ -2371,6 +2371,7 @@
     <Compile Include="Controllers\School\BikeController.cs" />
     <Compile Include="Controllers\School\BikesiteController.cs" />
     <Compile Include="Controllers\School\SchoolController.cs" />
+    <Compile Include="Controllers\School\SitemonitorController.cs" />
     <Compile Include="Controllers\School\UserController.cs" />
     <Compile Include="Extension\DynamicLambda.cs" />
     <Compile Include="Extension\Fliter\AdminLayoutAttribute.cs" />
@@ -2402,6 +2403,7 @@
     <Compile Include="Models\School\BikeModel.cs" />
     <Compile Include="Models\School\BikesiteModel.cs" />
     <Compile Include="Models\School\SchoolModel.cs" />
+    <Compile Include="Models\School\SitemonitorModel.cs" />
     <Compile Include="Models\School\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\ASBicycleWebViewPageBase.cs" />
@@ -2477,6 +2479,12 @@
     <Content Include="Views\Tenancy\Create.cshtml" />
     <Content Include="Views\Tenancy\Edit.cshtml" />
     <Content Include="Views\School\Info.cshtml" />
+    <Content Include="Views\Sitemonitor\List.cshtml" />
+    <Content Include="Views\Sitemonitor\_CreateOrUpdate.cshtml" />
+    <Content Include="Views\Sitemonitor\Create.cshtml" />
+    <Content Include="Views\Sitemonitor\Edit.cshtml" />
+    <Content Include="Views\Sitemonitor\_List.cshtml" />
+    <Content Include="Views\Sitemonitor\_Search.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

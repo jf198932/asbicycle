@@ -43,6 +43,7 @@ namespace ASBicycle.Web.Models.School
         public string User_name { get; set; }
         public int? Bikesite_id { get; set; }
         public string Bikesite_name { get; set; }
+        public string Phone { get; set; }
 
         public BikeSearchModel Search { get; set; }
 
