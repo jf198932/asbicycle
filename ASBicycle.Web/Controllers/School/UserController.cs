@@ -73,6 +73,7 @@ namespace ASBicycle.Web.Controllers.School
                                 t.Name,
                                 t.Nickname,
                                 t.School_name,
+                                t.Remember_token,
                                 t.Certification.ToString(),
                                 t.Id.ToString()
                             };

@@ -61,7 +61,7 @@ namespace ASBicycle.Web.Controllers.School
                 Return_charge = t.Return_charge,
                 Gps_point = t.Gps_point,
                 Radius = t.Radius,
-                Bike_count = t.Bike_count,
+                Bike_count = t.Bikes.Count,
                 Available_count = t.Available_count,
                 School_name = t.School.Name
             }).ToList();

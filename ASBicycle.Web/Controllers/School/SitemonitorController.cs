@@ -57,7 +57,8 @@ namespace ASBicycle.Web.Controllers.School
                 Name = t.Name,
                 Bikesite_id = t.Bikesite_id,
                 Bikesite_name = t.Bikesite == null? "": t.Bikesite.Name,
-                Status = t.Status??1
+                Status = t.Status??1,
+                Enabled = t.Enabled??1
             }).ToList();
             int sortId = param.iDisplayStart + 1;
             var result = from t in filterResult
@@ -67,6 +68,7 @@ namespace ASBicycle.Web.Controllers.School
                                 t.Name,
                                 t.Bikesite_name,
                                 t.Status.ToString(),
+                                t.Enabled.ToString(),
                                 t.Id.ToString()
                             };
 
@@ -175,6 +177,12 @@ namespace ASBicycle.Web.Controllers.School
             {
                 var data = Convert.ToInt32(Request["Status"].Trim());
                 Expression<Func<Entities.Sitemonitor, Boolean>> tmp = t => t.Status == data;
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["Enabled"]) && Request["Enabled"].Trim() != "-1")
+            {
+                var data = Convert.ToInt32(Request["Enabled"].Trim());
+                Expression<Func<Entities.Sitemonitor, Boolean>> tmp = t => t.Enabled == data;
                 expr = bulider.BuildQueryAnd(expr, tmp);
             }
             return expr;

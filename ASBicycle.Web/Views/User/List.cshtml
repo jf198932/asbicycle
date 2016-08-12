@@ -1,6 +1,6 @@
 ﻿@model ASBicycle.Web.Models.School.UserModel
 @{
-    ViewBag.Title = "会员管理 | NextCMS Admin";
+    ViewBag.Title = "会员管理";
 }
 
 @Html.Partial("_Search", Model.Search)
@@ -20,6 +20,7 @@
                 { "sName": "name" },
                 { "sName": "nickname" },
                 { "sName": "school_name" },
+                { "sName": "remember_token" },
                 {
                     "sName": "Certification",
                     "fnRender": function (oObj) {

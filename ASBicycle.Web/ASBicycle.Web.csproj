@@ -2368,6 +2368,7 @@
     <Compile Include="Controllers\Common\CommonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ASBicycleControllerBase.cs" />
+    <Compile Include="Controllers\School\AlarmController.cs" />
     <Compile Include="Controllers\School\BikeController.cs" />
     <Compile Include="Controllers\School\BikesiteController.cs" />
     <Compile Include="Controllers\School\SchoolController.cs" />
@@ -2485,6 +2486,9 @@
     <Content Include="Views\Sitemonitor\Edit.cshtml" />
     <Content Include="Views\Sitemonitor\_List.cshtml" />
     <Content Include="Views\Sitemonitor\_Search.cshtml" />
+    <Content Include="Views\Alarm\List.cshtml" />
+    <Content Include="Views\Alarm\_Search.cshtml" />
+    <Content Include="Views\Alarm\_List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -97,5 +97,8 @@ namespace ASBicycle.User
         Task<UserOutput> UserLogin(CheckLoginInput checkLoginInput);
         [HttpPost]
         Task<UserOutput> UserRegister(RegisterUserInput modelIntput);
+
+        [HttpGet]
+        MianzeOutput Mianze();
     }
 }

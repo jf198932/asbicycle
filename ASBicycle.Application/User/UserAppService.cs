@@ -59,7 +59,7 @@ namespace ASBicycle.User
                 //    result = await _userRepository.UpdateAsync(result);
                 //    return new UserOutput {UserDto = Mapper.Map<UserDto>(result)};
                 //}
-                result.Remember_token = "";
+                //result.Remember_token = "";
                 return new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
             }
             throw new UserFriendlyException("请重新登录");
@@ -117,10 +117,7 @@ namespace ASBicycle.User
             //生成6位数字随机数
             Random rand = new Random();
             int i = rand.Next(1000, 9999);
-            CheckCodeOutput checkCodeOutput = new CheckCodeOutput {CheckCode = i.ToString()};
-            var cacheCheckCode = _cacheManager.GetCache("CheckCode");
-            await cacheCheckCode.SetAsync(phoneNumInput.Phone, checkCodeOutput, new TimeSpan(0, 0, 70));
-
+            
             StringBuilder sms = new StringBuilder();
             sms.AppendFormat("name={0}", "isr");
             sms.AppendFormat("&pwd={0}", "2FF79C1AE7A1798A84D0E9B1B2B7");
@@ -131,16 +128,18 @@ namespace ASBicycle.User
             string resp = PushMsgHelper.PushToWeb("http://web.wasun.cn/asmx/smsservice.aspx", sms.ToString(),
                 Encoding.UTF8);
             string[] msg = resp.Split(',');
+            CheckCodeOutput checkCodeOutput = new CheckCodeOutput { CheckCode = i.ToString() };
+            var cacheCheckCode = _cacheManager.GetCache("CheckCode");
+            await cacheCheckCode.SetAsync(phoneNumInput.Phone, checkCodeOutput, new TimeSpan(0, 0, 70));
             if (msg[0] == "0")
             {
-                checkCodeOutput.CheckCode = "";
+                return new CheckCodeOutput {CheckCode = ""};
+
             }
             else
             {
-                checkCodeOutput.CheckCode = "";
+                return new CheckCodeOutput { CheckCode = "" };
             }
-
-            return checkCodeOutput;
         }
         [HttpPost]
         public async Task UpdateUser(UserInput userInput)
@@ -428,6 +427,10 @@ namespace ASBicycle.User
             //    return new UserOutput { UserDto = Mapper.Map<UserDto>(model) };
             //}
         }
-        
+        [HttpGet]
+        public MianzeOutput Mianze()
+        {
+            return new MianzeOutput {Url = "http://121.40.34.43/ASBicycle/Uploads/mianze.html" };
+        }
     }
 }

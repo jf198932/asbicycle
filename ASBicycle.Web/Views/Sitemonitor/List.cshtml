@@ -1,6 +1,6 @@
 ﻿@model ASBicycle.Web.Models.School.SitemonitorModel
 @{
-    ViewBag.Title = "小桩管理 | NextCMS Admin";
+    ViewBag.Title = "小桩管理";
 }
 
 @Html.Partial("_Search", Model.Search)
@@ -22,7 +22,21 @@
                     "sName": "status",
                     "fnRender": function (oObj) {
                         var render;
-                        var t = oObj.aData[oObj.aData.length-2];
+                        var t = oObj.aData[oObj.aData.length-3];
+                        if (t === "1") {
+                            render = '正常';
+                        } else {
+                            render = '损坏';
+                        }
+
+                        return render;
+                    }
+                },
+                {
+                    "sName": "enabled",
+                    "fnRender": function (oObj) {
+                        var render;
+                        var t = oObj.aData[oObj.aData.length - 2];
                         if (t === "1") {
                             render = '启用';
                         } else {
