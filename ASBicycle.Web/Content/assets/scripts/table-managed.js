@@ -49,7 +49,7 @@ var TableManaged = {
     },
 
     search: function (searchUrl) {
-        var filterdata = $("form").serialize();
+        var filterdata = $("#search_form").serialize();
         var actionUrl = searchUrl + "?rand=" + Math.random() + "&" + filterdata;
         this.oTable.fnReloadAjax(actionUrl);
     },

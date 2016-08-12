@@ -110,7 +110,7 @@ namespace ASBicycle.Web.Controllers.School
             {
                 Mapper.CreateMap<BikeModel, Entities.Bike>();
                 var bike = Mapper.Map<Entities.Bike>(model);
-                //bike.School_id = CommonHelper.GetSchoolId();
+                bike.School_id = CommonHelper.GetSchoolId();
                 bike.Insite_status = model.Bikesite_id == null ? 2 : 1;
                 _bikeRepository.Insert(bike);
 

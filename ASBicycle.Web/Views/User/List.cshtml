@@ -53,8 +53,8 @@
 
             $('#search_form').keypress(function (e) {
                 if (e.which === 13) {
+                    e.preventDefault();//取消回车原事件
                     TableManaged.search('@Url.Action("InitDataTable")');
-                    //return false;
                 }
             });
         });

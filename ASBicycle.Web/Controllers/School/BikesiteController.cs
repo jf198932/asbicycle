@@ -95,6 +95,7 @@ namespace ASBicycle.Web.Controllers.School
             {
                 Mapper.CreateMap<BikesiteModel, Entities.Bikesite>();
                 var bikesite = Mapper.Map<Entities.Bikesite>(model);
+                bikesite.School_id = CommonHelper.GetSchoolId();
                 _bikesiteRepository.Insert(bikesite);
 
                 //SuccessNotification("添加成功");
@@ -156,8 +157,9 @@ namespace ASBicycle.Web.Controllers.School
         {
             if (model == null)
                 throw new ArgumentNullException("model");
-            model.SchoolList.AddRange(
-                _schoolRepository.GetAll().Select(b => new SelectListItem {Text = b.Name, Value = b.Id.ToString()}));
+            //var schoolid = CommonHelper.GetSchoolId();
+            //model.SchoolList.AddRange(
+            //    _schoolRepository.GetAll().Where(t=>t.Id == schoolid).Select(b => new SelectListItem {Text = b.Name, Value = b.Id.ToString()}));
             model.TypeList.AddRange(new List<SelectListItem>
             {
                 new SelectListItem {Text = "普通", Value = "1"},

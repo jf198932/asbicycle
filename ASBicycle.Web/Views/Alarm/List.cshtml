@@ -37,7 +37,7 @@
                     "sName": "bike_img",
                     "fnRender": function (oObj) {
                         var t = oObj.aData[oObj.aData.length - 2];
-                        var render = "<img src='xxx.jpg' bigimg='" + t + "' title='xx' class='imgtip' onmousemove='mmove(this)' onmouseover='mover(this)' onmouseout='mout()' />";
+                        var render = "<img src='" + t + "' bigimg='" + t + "' class='imgtip' onmousemove='mmove(this)' onmouseover='mover(this)' onmouseout='mout()' />";
                         return render;
                     }
                 },
@@ -91,12 +91,12 @@
 
             $('#search_form').keypress(function (e) {
                 if (e.which === 13) {
+                    e.preventDefault();//取消回车原事件
                     TableManaged.search('@Url.Action("InitDataTable")');
-                    //return false;
                 }
             });
         });
-        
+
         function mover(obj) {
             var imgtip = "<div id='imgtip'><img src='" + $(obj).attr("bigimg") + "' alt='预览图'/><\/div>"; //创建 div 元素
             $("body").append(imgtip); //把它追加到文档中
@@ -127,6 +127,8 @@
     <style>
         .imgtip {
             position:relative;
+            width: 100px;
+            height: 100px;
         }
     </style>
 }

@@ -110,10 +110,10 @@ namespace ASBicycle.Web.Controllers.School
                 Expression<Func<Entities.Bike, Boolean>> tmp = t => t.Ble_type >= data;
                 expr = bulider.BuildQueryAnd(expr, tmp);
             }
-            
-            //Expression<Func<Entities.Bike, Boolean>> tmpd = t => t.Vlock_status >= 3;
-            //expr = bulider.BuildQueryAnd(expr, tmpd);
-            
+
+            Expression<Func<Entities.Bike, Boolean>> tmpd = t => t.Vlock_status >= 3;
+            expr = bulider.BuildQueryAnd(expr, tmpd);
+
             var id = CommonHelper.GetSchoolId();
             Expression<Func<Entities.Bike, Boolean>> tmpSolid = t => t.School_id == id;
             expr = bulider.BuildQueryAnd(expr, tmpSolid);

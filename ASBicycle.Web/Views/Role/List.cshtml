@@ -6,9 +6,6 @@
 
 @Html.Partial("_Search", Model.Search)
 @Html.Partial("_List")
-
-
-
 @Html.Partial("Modal")
 @Html.Partial("_FormModalPermission")
 
@@ -54,6 +51,13 @@
             ];
 
             oTable = TableManaged.init($(".datatable"), actionUrl, aoColumns);
+
+            $('#search_form').keypress(function (e) {
+                if (e.which === 13) {
+                    e.preventDefault();//取消回车原事件
+                    TableManaged.search('@Url.Action("InitDataTable")');
+                }
+            });
         });
 
         //新增
