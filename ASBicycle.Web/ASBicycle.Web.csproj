@@ -2374,6 +2374,7 @@
     <Compile Include="Controllers\School\SchoolController.cs" />
     <Compile Include="Controllers\School\SitemonitorController.cs" />
     <Compile Include="Controllers\School\UserController.cs" />
+    <Compile Include="Controllers\School\VersionUpdateController.cs" />
     <Compile Include="Extension\DynamicLambda.cs" />
     <Compile Include="Extension\Fliter\AdminLayoutAttribute.cs" />
     <Compile Include="Extension\Fliter\AdminPermissionAttribute.cs" />
@@ -2406,6 +2407,7 @@
     <Compile Include="Models\School\SchoolModel.cs" />
     <Compile Include="Models\School\SitemonitorModel.cs" />
     <Compile Include="Models\School\UserModel.cs" />
+    <Compile Include="Models\School\VersionUpdateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\ASBicycleWebViewPageBase.cs" />
   </ItemGroup>
@@ -2489,6 +2491,12 @@
     <Content Include="Views\Alarm\List.cshtml" />
     <Content Include="Views\Alarm\_Search.cshtml" />
     <Content Include="Views\Alarm\_List.cshtml" />
+    <Content Include="Views\VersionUpdate\List.cshtml" />
+    <Content Include="Views\VersionUpdate\_CreateOrUpdate.cshtml" />
+    <Content Include="Views\VersionUpdate\Create.cshtml" />
+    <Content Include="Views\VersionUpdate\Edit.cshtml" />
+    <Content Include="Views\VersionUpdate\_Search.cshtml" />
+    <Content Include="Views\VersionUpdate\_List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

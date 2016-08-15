@@ -1,6 +1,6 @@
 ﻿@model ASBicycle.Web.Models.Authen.ModuleModel
 @{
-    ViewBag.Title = "管理";
+    ViewBag.Title = "菜单管理";
 }
 
 
@@ -92,13 +92,13 @@
 
         //新增
         function Create(actionUrl) {
-            ShowModal(actionUrl, {}, "新增角色");
+            ShowModal(actionUrl, {}, "新增菜单");
         }
 
         //编辑
         function Edit(actionUrl, id) {
             var param = { id: id };
-            ShowModal(actionUrl, param, "编辑角色");
+            ShowModal(actionUrl, param, "编辑菜单");
         }
 
         //设置按钮

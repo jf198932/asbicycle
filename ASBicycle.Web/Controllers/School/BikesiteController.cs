@@ -125,7 +125,7 @@ namespace ASBicycle.Web.Controllers.School
                 bikesite.Available_count = model.Available_count;
                 bikesite.Gps_point = model.Gps_point;
                 bikesite.Type = model.Type;
-                bikesite.School_id = model.School_id;
+                //bikesite.School_id = model.School_id;
                 bikesite.Radius = model.Radius;
                 bikesite.Updated_at = DateTime.Now;
                 

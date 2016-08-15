@@ -17,7 +17,8 @@ namespace ASBicycle.EntityFramework
         public virtual IDbSet<Entities.Credit> Credits { get; set; }
         public virtual IDbSet<Entities.Bikesite> Bikesites { get; set; }
         public virtual IDbSet<Entities.Bike> Bikes { get; set; }
-        public virtual IDbSet<Entities.Sitemonitor> Sitemonitors { get; set; } 
+        public virtual IDbSet<Entities.Sitemonitor> Sitemonitors { get; set; }
+        public virtual IDbSet<Entities.VersionUpdate> VersionUpdates { get; set; }
         //权限
         public virtual IDbSet<Entities.Authen.BackUser> BackUsers { get; set; }
         public virtual IDbSet<Entities.Authen.Role> Roles { get; set; }

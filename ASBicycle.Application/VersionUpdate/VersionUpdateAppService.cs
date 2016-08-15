@@ -15,10 +15,10 @@ namespace ASBicycle.VersionUpdate
             //todo 逻辑
             VersionUpdateOutput aa = new VersionUpdateOutput
             {
-                versionCode = 2,
-                versionName = "0.0.2",
-                upgrade = 2,
-                versionUrl = "http://121.40.34.43/ASBicycle/Uploads/isr_bms_0.0.2.apk"
+                versionCode = 3,
+                versionName = "0.0.3",
+                upgrade = 1,
+                versionUrl = "http://120.76.236.7/isriding/Uploads/isr_bms.apk"
             };
             return aa;
         }

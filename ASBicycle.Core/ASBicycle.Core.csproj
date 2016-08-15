@@ -112,6 +112,7 @@
     <Compile Include="Entities\Sitemonitor.cs" />
     <Compile Include="Entities\Track.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Entities\VersionUpdate.cs" />
     <Compile Include="IAppFolders.cs" />
     <Compile Include="Localization\CultureHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
