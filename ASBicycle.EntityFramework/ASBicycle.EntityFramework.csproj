@@ -118,6 +118,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="ASBicycleDataModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlExecuter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

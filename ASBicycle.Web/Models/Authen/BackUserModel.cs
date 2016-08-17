@@ -13,6 +13,7 @@ namespace ASBicycle.Web.Models.Authen
         {
             RoleList = new List<KeyValueModel>();
             SelectedRoleList = new List<int>();
+            SchoolList = new List<SelectListItem>();
             Enabled = true;
             Search = new BackUserSearchModel();
         }
@@ -28,8 +29,13 @@ namespace ASBicycle.Web.Models.Authen
         public int LoginCount { get; set; }
         public DateTime? RegisterTime { get; set; }
         public DateTime? LastLoginTime { get; set; }
+        public int? School_id { get; set; }
+
+        public string SchoolName { get; set; }
 
         public BackUserSearchModel Search { get; set; }
+
+        public List<SelectListItem> SchoolList { get; set; }
 
         public ICollection<KeyValueModel> RoleList { get; set; }
         [KeyValue(DisplayProperty = "RoleList")]
@@ -45,6 +51,7 @@ namespace ASBicycle.Web.Models.Authen
                 new SelectListItem {Text = "禁用", Value = "0"},
                 new SelectListItem {Text = "启用", Value = "1"}
             };
+            SchoolList = new List<SelectListItem>();
         }
         [Display(Name = "启用")]
         public bool Enabled { get; set; }
@@ -54,6 +61,10 @@ namespace ASBicycle.Web.Models.Authen
 
         [Display(Name = "全名")]
         public string FullName { get; set; }
+        [Display(Name = "校园")]
+        public int School_id { get; set; }
+
+        public List<SelectListItem> SchoolList { get; set; }
 
         public List<SelectListItem> EnabledList { get; set; }
     }

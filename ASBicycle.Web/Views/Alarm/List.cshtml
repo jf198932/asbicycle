@@ -15,13 +15,12 @@
             var actionUrl = "@Url.Action("InitDataTable")?rand=" + Math.random();
             var aoColumns = [
                 { "sName": "sort" },
-                { "sName": "ble_serial" },
                 { "sName": "ble_name" },
                 {
                     "sName": "ble_type",
                     "fnRender": function (oObj) {
                         var render;
-                        var t = oObj.aData[3];
+                        var t = oObj.aData[2];
                         if (t === "1") {
                             render = '追踪器';
                         } else if (t === "2") {
@@ -34,18 +33,10 @@
                     }
                 },
                 {
-                    "sName": "bike_img",
-                    "fnRender": function (oObj) {
-                        var t = oObj.aData[oObj.aData.length - 2];
-                        var render = "<img src='" + t + "' bigimg='" + t + "' class='imgtip' onmousemove='mmove(this)' onmouseover='mover(this)' onmouseout='mout()' />";
-                        return render;
-                    }
-                },
-                {
                     "sName": "vlock_status",
                     "fnRender": function (oObj) {
                         var render;
-                        var t = oObj.aData[4];
+                        var t = oObj.aData[3];
                         if (t === "0") {
                             render = '初始';
                         } else if (t === "1") {
@@ -65,23 +56,16 @@
                         return render;
                     }
                 },
-                { "sName": "bikesite_name" },
+                { "sName": "alarmtime" },
+                { "sName": "alarmbikesitename" },
+                { "sName": "user_name" },
                 { "sName": "phone" },
-                { "sName": "position" },
-                { "sName": "battery" },
                 {
-                    "sName": "insite_status",
+                    "sName": "bike_img",
                     "fnRender": function (oObj) {
-                        var render;
-                        var t = oObj.aData[oObj.aData.length-3];
-                        if (t === "1") {
-                            render = '在桩';
-                        } else if (t === "2") {
-                            render = '离桩';
-                        } else {
-                            render = '未知';
-                        }
-
+                        var t = oObj.aData[oObj.aData.length - 2];
+                        //var render = "<img src='" + t + "' bigimg='" + t + "' class='imgtip' onmousemove='mmove(this)' onmouseover='mover(this)' onmouseout='mout()' />";
+                        var render = "<a href='" + t + "' target='_blank'>点击查看图片</a>";
                         return render;
                     }
                 }
@@ -119,7 +103,7 @@
                     "position": "absolute"
                 });
         }
-        //setInterval("TableManaged.search('@Url.Action("InitDataTable")')", 5000);
+        setInterval("TableManaged.search('@Url.Action("InitDataTable")')", 10000);
     </script>
 }
 

@@ -45,7 +45,11 @@ namespace ASBicycle.Web.Controllers.School
         public virtual ActionResult InitDataTable(DataTableParameter param)
         {
             var expr = BuildSearchCriteria();
-            var temp = _bikesiteRepository.GetAll().Where(expr);
+            var temp = _bikesiteRepository.GetAll();
+            if (expr != null)
+            {
+                temp = temp.Where(expr);
+            }
             var query = temp
                     .OrderBy(s => s.Id)
                     .Skip(param.iDisplayStart)
@@ -190,9 +194,11 @@ namespace ASBicycle.Web.Controllers.School
                 expr = bulider.BuildQueryAnd(expr, tmp);
             }
             var id = CommonHelper.GetSchoolId();
-            Expression<Func<Entities.Bikesite, Boolean>> tmpSolid = t => t.School_id == id;
-            expr = bulider.BuildQueryAnd(expr, tmpSolid);
-
+            if (id > 1)
+            {
+                Expression<Func<Entities.Bikesite, Boolean>> tmpSolid = t => t.School_id == id;
+                expr = bulider.BuildQueryAnd(expr, tmpSolid);
+            }
             return expr;
         }
         #endregion

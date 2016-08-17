@@ -44,7 +44,7 @@ namespace ASBicycle.School
 
         public async Task<List<SchoolOutput>> GetSchoolList()
         {
-            var school = _schoolRepository.GetAll().Where(t=> !string.IsNullOrEmpty(t.Gps_point)).ToList();
+            var school = _schoolRepository.GetAll().Where(t=> !string.IsNullOrEmpty(t.Gps_point) && t.TenancyName.ToLower() != "default").ToList();
             if (school == null)
             {
                 throw new UserFriendlyException("没有学校");

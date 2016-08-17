@@ -78,14 +78,20 @@ namespace ASBicycle.Web.Controllers
                 {
                     schoolid = school.Id;
                 }
-                
+
+                //var user =
+                //    _backUserRepository.GetAll()
+                //        .FirstOrDefault(
+                //            u =>
+                //                u.LoginName.ToLower() == model.UserNameOrEmail.ToLower() 
+                //                && u.LoginPwd == despwd 
+                //                && u.School_id == schoolid);
                 var user =
                     _backUserRepository.GetAll()
                         .FirstOrDefault(
                             u =>
-                                u.LoginName.ToLower() == model.UserNameOrEmail.ToLower() 
-                                && u.LoginPwd == despwd 
-                                && u.School_id == schoolid);
+                                u.LoginName.ToLower() == model.UserNameOrEmail.ToLower()
+                                && u.LoginPwd == despwd);
                 if (user == null)
                     return Json(null);
 
@@ -112,7 +118,7 @@ namespace ASBicycle.Web.Controllers
                                 Icon = t.Permission == null ? "" : t.Permission.Icon
                             }));
 
-                var moduleList = _moduleUserRepository.GetAll().Where(t=> t.School_id == schoolid).ToList();
+                var moduleList = _moduleUserRepository.GetAll().ToList();
                 //菜单列表
                 SortMenuForTree(null, moduleIdList, moduleList, currentUser.Menus);
 

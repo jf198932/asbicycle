@@ -21,12 +21,14 @@ namespace ASBicycle.Web.Controllers.Authen
         private readonly IRepository<BackUser> _backUserRepository;
         private readonly IRepository<Role> _roleRepository;
         private readonly IRepository<UserRole> _userRoleRepository;
+        private readonly IRepository<Entities.School> _schoolRepository;
 
-        public BackUserController(IRepository<BackUser> backUserrepository, IRepository<Role> roleRepository, IRepository<UserRole> userRoleRepository)
+        public BackUserController(IRepository<BackUser> backUserrepository, IRepository<Role> roleRepository, IRepository<UserRole> userRoleRepository, IRepository<Entities.School> schoolRepository)
         {
             _backUserRepository = backUserrepository;
             _roleRepository = roleRepository;
             _userRoleRepository = userRoleRepository;
+            _schoolRepository = schoolRepository;
         }
         // GET: BackUser
         //[AdminLayout]
@@ -39,6 +41,7 @@ namespace ASBicycle.Web.Controllers.Authen
         public ActionResult List()
         {
             var model = new BackUserModel();
+            PrepareAllUserModel(model);
             return View(model);
         }
 
@@ -46,8 +49,11 @@ namespace ASBicycle.Web.Controllers.Authen
         public virtual ActionResult InitDataTable(DataTableParameter param)
         {
             var expr = BuildSearchCriteria();
-            var temp = _backUserRepository.GetAll().Where(expr);
-
+            var temp = _backUserRepository.GetAll();
+            if (expr != null)
+            {
+                temp = temp.Where(expr);
+            }
             var query =
                 temp.OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
             var total = temp.Count();
@@ -62,13 +68,16 @@ namespace ASBicycle.Web.Controllers.Authen
                 PwdErrorCount = t.PwdErrorCount,
                 LoginCount = t.LoginCount,
                 RegisterTime = t.RegisterTime,
-                LastLoginTime = t.LastLoginTime
+                LastLoginTime = t.LastLoginTime,
+                School_id = t.School_id,
+                SchoolName = t.School == null ? "" : t.School.Name
             }).ToList();
             int sortId = param.iDisplayStart + 1;
             var result = from t in filterResult
                          select new[]
                              {
                                 sortId++.ToString(),
+                                t.SchoolName,
                                 t.LoginName,
                                 t.FullName,
                                 t.Phone,
@@ -188,16 +197,23 @@ namespace ASBicycle.Web.Controllers.Authen
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
-            var schoolid = CommonHelper.GetSchoolId();
+            //var schoolid = CommonHelper.GetSchoolId();
             model.RoleList =
                 _roleRepository.GetAll()
-                    .Where(r => r.Enabled && r.School_id == schoolid)
+                    .Where(r => r.Enabled)
                     .OrderBy(r => r.OrderSort)
-                    .Select(r => new KeyValueModel {Text = r.Name, Value = r.Id.ToString()})
+                    .Select(r => new KeyValueModel {Text = r.School.Name+"-"+r.Name, Value = r.Id.ToString()})
                     .ToList();
             //model.RoleList.Add(
             //    _schoolRepository.GetAll().Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() }));
-
+            var temp = _schoolRepository.GetAll()
+                    .Where(t => t.TenancyName.ToLower() != "default")
+                    .Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() })
+                    .ToList();
+            model.SchoolList.AddRange(temp);
+            model.SchoolList.Insert(0, new SelectListItem {Text = "---请选择---", Value = "0"});
+            model.Search.SchoolList.AddRange(temp);
+            model.Search.SchoolList.Insert(0, new SelectListItem { Text = "---请选择---", Value = "0" });
         }
 
         #region 构建查询表达式
@@ -227,9 +243,15 @@ namespace ASBicycle.Web.Controllers.Authen
                 Expression<Func<BackUser, Boolean>> tmp = t => t.Enabled == data;
                 expr = bulider.BuildQueryAnd(expr, tmp);
             }
-            var id = CommonHelper.GetSchoolId();
-            Expression<Func<BackUser, Boolean>> tmpSolid = t => t.School_id == id;
-            expr = bulider.BuildQueryAnd(expr, tmpSolid);
+            if (!string.IsNullOrEmpty(Request["School_id"]) && Request["School_id"].Trim() != "0")
+            {
+                var data = Convert.ToInt32(Request["School_id"].Trim());
+                Expression<Func<BackUser, Boolean>> tmp = t => t.School_id == data;
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            //var id = CommonHelper.GetSchoolId();
+            //Expression<Func<BackUser, Boolean>> tmpSolid = t => t.School_id == id;
+            //expr = bulider.BuildQueryAnd(expr, tmpSolid);
 
             return expr;
         }

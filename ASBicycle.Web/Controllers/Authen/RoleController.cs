@@ -23,16 +23,19 @@ namespace ASBicycle.Web.Controllers.Authen
         private readonly IRepository<Module> _moduleRepository;
         private readonly IRepository<Permission> _permissionRepository;
         private readonly IRepository<ModulePermission> _modulePermissionRepository; 
-        private readonly IRepository<RoleModulePermission> _roleModulePermissionRepository; 
+        private readonly IRepository<RoleModulePermission> _roleModulePermissionRepository;
+        private readonly IRepository<Entities.School> _schoolRepository;
 
         public RoleController(IRepository<Role> roleRepository, IRepository<Module> moduleRepository, IRepository<Permission> permissionRepository,
-            IRepository<ModulePermission> modulePermissionRepository, IRepository<RoleModulePermission> roleModulePermissionRepository)
+            IRepository<ModulePermission> modulePermissionRepository, IRepository<RoleModulePermission> roleModulePermissionRepository,
+            IRepository<Entities.School> schoolRepository)
         {
             _roleRepository = roleRepository;
             _moduleRepository = moduleRepository;
             _permissionRepository = permissionRepository;
             _modulePermissionRepository = modulePermissionRepository;
             _roleModulePermissionRepository = roleModulePermissionRepository;
+            _schoolRepository = schoolRepository;
         }
         // GET: 
         //[AdminLayout]
@@ -45,6 +48,7 @@ namespace ASBicycle.Web.Controllers.Authen
         public ActionResult List()
         {
             var model = new RoleModel();
+            PrepareAllUserModel(model);
             return View(model);
         }
 
@@ -52,7 +56,11 @@ namespace ASBicycle.Web.Controllers.Authen
         public virtual ActionResult InitDataTable(DataTableParameter param)
         {
             var expr = BuildSearchCriteria();
-            var temp = _roleRepository.GetAll().Where(expr);
+            var temp = _roleRepository.GetAll();
+            if (expr != null)
+            {
+                temp = temp.Where(expr);
+            }
             var query = temp.OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
             var total = temp.Count();
             var filterResult = query.Select(t => new RoleModel
@@ -61,13 +69,16 @@ namespace ASBicycle.Web.Controllers.Authen
                 Name = t.Name,
                 Description = t.Description,
                 OrderSort = t.OrderSort,
-                Enabled = t.Enabled
+                Enabled = t.Enabled,
+                School_id = t.School_id,
+                SchoolName = t.School == null ? "" : t.School.Name
             }).ToList();
             int sortId = param.iDisplayStart + 1;
             var result = from t in filterResult
                          select new[]
                              {
                                 sortId++.ToString(),
+                                t.SchoolName,
                                 t.Name,
                                 t.Description,
                                 t.OrderSort.ToString(),
@@ -81,7 +92,7 @@ namespace ASBicycle.Web.Controllers.Authen
         public ActionResult Create()
         {
             var model = new RoleModel();
-            //PrepareAllUserModel(model);
+            PrepareAllUserModel(model);
             return PartialView(model);
         }
 
@@ -92,7 +103,7 @@ namespace ASBicycle.Web.Controllers.Authen
             {
                 Mapper.CreateMap<RoleModel, Role>();
                 var role = Mapper.Map<Role>(model);
-                role.School_id = CommonHelper.GetSchoolId();
+                role.School_id = 1;
                 _roleRepository.Insert(role);
 
                 //SuccessNotification("添加成功");
@@ -106,7 +117,7 @@ namespace ASBicycle.Web.Controllers.Authen
             Mapper.CreateMap<Role, RoleModel>();
             var model = Mapper.Map<RoleModel>(_roleRepository.Get(id));
             //var model = role.ToModel();
-            //PrepareAllUserModel(model);
+            PrepareAllUserModel(model);
             return PartialView(model);
         }
 
@@ -147,7 +158,7 @@ namespace ASBicycle.Web.Controllers.Authen
         {
             //角色 - 菜单
             var model = new RoleSelectedModuleModel();
-            var schoolid = CommonHelper.GetSchoolId();
+            //var schoolid = CommonHelper.GetSchoolId();
             #region 角色
 
             var role = _roleRepository.Get(id);
@@ -160,7 +171,7 @@ namespace ASBicycle.Web.Controllers.Authen
             //菜单列表
             model.ModuleDataList =
                 _moduleRepository.GetAll()
-                    .Where(m => m.IsMenu && m.Enabled && m.School_id == schoolid)
+                    .Where(m => m.IsMenu && m.Enabled && m.School_id == 1)
                     .Select(m => new ModuleModel1
                     {
                         ModuleId = m.Id,
@@ -204,13 +215,13 @@ namespace ASBicycle.Web.Controllers.Authen
                 if (!selectedModuleId.Contains(temp))
                     selectedModuleId.Add(temp);
             }
-            var schoolid = CommonHelper.GetSchoolId();
+            //var schoolid = CommonHelper.GetSchoolId();
             //权限列表
             var model = new RoleSelectedPermissionModel();
             //table头
             model.HeaderPermissionList =
                 _permissionRepository.GetAll()
-                .Where(p => p.Enabled && p.School_id == schoolid)
+                .Where(p => p.Enabled && p.School_id == 1)
                 .Select(p => new PermissionModel1
                 {
                     PermissionId = p.Id,
@@ -353,13 +364,32 @@ namespace ASBicycle.Web.Controllers.Authen
                 Expression<Func<Role, Boolean>> tmp = t => t.Enabled == data;
                 expr = bulider.BuildQueryAnd(expr, tmp);
             }
-            var id = CommonHelper.GetSchoolId();
-            Expression<Func<Role, Boolean>> tmpSolid = t => t.School_id == id;
-            expr = bulider.BuildQueryAnd(expr, tmpSolid);
-
+            //var id = CommonHelper.GetSchoolId();
+            //if (id > 1)
+            //{
+            //    Expression<Func<Role, Boolean>> tmpSolid = t => t.School_id == id;
+            //    expr = bulider.BuildQueryAnd(expr, tmpSolid);
+            //}
             return expr;
         }
 
         #endregion
+
+        [NonAction, UnitOfWork]
+        protected virtual void PrepareAllUserModel(RoleModel model)
+        {
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+
+            var temp = _schoolRepository.GetAll()
+                    .Where(t => t.TenancyName.ToLower() != "default")
+                    .Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() })
+                    .ToList();
+            model.SchoolList.AddRange(temp);
+            model.SchoolList.Insert(0, new SelectListItem { Text = "---请选择---", Value = "0" });
+            model.Search.SchoolList.AddRange(temp);
+            model.Search.SchoolList.Insert(0, new SelectListItem { Text = "---请选择---", Value = "0" });
+
+        }
     }
 }

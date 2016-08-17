@@ -32,12 +32,12 @@
                         </span>
                     </div>
                 </div>
-                @*<div class="form-group">
-                        <label class="control-label col-md-3">启用</label>
-                        <div class="col-md-6">
-                            @Html.DropDownListFor(model => model.Enabled, Model.EnableList, new { @class = "form-control" })
-                        </div>
-                    </div>*@
+                <div class="form-group">
+                    <label class="control-label col-md-3">校园</label>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(model => model.School_id, Model.SchoolList, new { @class = "form-control" })
+                    </div>
+                </div>
                 <div class="form-group">
                     <label class="control-label col-md-3">排序</label>
                     <div class="col-md-6">

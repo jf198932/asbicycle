@@ -19,14 +19,15 @@
             var actionUrl = "@Url.Action("InitDataTable")?rand=" + Math.random();
             var aoColumns = [
                 { "sName": "sort" },
+                { "sName": "schoolname" },
                 {
                     "sName": "Name",
                     "bSortable": false,
                     "fnRender": function(oObj) {
-                        if (oObj.aData[3] != "") {
-                            return "<label class='th-label'>[ " + oObj.aData[1] + " ]</label>";
+                        if (oObj.aData[4] != "") {
+                            return "<label class='th-label'>[ " + oObj.aData[2] + " ]</label>";
                         } else {
-                            return oObj.aData[1];
+                            return oObj.aData[2];
                         }
                     }
                 },

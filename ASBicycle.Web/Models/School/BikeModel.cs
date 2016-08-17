@@ -45,6 +45,9 @@ namespace ASBicycle.Web.Models.School
         public string Bikesite_name { get; set; }
         public string Phone { get; set; }
 
+        public DateTime? AlarmTime { get; set; }
+        public string AlarmBikesiteName { get; set; }
+
         public BikeSearchModel Search { get; set; }
 
         public List<SelectListItem> TypeList { get; set; }

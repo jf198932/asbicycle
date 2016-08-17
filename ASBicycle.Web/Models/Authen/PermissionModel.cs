@@ -10,6 +10,7 @@ namespace ASBicycle.Web.Models.Authen
         public PermissionModel()
         {
             Search = new PermissionSearchModel();
+            SchoolList = new List<SelectListItem>();
         }
 
         public int Id { get; set; }
@@ -19,8 +20,11 @@ namespace ASBicycle.Web.Models.Authen
         public string Icon { get; set; }
         public string Description { get; set; }
         public bool Enabled { get; set; }
+        public int? School_id { get; set; }
+        public string SchoolName { get; set; }
 
         public PermissionSearchModel Search { get; set; }
+        public List<SelectListItem> SchoolList { get; set; }
     }
 
     public class PermissionSearchModel
@@ -32,6 +36,7 @@ namespace ASBicycle.Web.Models.Authen
                 new SelectListItem {Text = "禁用", Value = "0"},
                 new SelectListItem {Text = "启用", Value = "1"}
             };
+            SchoolList = new List<SelectListItem>();
         }
         [Display(Name = "按钮名称")]
         public string Name { get; set; }
@@ -39,6 +44,9 @@ namespace ASBicycle.Web.Models.Authen
         public string Code { get; set; }
         [Display(Name = "启用")]
         public bool Enabled { get; set; }
+        [Display(Name = "校园")]
+        public int School_id { get; set; }
+        public List<SelectListItem> SchoolList { get; set; } 
 
         public List<SelectListItem> EnabledList { get; set; }
 

@@ -33,7 +33,13 @@
                 <div class="form-group">
                     <label class="control-label col-md-3">上级模块</label>
                     <div class="col-md-6">
-                        @Html.DropDownListFor(model => model.ParentId, Model.ParentModuleItems, new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.ParentId, Model.ParentModuleItems, new {@class = "form-control"})
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">校园</label>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(model => model.School_id, Model.SchoolList, new { @class = "form-control" })
                     </div>
                 </div>
                 <div class="form-group">

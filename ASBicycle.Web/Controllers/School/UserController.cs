@@ -44,7 +44,11 @@ namespace ASBicycle.Web.Controllers.School
         public virtual ActionResult InitDataTable(DataTableParameter param)
         {
             var expr = BuildSearchCriteria();
-            var temp = _userRepository.GetAll().Where(expr);
+            var temp = _userRepository.GetAll();
+            if (expr != null)
+            {
+                temp = temp.Where(expr);
+            }
             var query = temp.OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
             var total = temp.Count();
             var filterResult = query.Select(t => new UserModel
@@ -197,9 +201,11 @@ namespace ASBicycle.Web.Controllers.School
                 expr = bulider.BuildQueryAnd(expr, tmp);
             }
             var id = CommonHelper.GetSchoolId();
-            Expression<Func<Entities.User, Boolean>> tmpSolid = t => t.School_id == id;
-            expr = bulider.BuildQueryAnd(expr, tmpSolid);
-
+            if (id > 1)
+            {
+                Expression<Func<Entities.User, Boolean>> tmpSolid = t => t.School_id == id;
+                expr = bulider.BuildQueryAnd(expr, tmpSolid);
+            }
             return expr;
         }
         #endregion

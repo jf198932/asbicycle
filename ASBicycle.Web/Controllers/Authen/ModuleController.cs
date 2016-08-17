@@ -20,13 +20,15 @@ namespace ASBicycle.Web.Controllers.Authen
     {
         private readonly IRepository<Module> _moduleRepository;
         private readonly IRepository<Permission> _permissionRepository;
-        private readonly IRepository<ModulePermission> _modulePermissionRepository; 
+        private readonly IRepository<ModulePermission> _modulePermissionRepository;
+        private readonly IRepository<Entities.School> _schoolRepository; 
 
-        public ModuleController(IRepository<Module> moduleRepository, IRepository<Permission> permissionRepository, IRepository<ModulePermission> modulePermissionRepository)
+        public ModuleController(IRepository<Module> moduleRepository, IRepository<Permission> permissionRepository, IRepository<ModulePermission> modulePermissionRepository, IRepository<Entities.School> schoolRepository)
         {
             _moduleRepository = moduleRepository;
             _permissionRepository = permissionRepository;
             _modulePermissionRepository = modulePermissionRepository;
+            _schoolRepository = schoolRepository;
         }
 
         // GET: Module
@@ -40,6 +42,7 @@ namespace ASBicycle.Web.Controllers.Authen
         public ActionResult List()
         {
             var model = new ModuleModel();
+            PrepareAllUserModel(model);
             return View(model);
         }
 
@@ -47,7 +50,11 @@ namespace ASBicycle.Web.Controllers.Authen
         public virtual ActionResult InitDataTable(DataTableParameter param)
         {
             var expr = BuildSearchCriteria();
-            var temp = _moduleRepository.GetAll().Where(expr);
+            var temp = _moduleRepository.GetAll();
+            if (expr != null)
+            {
+                temp = temp.Where(expr);
+            }
             var query = temp.OrderBy(s => s.Id).Skip(param.iDisplayStart).Take(param.iDisplayLength);
             var total = temp.Count();
             var filterResult = query.Select(t => new ModuleModel
@@ -64,13 +71,16 @@ namespace ASBicycle.Web.Controllers.Authen
                 Enabled = t.Enabled,
                 Area = t.Area,
                 Controller = t.Controller,
-                Action = t.Action
+                Action = t.Action,
+                School_id = t.School_id,
+                SchoolName = t.School == null ? "" : t.School.Name
             }).ToList();
             int sortId = param.iDisplayStart + 1;
             var result = from t in filterResult
                          select new[]
                              {
                                 sortId++.ToString(),
+                                t.SchoolName,
                                 t.Name,
                                 t.Code,
                                 t.ParentName,
@@ -244,16 +254,22 @@ namespace ASBicycle.Web.Controllers.Authen
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
-            var schoolid = CommonHelper.GetSchoolId();
+            //var schoolid = CommonHelper.GetSchoolId();
             model.ParentModuleItems.AddRange(
                 _moduleRepository.GetAll()
-                    .Where(m => m.Enabled && m.IsMenu && m.School_id == schoolid)
+                    .Where(m => m.Enabled && m.IsMenu && m.School_id == 1)
                     .OrderBy(m => m.OrderSort)
                     .Select(m => new SelectListItem {Text = m.Name, Value = m.Id.ToString()}));
             model.ParentModuleItems.Insert(0, new SelectListItem {Text = "--根模块--", Value = ""});
 
-            //model.RoleList.Add(
-            //    _schoolRepository.GetAll().Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() }));
+            var temp = _schoolRepository.GetAll()
+                    .Where(t => t.TenancyName.ToLower() != "default")
+                    .Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() })
+                    .ToList();
+            model.SchoolList.AddRange(temp);
+            model.SchoolList.Insert(0, new SelectListItem { Text = "---请选择---", Value = "0" });
+            model.Search.SchoolList.AddRange(temp);
+            model.Search.SchoolList.Insert(0, new SelectListItem { Text = "---请选择---", Value = "0" });
 
         }
 
@@ -262,17 +278,16 @@ namespace ASBicycle.Web.Controllers.Authen
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
-            var schoolid = CommonHelper.GetSchoolId();
+            //var schoolid = CommonHelper.GetSchoolId();
             model.ButtonList =
                 _permissionRepository.GetAll()
-                    .Where(r => r.Enabled && r.School_id == schoolid)
+                    .Where(r => r.Enabled && r.School_id == 1)
                     .OrderBy(r => r.OrderSort)
                     .Select(r => new KeyValueModel { Text = r.Name, Value = r.Id.ToString() })
                     .ToList();
 
             //model.RoleList.Add(
             //    _schoolRepository.GetAll().Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() }));
-
         }
         #region 构建查询表达式
         /// <summary>
@@ -307,9 +322,9 @@ namespace ASBicycle.Web.Controllers.Authen
                 Expression<Func<Module, Boolean>> tmp = t => t.Enabled == data;
                 expr = bulider.BuildQueryAnd(expr, tmp);
             }
-            var id = CommonHelper.GetSchoolId();
-            Expression<Func<Module, Boolean>> tmpSolid = t => t.School_id == id;
-            expr = bulider.BuildQueryAnd(expr, tmpSolid);
+            //var id = CommonHelper.GetSchoolId();
+            //Expression<Func<Module, Boolean>> tmpSolid = t => t.School_id == 1;
+            //expr = bulider.BuildQueryAnd(expr, tmpSolid);
 
             return expr;
         }

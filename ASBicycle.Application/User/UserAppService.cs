@@ -451,5 +451,45 @@ namespace ASBicycle.User
             Mapper.CreateMap<Entities.User, UserDto>();
             return new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
         }
+        [HttpGet]
+        public async Task<CheckCodeOutput> GetCheckCodeRegist([FromUri] PhoneNumInput phoneNumInput)
+        {
+            var result =
+                await
+                    _userRepository.FirstOrDefaultAsync(
+                        u => u.Phone == phoneNumInput.Phone);
+            if (result != null)
+            {
+                throw new UserFriendlyException("该手机号已经注册过");
+            }
+
+            //生成验证码并存储在缓存中，用手机号做key
+            //生成6位数字随机数
+            Random rand = new Random();
+            int i = rand.Next(1000, 9999);
+
+            StringBuilder sms = new StringBuilder();
+            sms.AppendFormat("name={0}", "isr");
+            sms.AppendFormat("&pwd={0}", "2FF79C1AE7A1798A84D0E9B1B2B7");
+            sms.AppendFormat("&content=验证码：{0}", i);
+            sms.AppendFormat("&mobile={0}", phoneNumInput.Phone);
+            sms.AppendFormat("&sign={0}", "爱尚骑行");
+            sms.Append("&type=pt");
+            string resp = PushMsgHelper.PushToWeb("http://web.wasun.cn/asmx/smsservice.aspx", sms.ToString(),
+                Encoding.UTF8);
+            string[] msg = resp.Split(',');
+            CheckCodeOutput checkCodeOutput = new CheckCodeOutput { CheckCode = i.ToString() };
+            var cacheCheckCode = _cacheManager.GetCache("CheckCode");
+            await cacheCheckCode.SetAsync(phoneNumInput.Phone, checkCodeOutput, new TimeSpan(0, 0, 70));
+            if (msg[0] == "0")
+            {
+                return new CheckCodeOutput { CheckCode = "" };
+
+            }
+            else
+            {
+                return new CheckCodeOutput { CheckCode = "" };
+            }
+        }
     }
 }

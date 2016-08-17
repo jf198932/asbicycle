@@ -102,5 +102,8 @@ namespace ASBicycle.User
         MianzeOutput Mianze();
         [HttpGet]
         Task<UserOutput> GetUserInfo([FromUri] PhoneNumInput phoneNumInput);
+
+        [HttpGet]
+        Task<CheckCodeOutput> GetCheckCodeRegist([FromUri]PhoneNumInput phoneNumInput);
     }
 }

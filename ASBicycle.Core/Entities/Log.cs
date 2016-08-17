@@ -15,8 +15,8 @@ namespace ASBicycle.Entities
 
         public int Bikesite_id { get; set; }
         public int? Bike_id { get; set; }
-        //[ForeignKey("Bikesite_id")]
-        //public virtual Bikesite Bikesite { get; set; }
+        [ForeignKey("Bikesite_id")]
+        public virtual Bikesite Bikesite { get; set; }
         [ForeignKey("Bike_id")]
         public virtual Bike Bike { get; set; }
     }
