@@ -687,6 +687,8 @@
     <Content Include="Content\assets\img\input-spinner.gif" />
     <Content Include="Content\assets\img\invoice\walmart.png" />
     <Content Include="Content\assets\img\loading.gif" />
+    <Content Include="Content\assets\img\logo-as104x17 a.png" />
+    <Content Include="Content\assets\img\logo-as86x14 a.png" />
     <Content Include="Content\assets\img\logo-big.png" />
     <Content Include="Content\assets\img\logo.png" />
     <Content Include="Content\assets\img\menu-toggler.png" />

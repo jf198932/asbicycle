@@ -23,7 +23,7 @@ namespace ASBicycle.School
 
         public async Task<List<SchoolBikeSiteOutput>> GetSchoolBikeSiteList([FromUri]int id)
         {
-            var bikesites = await _bikesiteRepository.GetAllListAsync(b => b.School_id == id);
+            var bikesites = await _bikesiteRepository.GetAllListAsync(b => b.School_id == id && b.Sitemonitors.Count > 0);
             return bikesites.Select(item => new SchoolBikeSiteOutput
             {
                 Id = item.Id,
