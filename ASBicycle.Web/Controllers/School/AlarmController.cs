@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Web;
 using System.Web.Mvc;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
-using Abp.EntityFramework.Uow;
 using Abp.Web.Models;
-using ASBicycle.Entities;
 using ASBicycle.Web.Extension.Fliter;
 using ASBicycle.Web.Helper;
 using ASBicycle.Web.Models.Common;

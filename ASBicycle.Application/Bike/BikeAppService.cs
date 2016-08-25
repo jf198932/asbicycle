@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Threading.Tasks;
@@ -9,17 +10,49 @@ using Abp.UI;
 using ASBicycle.Bike;
 using ASBicycle.Bike.Dto;
 using System.Drawing;
+using System.Linq;
+using Abp.Domain.Repositories;
 using Abp.Extensions;
+using ASBicycle.Entities;
+using AutoMapper;
 
 namespace ASBicycle.Bike
 {
     public class BikeAppService : ASBicycleAppServiceBase, IBikeAppService
     {
         private readonly IBikeRepository _bikeRepository;
+        private readonly ISqlExecuter _sqlExecuter; 
 
-        public BikeAppService(IBikeRepository bikeRepository)
+        public BikeAppService(IBikeRepository bikeRepository, ISqlExecuter sqlExecuter)
         {
             _bikeRepository = bikeRepository;
+            _sqlExecuter = sqlExecuter;
+        }
+        [HttpGet]
+        public async Task<AlarmBikeOutput> GetAlarmBikeWay([FromUri] string phone)
+        {
+            var bike = await _bikeRepository.FirstOrDefaultAsync(t => t.User.Phone == phone);
+            var model = new AlarmBikeOutput();
+            if (bike == null)
+            {
+                throw new UserFriendlyException("请先进行绑定");
+            }
+            model.bikename = bike.Ble_name;
+            model.bikeimg = bike.Bike_img;
+
+            var sqlstr =
+                "SELECT t.gps_point,t.sitename,MAX(t.alarmtime) as alarmtime FROM (select b.gps_point,b.`name` as sitename,DATE_FORMAT(op_time,'%Y-%m-%d %H:%i:%S') as alarmtime,bikesite_id,bike_id from log as l JOIN bikesite as b on l.bikesite_id = b.id WHERE op_time >= (select op_time from log where type = 3 and bike_id = " + bike.Id+" ORDER BY op_time DESC LIMIT 1) and l.bike_id="+bike.Id+" order by op_time desc) as t GROUP BY t.bikesite_id,t.bike_id";
+            model.alarmlist = _sqlExecuter.SqlQuery<AlarmBikeDto>(sqlstr).ToList();
+            foreach (var item in model.alarmlist)
+            {
+                if (!item.gps_point.IsNullOrEmpty())
+                {
+                    var tempgps = item.gps_point.Split(',');
+                    item.lon = double.Parse(tempgps[0]);
+                    item.lat = double.Parse(tempgps[1]);
+                }
+            }
+            return model;
         }
 
         public async Task<BikeOutput> GetBikeInfo([FromUri]string serial)

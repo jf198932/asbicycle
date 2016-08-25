@@ -108,6 +108,7 @@
     <Compile Include="Bikesite\Dto\BikesiteOutput.cs" />
     <Compile Include="Bikesite\IBikesiteAppService.cs" />
     <Compile Include="Bike\BikeAppService.cs" />
+    <Compile Include="Bike\Dto\AlarmBikeOutput.cs" />
     <Compile Include="Bike\Dto\BikeDto.cs" />
     <Compile Include="Bike\Dto\BikeInput.cs" />
     <Compile Include="Bike\Dto\BikeOutput.cs" />

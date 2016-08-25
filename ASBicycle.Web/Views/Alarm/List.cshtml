@@ -64,8 +64,14 @@
                     "sName": "bike_img",
                     "fnRender": function (oObj) {
                         var t = oObj.aData[oObj.aData.length - 2];
+                        var render = "";
                         //var render = "<img src='" + t + "' bigimg='" + t + "' class='imgtip' onmousemove='mmove(this)' onmouseover='mover(this)' onmouseout='mout()' />";
-                        var render = "<a href='" + t + "' target='_blank'>点击查看图片</a>";
+                        if (t !== "") {
+                            render = "<a href='" + t + "' target='_blank'>点击查看图片</a>";
+                        } else {
+                            render = "暂无";
+                        }
+                          
                         return render;
                     }
                 }
