@@ -38,7 +38,7 @@ namespace ASBicycle.Bikesite
 
         public async Task<List<BikesiteListOutput>> GetNearbyBikesites([FromUri]double lat, double lon)
         {
-            var model = await _bikesiteRepository.GetAllListAsync();
+            var model = _bikesiteRepository.GetAll().Where(t=>t.Sitemonitors.Count > 0);
             List<BikesiteListOutput> result = new List<BikesiteListOutput>();
             foreach (var item in model)
             {
