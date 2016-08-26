@@ -5,22 +5,32 @@ using System.Text;
 using System.Threading.Tasks;
 using ASBicycle.VersionUpdate.Dto;
 using System.Web.Http;
+using Abp.Domain.Repositories;
 
 namespace ASBicycle.VersionUpdate
 {
     public class VersionUpdateAppService : ASBicycleAppServiceBase, IVersionUpdateAppService
     {
+        private readonly IRepository<Entities.VersionUpdate> _versionUpdateRepository;
+
+        public VersionUpdateAppService(IRepository<Entities.VersionUpdate> versionUpdateRepository)
+        {
+            _versionUpdateRepository = versionUpdateRepository;
+        }
+
         public async Task<VersionUpdateOutput> UpdateApp()
         {
-            //todo 逻辑
-            VersionUpdateOutput aa = new VersionUpdateOutput
-            {
-                versionCode = 3,
-                versionName = "0.0.3",
-                upgrade = 1,
-                versionUrl = "http://120.76.236.7/isriding/Uploads/isr_bms.apk"
-            };
-            return aa;
+            var model = _versionUpdateRepository.GetAll().OrderByDescending(t => t.versionCode)
+                .Select(t=> new VersionUpdateOutput
+                {
+                    versionCode = t.versionCode,
+                    versionName = t.versionName,
+                    upgrade = t.upgrade,
+                    versionUrl = t.versionUrl
+                }).FirstOrDefault();
+
+
+            return model;
         }
     }
 }

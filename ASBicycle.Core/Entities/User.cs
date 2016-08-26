@@ -41,6 +41,9 @@ namespace ASBicycle.Entities
 
         public string Img { get; set; }
 
+        public int? User_type { get; set; }
+        public int? Device_os { get; set; }
+        public string Device_id { get; set; }
 
         public int? School_id { get; set; }
         [ForeignKey("School_id")]

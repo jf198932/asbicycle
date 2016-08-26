@@ -15,6 +15,7 @@ namespace ASBicycle.Web.Models.School
                 new SelectListItem {Text = "可升级", Value = "2"},
                 new SelectListItem {Text = "强制升级", Value = "3"}
             };
+            Search = new VersionUpdateSearchModel();
         }
         public int Id { get; set; }
         public int versionCode { get; set; }

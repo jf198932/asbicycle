@@ -40,7 +40,12 @@ namespace ASBicycle.Web.Controllers.School
         {
 
             var expr = BuildSearchCriteria();
-            var temp = _versionUpdateRepository.GetAll().Where(expr);
+            var temp = _versionUpdateRepository.GetAll();
+            if (expr != null)
+            {
+                temp = temp.Where(expr);
+            }
+            
             if (expr != null)
             {
                 temp = temp.Where(expr);

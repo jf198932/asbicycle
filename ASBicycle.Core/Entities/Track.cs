@@ -20,6 +20,9 @@ namespace ASBicycle.Entities
         public DateTime End_time { get; set; }
         public int? Payment { get; set; }
         public int? Pay_status { get; set; }
+        public string Pay_method { get; set; }
+        public string Pay_docno { get; set; }
+        public string Remark { get; set; }
 
 
         public int User_id { get; set; }

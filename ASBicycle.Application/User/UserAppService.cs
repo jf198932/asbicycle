@@ -439,7 +439,7 @@ namespace ASBicycle.User
         [HttpGet]
         public MianzeOutput Mianze()
         {
-            return new MianzeOutput {Url = "http://120.76.236.7/isriding/Uploads/mianze.html" };
+            return new MianzeOutput {Url = "http://bms.isriding.com/isriding/Uploads/mianze.html" };
         }
         [HttpGet]
         public async Task<UserOutput> GetUserInfo([FromUri] PhoneNumInput phoneNumInput)
