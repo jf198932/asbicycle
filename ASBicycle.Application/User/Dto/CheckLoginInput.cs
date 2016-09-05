@@ -9,6 +9,7 @@ namespace ASBicycle.User.Dto
         public string Phone { get; set; }
         [Required]
         public string CheckCode { get; set; }
+        public int? device_os { get; set; }
     }
 
     public class CheckIdentityInput : IInputDto
@@ -17,6 +18,7 @@ namespace ASBicycle.User.Dto
         public string Phone { get; set; }
         [Required]
         public string Token { get; set; }
+        public int? device_os { get; set; }
     }
 
     public class RegisterUserInput : IInputDto
@@ -25,5 +27,6 @@ namespace ASBicycle.User.Dto
         public string Phone { get; set; }
         [Required]
         public string CheckCode { get; set; }
+        public int? device_os { get; set; }
     }
 }

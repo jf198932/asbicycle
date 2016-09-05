@@ -60,6 +60,12 @@ namespace ASBicycle.User
                 //    return new UserOutput {UserDto = Mapper.Map<UserDto>(result)};
                 //}
                 //result.Remember_token = "";
+                if (checkIdentityInput.device_os != null)
+                {
+                    result.Device_os = checkIdentityInput.device_os;
+                    await _userRepository.UpdateAsync(result);
+                }
+                
                 return new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
             }
             throw new UserFriendlyException("请重新登录");
@@ -394,6 +400,7 @@ namespace ASBicycle.User
                 //todo 时间戳+手机号+盐 对称加密
                 result.Remember_token = DateTime.Now.ToString("yyyyMMddhhmmssffff") + checkLoginInput.Phone;
                 // 生成token放入数据库并返回给app
+                result.Device_os = checkLoginInput.device_os;
                 result.Updated_at = DateTime.Now;
                 result = await _userRepository.UpdateAsync(result);
                 return new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
@@ -424,6 +431,7 @@ namespace ASBicycle.User
             var result = await _userRepository.InsertAsync(new Entities.User{
                                                     Phone = modelIntput.Phone,
                                                     Certification = 1,//未申请
+                                                    Device_os = modelIntput.device_os,
                                                     Remember_token = DateTime.Now.ToString("yyyyMMddhhmmssffff") + modelIntput.Phone,
                                                     Created_at = DateTime.Now,
                                                     Updated_at = DateTime.Now
