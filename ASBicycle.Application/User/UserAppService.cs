@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using Abp.Auditing;
 using Abp.AutoMapper;
+using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Runtime.Caching;
 using Abp.UI;
 using ASBicycle.Bike;
 using ASBicycle.Bike.Dto;
 using ASBicycle.Common;
+using ASBicycle.Entities;
 using ASBicycle.User.Dto;
 using AutoMapper;
-using static System.Int32;
 
 namespace ASBicycle.User
 {
@@ -24,12 +26,16 @@ namespace ASBicycle.User
         private readonly IUserRepository _userRepository;
         private readonly IBikeRepository _bikeRepository;
         private readonly ICacheManager _cacheManager;
+        private readonly ISqlExecuter _sqlExecuter;
+        private readonly IRepository<Log> _logRepository; 
 
-        public UserAppService(IUserRepository userRepository, ICacheManager cacheManager, IBikeRepository bikeRepository)
+        public UserAppService(IUserRepository userRepository, ICacheManager cacheManager, IBikeRepository bikeRepository, ISqlExecuter sqlExecuter, IRepository<Log> logRepository)
         {
             _userRepository = userRepository;
             _cacheManager = cacheManager;
             _bikeRepository = bikeRepository;
+            _sqlExecuter = sqlExecuter;
+            _logRepository = logRepository;
         }
 
         [HttpPost]
@@ -225,9 +231,27 @@ namespace ASBicycle.User
             if (bike.Bikesite_id == null)
                 throw new UserFriendlyException("当前没有进入桩点，不能锁车");
 
+            
+
             bike.Vlock_status = 1;//锁车
 
-            await _bikeRepository.UpdateAsync(bike);
+            //await _bikeRepository.UpdateAsync(bike);
+
+            //string sql = "call SP_InsertLog(" + 1 + "," + bike.Bikesite_id + ",'" + bike.Ble_serial + "')";
+
+            //await _sqlExecuter.ExecuteAsync(sql);
+
+            await
+                _logRepository.InsertAsync(new Log
+                {
+                    Created_at = DateTime.Now,
+                    Updated_at = DateTime.Now,
+                    Op_Time = DateTime.Now,
+                    Bike_id = bike.Id,
+                    Bikesite_id = bike.Bikesite_id,
+                    Type = 1
+                });
+
         }
         [HttpPost]
         public async Task OpenBike(UserBikeInput userBikeInput)
@@ -243,9 +267,25 @@ namespace ASBicycle.User
                 throw new UserFriendlyException("没有该车辆");
             if(bike.Vlock_status >= 3)
                 throw new UserFriendlyException("车辆异常");
+
+            //string sql = "call SP_InsertLog(" + 2 + "," + bike.Bikesite_id + ",'" + bike.Ble_serial + "')";
+
+            //await _sqlExecuter.ExecuteAsync(sql);
+
             bike.Vlock_status = 2;//开锁
 
-            await _bikeRepository.UpdateAsync(bike);
+            //await _bikeRepository.UpdateAsync(bike);
+
+            await
+                _logRepository.InsertAsync(new Log
+                {
+                    Created_at = DateTime.Now,
+                    Updated_at = DateTime.Now,
+                    Op_Time = DateTime.Now,
+                    Bike_id = bike.Id,
+                    Bikesite_id = bike.Bikesite_id,
+                    Type = 2
+                });
         }
 
         public async Task<UserBikeOutput> GetUserBike([FromUri]UserIdInput userIdInput)

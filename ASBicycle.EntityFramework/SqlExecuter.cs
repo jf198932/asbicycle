@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Abp.Dependency;
 using Abp.EntityFramework;
 using ASBicycle.EntityFramework;
@@ -19,6 +20,17 @@ namespace ASBicycle
         public int Execute(string sql, params object[] parameters)
         {
             return _dbContextProvider.GetDbContext().Database.ExecuteSqlCommand(sql, parameters);
+        }
+
+        ///<summary>        
+        /// 执行给定的命令        
+        /// </summary>        
+        /// <param name="sql">命令字符串</param>        
+        /// <param name="parameters">要应用于命令字符串的参数</param>        
+        /// <returns>执行命令后由数据库返回的结果</returns>        
+        public Task<int> ExecuteAsync(string sql, params object[] parameters)
+        {
+            return _dbContextProvider.GetDbContext().Database.ExecuteSqlCommandAsync(sql, parameters);
         }
 
         /// <summary>        
