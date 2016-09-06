@@ -8,6 +8,6 @@ namespace ASBicycle.VersionUpdate
     public interface IVersionUpdateAppService : IApplicationService
     {
         [HttpGet]
-        Task<VersionUpdateOutput> UpdateApp();
+        Task<VersionUpdateOutput> UpdateApp([FromUri] VersionUpdateInput input);
     }
 }

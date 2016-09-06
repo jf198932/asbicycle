@@ -18,11 +18,12 @@ namespace ASBicycle.VersionUpdate
             _versionUpdateRepository = versionUpdateRepository;
         }
 
-        public async Task<VersionUpdateOutput> UpdateApp()
+        public async Task<VersionUpdateOutput> UpdateApp([FromUri] VersionUpdateInput input)
         {
-            var model = _versionUpdateRepository.GetAll().OrderByDescending(t => t.versionCode)
+            var model = _versionUpdateRepository.GetAll().Where(t => t.device_os == input.device_os).OrderByDescending(t => t.versionCode)
                 .Select(t=> new VersionUpdateOutput
                 {
+                    device_os = t.device_os,
                     versionCode = t.versionCode,
                     versionName = t.versionName,
                     upgrade = t.upgrade,

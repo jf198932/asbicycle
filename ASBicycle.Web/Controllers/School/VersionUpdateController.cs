@@ -55,6 +55,7 @@ namespace ASBicycle.Web.Controllers.School
             var filterResult = query.Select(t => new VersionUpdateModel
             {
                 Id = t.Id,
+                device_os = t.device_os,
                 versionCode = t.versionCode,
                 versionName = t.versionName,
                 versionUrl = t.versionUrl,
@@ -65,6 +66,7 @@ namespace ASBicycle.Web.Controllers.School
                          select new[]
                              {
                                 sortId++.ToString(),
+                                t.device_os.ToString(),
                                 t.versionCode.ToString(),
                                 t.versionName,
                                 t.versionUrl,
@@ -148,6 +150,13 @@ namespace ASBicycle.Web.Controllers.School
                 var dataint = 0;
                 int.TryParse(Request["versionCode"].Trim(),out dataint);
                 Expression<Func<Entities.VersionUpdate, Boolean>> tmp = t => t.versionCode == dataint;
+                expr = bulider.BuildQueryAnd(expr, tmp);
+            }
+            if (!string.IsNullOrEmpty(Request["device_os"]) && Request["device_os"].Trim() != "0")
+            {
+                var dataint = 0;
+                int.TryParse(Request["device_os"].Trim(), out dataint);
+                Expression<Func<Entities.VersionUpdate, Boolean>> tmp = t => t.device_os == dataint;
                 expr = bulider.BuildQueryAnd(expr, tmp);
             }
             if (!string.IsNullOrEmpty(Request["versionName"]))

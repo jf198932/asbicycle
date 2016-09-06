@@ -16,6 +16,22 @@
             var actionUrl = "@Url.Action("InitDataTable")?rand=" + Math.random();
             var aoColumns = [
                 { "sName": "sort" },
+                {
+                    "sName": "device_os",
+                    "fnRender": function (oObj) {
+                        var render;
+                        var t = oObj.aData[1];
+                        if (t === "1") {
+                            render = 'iOS';
+                        } else if (t === "2") {
+                            render = 'Android';
+                        } else {
+                            render = '未知';
+                        }
+
+                        return render;
+                    }
+                },
                 { "sName": "versionCode" },
                 { "sName": "versionName" },
                 { "sName": "versionUrl" },

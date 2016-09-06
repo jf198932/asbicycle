@@ -15,5 +15,8 @@ namespace ASBicycle.User.Dto
         public int? Balance { get; set; }
         public string Img { get; set; }
         public int? School_id { get; set; }
+        public int? User_type { get; set; }
+        public int? Device_os { get; set; }
+        public string Device_id { get; set; }
     }
 }

@@ -4,6 +4,10 @@ namespace ASBicycle.VersionUpdate.Dto
 {
     public class VersionUpdateOutput : IOutputDto
     {
+        /// <summary>
+        /// 设备
+        /// </summary>
+        public int device_os { get; set; }
         //版本号
         public int versionCode { get; set; }
         //版本名称

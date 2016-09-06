@@ -139,6 +139,7 @@
     <Compile Include="User\Dto\UserUploadOutput.cs" />
     <Compile Include="User\IUserAppService.cs" />
     <Compile Include="User\UserAppService.cs" />
+    <Compile Include="VersionUpdate\Dto\VersionUpdateInput.cs" />
     <Compile Include="VersionUpdate\Dto\VersionUpdateOutput.cs" />
     <Compile Include="VersionUpdate\IVersionUpdateAppService.cs" />
     <Compile Include="VersionUpdate\VersionUpdateAppService.cs" />
