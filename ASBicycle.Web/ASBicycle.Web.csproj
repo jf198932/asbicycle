@@ -317,6 +317,9 @@
     <Content Include="Abp\Framework\styles\abp.mixings.css" />
     <Content Include="Abp\Framework\styles\abp.mixings.min.css" />
     <Content Include="Abp\Framework\styles\utils\ie10fix.css" />
+    <Content Include="Alipay\notify_url.aspx" />
+    <Content Include="Alipay\return_url.aspx" />
+    <Content Include="Alipay\signatures_url.aspx" />
     <Content Include="App\Main\app.js" />
     <Content Include="App\Main\images\abp-logo.png" />
     <Content Include="App\Main\main.css">
@@ -2358,11 +2361,24 @@
     <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alipay\notify_url.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>notify_url.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Alipay\return_url.aspx.cs">
+      <DependentUpon>return_url.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Alipay\signatures_url.aspx.cs">
+      <DependentUpon>signatures_url.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\ASBicycleNavigationProvider.cs" />
     <Compile Include="App_Start\ASBicycleWebModule.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.cs" />
+    <Compile Include="Controllers\Alipay\AlipayController.cs" />
     <Compile Include="Controllers\Authen\BackUserController.cs" />
     <Compile Include="Controllers\Authen\ModuleController.cs" />
     <Compile Include="Controllers\Authen\PermissionController.cs" />
@@ -2389,6 +2405,8 @@
     <Compile Include="Helper\DESProvider.cs" />
     <Compile Include="Helper\ExcelHelper.cs" />
     <Compile Include="Helper\MD5Provider.cs" />
+    <Compile Include="Models\Alipay\Notifyurl.cs" />
+    <Compile Include="Models\Alipay\Returnurl.cs" />
     <Compile Include="Models\Authen\BackUserModel.cs" />
     <Compile Include="Controllers\Authen\RoleController.cs" />
     <Compile Include="Models\Authen\ModuleModel.cs" />
@@ -2499,6 +2517,8 @@
     <Content Include="Views\VersionUpdate\Edit.cshtml" />
     <Content Include="Views\VersionUpdate\_Search.cshtml" />
     <Content Include="Views\VersionUpdate\_List.cshtml" />
+    <Content Include="Views\Alipay\Notify.cshtml" />
+    <Content Include="Views\Alipay\Return.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2514,6 +2534,10 @@
     <Folder Include="Views\Common\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ASBicycle.ApplicationRental\ASBicycle.ApplicationRental.csproj">
+      <Project>{d7f3fe0f-b0eb-4749-9572-72aa37b9d1c4}</Project>
+      <Name>ASBicycle.ApplicationRental</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ASBicycle.Application\ASBicycle.Application.csproj">
       <Project>{edf5d964-4c0f-4f19-b674-58a38a5e5401}</Project>
       <Name>ASBicycle.Application</Name>
