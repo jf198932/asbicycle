@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using ASBicycle.Rental.AliPay.App;
+using ASBicycle.AliPay.App;
 
 /// <summary>
 /// 功能：页面跳转同步通知页面

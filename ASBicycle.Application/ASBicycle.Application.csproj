@@ -102,6 +102,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AliPay\AlipayAppService.cs" />
+    <Compile Include="AliPay\App\AlipayConfig.cs" />
+    <Compile Include="AliPay\App\AlipayCore.cs" />
+    <Compile Include="AliPay\App\AlipayNotify.cs" />
+    <Compile Include="AliPay\App\RSA.cs" />
+    <Compile Include="AliPay\Dto\AlipayOutput.cs" />
+    <Compile Include="AliPay\Dto\SignaturesInput.cs" />
+    <Compile Include="AliPay\IAlipayAppService.cs" />
     <Compile Include="ASBicycleApplicationModule.cs" />
     <Compile Include="ASBicycleAppServiceBase.cs" />
     <Compile Include="Bikesite\BikesiteAppService.cs" />
@@ -114,6 +122,11 @@
     <Compile Include="Bike\Dto\BikeOutput.cs" />
     <Compile Include="Bike\Dto\BikeUploadInput.cs" />
     <Compile Include="Bike\Dto\BikeUploadOutput.cs" />
+    <Compile Include="Bike\Dto\RentalBikeInput.cs" />
+    <Compile Include="Bike\Dto\RentalBikeOutput.cs" />
+    <Compile Include="Bike\Dto\RentalCostOutput.cs" />
+    <Compile Include="Bike\Dto\RentalFinishOutput.cs" />
+    <Compile Include="Bike\Dto\TrackEntity.cs" />
     <Compile Include="Bike\IBikeAppService.cs" />
     <Compile Include="Common\LatlonHelper.cs" />
     <Compile Include="Common\PushMsgHelper.cs" />
@@ -122,6 +135,7 @@
     <Compile Include="School\Dto\SchoolOutput.cs" />
     <Compile Include="School\ISchoolAppService.cs" />
     <Compile Include="School\SchoolAppService.cs" />
+    <Compile Include="Track\Dto\TrackAlipay.cs" />
     <Compile Include="Track\Dto\TrackInput.cs" />
     <Compile Include="Track\Dto\TrackOutput.cs" />
     <Compile Include="Track\Dto\TrackUpdateInput.cs" />
@@ -156,6 +170,7 @@
       <Name>ASBicycle.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

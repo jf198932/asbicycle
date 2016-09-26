@@ -106,48 +106,16 @@
     <Compile Include="AliPay\IAlipayAppService.cs" />
     <Compile Include="ASBicycleApplicationRentalModulel.cs" />
     <Compile Include="ASBicycleAppServiceBase.cs" />
-    <Compile Include="BikeSite\BikesiteAppService.cs" />
-    <Compile Include="BikeSite\Dto\BikesiteOutput.cs" />
-    <Compile Include="BikeSite\IBikesiteAppService.cs" />
     <Compile Include="Bike\BikeAppService.cs" />
-    <Compile Include="Bike\Dto\AlarmBikeOutput.cs" />
-    <Compile Include="Bike\Dto\BikeDto.cs" />
-    <Compile Include="Bike\Dto\BikeInput.cs" />
-    <Compile Include="Bike\Dto\BikeOutput.cs" />
-    <Compile Include="Bike\Dto\BikeUploadInput.cs" />
-    <Compile Include="Bike\Dto\BikeUploadOutput.cs" />
     <Compile Include="Bike\Dto\RentalBikeInput.cs" />
     <Compile Include="Bike\Dto\RentalBikeOutput.cs" />
     <Compile Include="Bike\IBikeAppService.cs" />
-    <Compile Include="Common\LatlonHelper.cs" />
-    <Compile Include="Common\PushMsgHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="School\Dto\SchoolBikeSiteOutput.cs" />
-    <Compile Include="School\Dto\SchoolInput.cs" />
-    <Compile Include="School\Dto\SchoolOutput.cs" />
-    <Compile Include="School\ISchoolAppService.cs" />
-    <Compile Include="School\SchoolAppService.cs" />
     <Compile Include="Track\Dto\TrackInput.cs" />
     <Compile Include="Track\Dto\TrackOutput.cs" />
     <Compile Include="Track\Dto\TrackUpdateInput.cs" />
     <Compile Include="Track\ITrackAppService.cs" />
     <Compile Include="Track\TrackAppService.cs" />
-    <Compile Include="User\Dto\CheckCodeOutput.cs" />
-    <Compile Include="User\Dto\CheckLoginInput.cs" />
-    <Compile Include="User\Dto\MianzeOutput.cs" />
-    <Compile Include="User\Dto\PhoneNumInput.cs" />
-    <Compile Include="User\Dto\UserBikeInput.cs" />
-    <Compile Include="User\Dto\UserBikeOutput.cs" />
-    <Compile Include="User\Dto\UserDto.cs" />
-    <Compile Include="User\Dto\UserInput.cs" />
-    <Compile Include="User\Dto\UserOutput.cs" />
-    <Compile Include="User\Dto\UserUploadOutput.cs" />
-    <Compile Include="User\IUserAppService.cs" />
-    <Compile Include="User\UserAppService.cs" />
-    <Compile Include="VersionUpdate\Dto\VersionUpdateInput.cs" />
-    <Compile Include="VersionUpdate\Dto\VersionUpdateOutput.cs" />
-    <Compile Include="VersionUpdate\IVersionUpdateAppService.cs" />
-    <Compile Include="VersionUpdate\VersionUpdateAppService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ASBicycle.Core\ASBicycle.Core.csproj">
@@ -159,9 +127,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Common\Dto\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

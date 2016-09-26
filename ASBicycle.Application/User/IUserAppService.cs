@@ -105,5 +105,11 @@ namespace ASBicycle.User
 
         [HttpGet]
         Task<CheckCodeOutput> GetCheckCodeRegist([FromUri]PhoneNumInput phoneNumInput);
+
+        [HttpPost]
+        Task<UserUploadOutput> UploadUserHeadPic();
+
+        [HttpPost]
+        Task<UserOutput> UpdateUserNickName(UserInput userInput);
     }
 }

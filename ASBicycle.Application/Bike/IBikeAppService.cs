@@ -18,5 +18,14 @@ namespace ASBicycle.Bike
 
         [HttpGet]
         Task<AlarmBikeOutput> GetAlarmBikeWay([FromUri] string phone);
+        [HttpPost]
+        Task<RentalBikeOutput> RentalBike(RentalBikeInput input);
+        [HttpPost]
+        Task<RentalFinishOutput> RentalBikeFinish(RentalBikeInput input);
+        [HttpPost]
+        Task<RentalBikeOutput> RefreshBike(RentalBikeInput input);
+
+        [HttpPost]
+        Task<RentalCostOutput> RentalCast(RentalBikeInput input);
     }
 }

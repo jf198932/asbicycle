@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Abp.Domain.Repositories;
-using ASBicycle.Rental.AliPay.App;
+using ASBicycle.AliPay.App;
 using ASBicycle.Web.Models.Alipay;
 
 namespace ASBicycle.Web.Controllers.Alipay
@@ -20,119 +20,122 @@ namespace ASBicycle.Web.Controllers.Alipay
         }
 
         // GET: Alipay
-        public ActionResult Notify()
-        {
-            Dictionary<string, string> sPara = GetRequestPost();
-            string notify_id = Request.Form["notify_id"];//获取notify_id
+        //public ActionResult Notify()
+        //{
+        //    Dictionary<string, string> sPara = GetRequestPost();
+        //    string notify_id = Request.Form["notify_id"];//获取notify_id
 
-            string sign = Request.Form["sign"];//获取sign
+        //    string sign = Request.Form["sign"];//获取sign
 
-            if (notify_id != null && notify_id != "")//判断是否有带返回参数
-            {
-                Notify aliNotify = new Notify();
-                if (aliNotify.GetResponseTxt(notify_id) == "true")
-                {
-                    if (aliNotify.GetSignVeryfy(sPara, sign))
-                    {
-                        //——请根据您的业务逻辑来编写程序（以下代码仅作参考）——
-                        //获取支付宝的通知返回参数，可参考技术文档中服务器异步通知参数列表
+        //    if (notify_id != null && notify_id != "")//判断是否有带返回参数
+        //    {
+        //        Notify aliNotify = new Notify();
+        //        if (aliNotify.GetResponseTxt(notify_id) == "true")
+        //        {
+        //            if (aliNotify.GetSignVeryfy(sPara, sign))
+        //            {
+        //                //——请根据您的业务逻辑来编写程序（以下代码仅作参考）——
+        //                //获取支付宝的通知返回参数，可参考技术文档中服务器异步通知参数列表
 
-                        //商户订单号
-                        string out_trade_no = Request.Form["out_trade_no"];
+        //                //商户订单号
+        //                string out_trade_no = Request.Form["out_trade_no"];
 
-                        //支付宝交易号
-                        string trade_no = Request.Form["trade_no"];
+        //                //支付宝交易号
+        //                string trade_no = Request.Form["trade_no"];
 
-                        //交易状态
-                        string trade_status = Request.Form["trade_status"];
+        //                //交易状态
+        //                string trade_status = Request.Form["trade_status"];
 
-                        if (Request.Form["trade_status"] == "TRADE_FINISHED")
-                        {
-                            //判断该笔订单是否在商户网站中已经做过处理
-                            //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
-                            //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
-                            //如果有做过处理，不执行商户的业务程序
+        //                if (Request.Form["trade_status"] == "TRADE_FINISHED")
+        //                {
+        //                    //判断该笔订单是否在商户网站中已经做过处理
+        //                    //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
+        //                    //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
+        //                    //如果有做过处理，不执行商户的业务程序
 
-                            //注意：
-                            //退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
-                        }
-                        else if (Request.Form["trade_status"] == "TRADE_SUCCESS")
-                        {
-                            //判断该笔订单是否在商户网站中已经做过处理
-                            //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
-                            //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
-                            //如果有做过处理，不执行商户的业务程序
+        //                    //注意：
+        //                    //退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
+        //                }
+        //                else if (Request.Form["trade_status"] == "TRADE_SUCCESS")
+        //                {
+        //                    //判断该笔订单是否在商户网站中已经做过处理
+        //                    //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
+        //                    //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
+        //                    //如果有做过处理，不执行商户的业务程序
 
 
 
-                            //注意：
-                            //付款完成后，支付宝系统发送该交易状态通知
-                        }
-                        //——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
-                        Response.Write("success");  //请不要修改或删除
-                    }
-                    else
-                    {
-                        Response.Write("sign fail!");
-                    }
-                }
-                else
-                {
-                    Response.Write("response fail!");
-                }
-            }
-            else
-            {
-                Response.Write("非通知参数!");
-            }
-            return View();
-        }
+        //                    //注意：
+        //                    //付款完成后，支付宝系统发送该交易状态通知
+        //                }
+        //                //——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
+        //                Response.Write("success");  //请不要修改或删除
+        //            }
+        //            else
+        //            {
+        //                Response.Write("sign fail!");
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Response.Write("response fail!");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Response.Write("非通知参数!");
+        //    }
+        //    return View();
+        //}
         [HttpPost]
         public ActionResult Notify(Notifyrul notifyurl)
         {
             Dictionary<string, string> sPara = GetRequestPost();
-            string notify_id = Request.Form["notify_id"];//获取notify_id
+            //string notify_id = Request.Form["notify_id"];//获取notify_id
 
-            string sign = Request.Form["sign"];//获取sign
+            //string sign = Request.Form["sign"];//获取sign
 
-            if (notify_id != null && notify_id != "")//判断是否有带返回参数
+            if (!string.IsNullOrEmpty(notifyurl.notify_id))//判断是否有带返回参数
             {
                 Notify aliNotify = new Notify();
-                if (aliNotify.GetResponseTxt(notify_id) == "true")
+                if (aliNotify.GetResponseTxt(notifyurl.notify_id) == "true")
                 {
-                    if (aliNotify.GetSignVeryfy(sPara, sign))
+                    if (aliNotify.GetSignVeryfy(sPara, notifyurl.sign))
                     {
                         //——请根据您的业务逻辑来编写程序（以下代码仅作参考）——
                         //获取支付宝的通知返回参数，可参考技术文档中服务器异步通知参数列表
 
                         //商户订单号
-                        string out_trade_no = Request.Form["out_trade_no"];
+                        //string out_trade_no = Request.Form["out_trade_no"];
 
                         //支付宝交易号
-                        string trade_no = Request.Form["trade_no"];
+                        //string trade_no = Request.Form["trade_no"];
 
                         //交易状态
-                        string trade_status = Request.Form["trade_status"];
-
-                        if (Request.Form["trade_status"] == "TRADE_FINISHED")
+                        //string trade_status = Request.Form["trade_status"];
+                        
+                        if (notifyurl.trade_status == "TRADE_FINISHED")
                         {
                             //判断该笔订单是否在商户网站中已经做过处理
                             //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                             //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                             //如果有做过处理，不执行商户的业务程序
-                            var track = _trackRepository.GetAll().FirstOrDefault(t => t.Pay_docno == out_trade_no);
+
+                            var track = _trackRepository.GetAll().FirstOrDefault(t => t.Pay_docno == notifyurl.out_trade_no);
                             track.Pay_status = 5;
+                            track.Pay_method = "支付宝";
+                            track.Payment = int.Parse(Request.Form["total_fee"]);
                             _trackRepository.Update(track);
                             //注意：
                             //退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
                         }
-                        else if (Request.Form["trade_status"] == "TRADE_SUCCESS")
+                        else if (notifyurl.trade_status == "TRADE_SUCCESS")
                         {
                             //判断该笔订单是否在商户网站中已经做过处理
                             //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                             //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                             //如果有做过处理，不执行商户的业务程序
-                            var track = _trackRepository.GetAll().FirstOrDefault(t => t.Pay_docno == out_trade_no);
+                            var track = _trackRepository.GetAll().FirstOrDefault(t => t.Pay_docno == notifyurl.out_trade_no);
                             track.Pay_status = 4;
                             track.Pay_method = "支付宝";
                             track.Payment = int.Parse(Request.Form["total_fee"]);
@@ -258,7 +261,7 @@ namespace ASBicycle.Web.Controllers.Alipay
                     bool issign = false;
 
                     //获得验签结果
-                    issign = RSA.verify(data, sign, Rental.AliPay.App.Notify.getPublicKeyStr(Config.alipay_public_key), Config.input_charset);
+                    issign = RSA.verify(data, sign, AliPay.App.Notify.getPublicKeyStr(Config.alipay_public_key), Config.input_charset);
                     if (issign)
                     {
                         //此处可做商家业务逻辑，建议商家以异步通知为准。

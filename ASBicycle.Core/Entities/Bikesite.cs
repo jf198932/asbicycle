@@ -15,6 +15,8 @@ namespace ASBicycle.Entities
             Messages = new List<Message>();
             Sitebeacons = new List<Sitebeacon>();
             Sitemonitors = new List<Sitemonitor>();
+            //TracksStart = new List<Track>();
+            //TracksEnd = new List<Track>();
             Logs = new List<Log>();
         }
 
@@ -42,6 +44,8 @@ namespace ASBicycle.Entities
         public virtual ICollection<Message> Messages { get; set; }
         public virtual ICollection<Sitebeacon> Sitebeacons { get; set; }
         public virtual ICollection<Sitemonitor> Sitemonitors { get; set; }
+        //public virtual ICollection<Track> TracksStart { get; set; }
+        //public virtual ICollection<Track> TracksEnd { get; set; }
         public virtual ICollection<Log> Logs { get; set; }
     }
 }

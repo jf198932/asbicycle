@@ -3,12 +3,14 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Abp.AutoMapper;
 using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.Runtime.Caching;
 using Abp.UI;
@@ -27,15 +29,17 @@ namespace ASBicycle.User
         private readonly IBikeRepository _bikeRepository;
         private readonly ICacheManager _cacheManager;
         private readonly ISqlExecuter _sqlExecuter;
-        private readonly IRepository<Log> _logRepository; 
+        private readonly IRepository<Log> _logRepository;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        public UserAppService(IUserRepository userRepository, ICacheManager cacheManager, IBikeRepository bikeRepository, ISqlExecuter sqlExecuter, IRepository<Log> logRepository)
+        public UserAppService(IUserRepository userRepository, ICacheManager cacheManager, IBikeRepository bikeRepository, ISqlExecuter sqlExecuter, IRepository<Log> logRepository, IUnitOfWorkManager unitOfWorkManager)
         {
             _userRepository = userRepository;
             _cacheManager = cacheManager;
             _bikeRepository = bikeRepository;
             _sqlExecuter = sqlExecuter;
             _logRepository = logRepository;
+            _unitOfWorkManager = unitOfWorkManager;
         }
 
         [HttpPost]
@@ -70,9 +74,28 @@ namespace ASBicycle.User
                 {
                     result.Device_os = checkIdentityInput.device_os;
                     await _userRepository.UpdateAsync(result);
+
+                    var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(
+                        "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,a.start_point");
+                    sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
+                    sb.AppendFormat(" where a.user_id={0} and end_site_id is NULL", result.Id);
+                    var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
+                    if (track != null)
+                    {
+                        xxx.UserDto.Payed = 1;
+                    }
+                    else
+                    {
+                        xxx.UserDto.Payed = 0;
+                    }
+
+
+                    return xxx;
+
                 }
-                
-                return new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
             }
             throw new UserFriendlyException("请重新登录");
         }
@@ -219,73 +242,80 @@ namespace ASBicycle.User
         [HttpPost]
         public async Task LockBike(UserBikeInput userBikeInput)
         {
-            var user =
+            using (var unitOfWork = _unitOfWorkManager.Begin())
+            {
+                var user =
                 await
                     _userRepository.FirstOrDefaultAsync(
                         u => u.Id == userBikeInput.User_id && u.Remember_token == userBikeInput.Token);
-            if (user == null)
-                throw new UserFriendlyException("请重新登录");
-            var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.Ble_name == userBikeInput.Serial);
-            if (bike == null)
-                throw new UserFriendlyException("没有该车辆");
-            if (bike.Bikesite_id == null)
-                throw new UserFriendlyException("当前没有进入桩点，不能锁车");
+                if (user == null)
+                    throw new UserFriendlyException("请重新登录");
+                var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.Ble_name == userBikeInput.Serial);
+                if (bike == null)
+                    throw new UserFriendlyException("没有该车辆");
+                if (bike.Bikesite_id == null)
+                    throw new UserFriendlyException("当前没有进入桩点，不能锁车");
 
-            
 
-            bike.Vlock_status = 1;//锁车
+                bike.Vlock_status = 1;//锁车
 
-            //await _bikeRepository.UpdateAsync(bike);
+                await _bikeRepository.UpdateAsync(bike);
 
-            //string sql = "call SP_InsertLog(" + 1 + "," + bike.Bikesite_id + ",'" + bike.Ble_serial + "')";
+                //string sql = "call SP_InsertLog(" + 1 + "," + bike.Bikesite_id + ",'" + bike.Ble_serial + "')";
 
-            //await _sqlExecuter.ExecuteAsync(sql);
+                //await _sqlExecuter.ExecuteAsync(sql);
 
-            await
-                _logRepository.InsertAsync(new Log
-                {
-                    Created_at = DateTime.Now,
-                    Updated_at = DateTime.Now,
-                    Op_Time = DateTime.Now,
-                    Bike_id = bike.Id,
-                    Bikesite_id = bike.Bikesite_id,
-                    Type = 1
-                });
+                await
+                    _logRepository.InsertAsync(new Log
+                    {
+                        Created_at = DateTime.Now,
+                        Updated_at = DateTime.Now,
+                        Op_Time = DateTime.Now,
+                        Bike_id = bike.Id,
+                        Bikesite_id = bike.Bikesite_id,
+                        Type = 1
+                    });
 
+                unitOfWork.Complete();
+            }
         }
         [HttpPost]
         public async Task OpenBike(UserBikeInput userBikeInput)
         {
-            var user =
+            using (var unitOfWork = _unitOfWorkManager.Begin())
+            {
+                var user =
                 await
                     _userRepository.FirstOrDefaultAsync(
                         u => u.Id == userBikeInput.User_id && u.Remember_token == userBikeInput.Token);
-            if (user == null)
-                throw new UserFriendlyException("请重新登录");
-            var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.Ble_name == userBikeInput.Serial);
-            if (bike == null)
-                throw new UserFriendlyException("没有该车辆");
-            if(bike.Vlock_status >= 3)
-                throw new UserFriendlyException("车辆异常");
+                if (user == null)
+                    throw new UserFriendlyException("请重新登录");
+                var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.Ble_name == userBikeInput.Serial);
+                if (bike == null)
+                    throw new UserFriendlyException("没有该车辆");
+                if(bike.Vlock_status >= 3)
+                    throw new UserFriendlyException("车辆异常");
 
-            //string sql = "call SP_InsertLog(" + 2 + "," + bike.Bikesite_id + ",'" + bike.Ble_serial + "')";
+                //string sql = "call SP_InsertLog(" + 2 + "," + bike.Bikesite_id + ",'" + bike.Ble_serial + "')";
 
-            //await _sqlExecuter.ExecuteAsync(sql);
+                //await _sqlExecuter.ExecuteAsync(sql);
 
-            bike.Vlock_status = 2;//开锁
+                bike.Vlock_status = 2;//开锁
 
-            //await _bikeRepository.UpdateAsync(bike);
+                await _bikeRepository.UpdateAsync(bike);
 
-            await
-                _logRepository.InsertAsync(new Log
-                {
-                    Created_at = DateTime.Now,
-                    Updated_at = DateTime.Now,
-                    Op_Time = DateTime.Now,
-                    Bike_id = bike.Id,
-                    Bikesite_id = bike.Bikesite_id,
-                    Type = 2
-                });
+                await
+                    _logRepository.InsertAsync(new Log
+                    {
+                        Created_at = DateTime.Now,
+                        Updated_at = DateTime.Now,
+                        Op_Time = DateTime.Now,
+                        Bike_id = bike.Id,
+                        Bikesite_id = bike.Bikesite_id,
+                        Type = 2
+                    });
+                unitOfWork.Complete();
+            }
         }
 
         public async Task<UserBikeOutput> GetUserBike([FromUri]UserIdInput userIdInput)
@@ -443,7 +473,26 @@ namespace ASBicycle.User
                 result.Device_os = checkLoginInput.device_os;
                 result.Updated_at = DateTime.Now;
                 result = await _userRepository.UpdateAsync(result);
-                return new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
+
+                var xxx = new UserOutput {UserDto = Mapper.Map<UserDto>(result)};
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append(
+                    "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,a.start_point");
+                sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
+                sb.AppendFormat(" where a.user_id={0} and end_site_id is NULL", result.Id);
+                var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
+                if (track != null)
+                {
+                    xxx.UserDto.Payed = 1;
+                }
+                else
+                {
+                    xxx.UserDto.Payed = 0;
+                }
+                
+
+                return xxx;
             }
             throw new UserFriendlyException("请先进行注册");
         }
@@ -497,7 +546,26 @@ namespace ASBicycle.User
                     _userRepository.FirstOrDefaultAsync(
                         u => u.Phone == phoneNumInput.Phone);
             Mapper.CreateMap<Entities.User, UserDto>();
-            return new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
+
+            var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(
+                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,a.start_point");
+            sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
+            sb.AppendFormat(" where a.user_id={0} and end_site_id is NULL", result.Id);
+            var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
+            if (track != null)
+            {
+                xxx.UserDto.Payed = 1;
+            }
+            else
+            {
+                xxx.UserDto.Payed = 0;
+            }
+
+
+            return xxx;
         }
         [HttpGet]
         public async Task<CheckCodeOutput> GetCheckCodeRegist([FromUri] PhoneNumInput phoneNumInput)
@@ -538,6 +606,84 @@ namespace ASBicycle.User
             {
                 return new CheckCodeOutput { CheckCode = "" };
             }
+        }
+
+        public async Task<UserUploadOutput> UploadUserHeadPic()
+        {
+            HttpPostedFile file = HttpContext.Current.Request.Files["filedata"];
+            if (file != null)
+            {
+                int userid = int.Parse(HttpContext.Current.Request.Params["user_id"]);
+                var usermodel = await _userRepository.FirstOrDefaultAsync(t => t.Id == userid);
+
+                if (null == usermodel)
+                    throw new UserFriendlyException("会员信息不正确");
+
+                try
+                {
+                    // 文件上传后的保存路径
+                    string filePath = HttpContext.Current.Server.MapPath("~/Uploads/UserHead/");
+                    if (!Directory.Exists(filePath))
+                    {
+                        Directory.CreateDirectory(filePath);
+                    }
+                    string fileName = Path.GetFileName(file.FileName);// 原始文件名称
+                    string fileExtension = Path.GetExtension(fileName); // 文件扩展名
+                    string saveName = Guid.NewGuid() + fileExtension; // 保存文件名称
+
+                    file.SaveAs(filePath + saveName);
+
+
+
+                    var img = ConfigurationManager.AppSettings["ServerPath"] + "Uploads/UserHead/" + saveName;
+                    usermodel.HeadImg = img;
+                    await _userRepository.UpdateAsync(usermodel);
+                    var result = new UserUploadOutput
+                    {
+                        ImgUrl = img
+                    };
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    throw new UserFriendlyException(ex.Message);
+
+                }
+            }
+            else
+            {
+                throw new UserFriendlyException("请选择一张图片上传");
+            }
+        }
+
+        public async Task<UserOutput> UpdateUserNickName(UserInput userInput)
+        {
+            var user = await _userRepository.FirstOrDefaultAsync(u => u.Id == userInput.Id);
+            user.Nickname = userInput.NickName;
+
+            await _userRepository.UpdateAsync(user);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(user) };
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(
+                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,a.start_point");
+            sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
+            sb.AppendFormat(" where a.user_id={0} and end_site_id is NULL", user.Id);
+            var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
+            if (track != null)
+            {
+                xxx.UserDto.Payed = 1;
+            }
+            else
+            {
+                xxx.UserDto.Payed = 0;
+            }
+
+
+            return xxx;
         }
     }
 }

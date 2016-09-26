@@ -10,7 +10,10 @@ using System.Web.UI.WebControls.WebParts;
 using System.Web.UI.HtmlControls;
 using System.Collections.Specialized;
 using System.Collections.Generic;
-using ASBicycle.Rental.AliPay.App;
+using Abp.Domain.Repositories;
+using ASBicycle.AliPay.App;
+using ASBicycle.Track;
+
 /// <summary>
 /// 功能：服务器异步通知页面
 /// 版本：3.3
@@ -27,6 +30,7 @@ using ASBicycle.Rental.AliPay.App;
 /// </summary>
 public partial class notify_url : System.Web.UI.Page
 {
+    private IRepository<ASBicycle.Entities.Track> _trackRepository;
     protected void Page_Load(object sender, EventArgs e)
     {
         Dictionary<string, string> sPara = GetRequestPost();
