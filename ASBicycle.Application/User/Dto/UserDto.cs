@@ -18,6 +18,7 @@ namespace ASBicycle.User.Dto
         public int? User_type { get; set; }
         public int? Device_os { get; set; }
         public string Device_id { get; set; }
+        public string Headimg { get; set; }
 
         public int Payed { get; set; }
     }

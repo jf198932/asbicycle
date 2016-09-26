@@ -607,13 +607,15 @@ namespace ASBicycle.User
                 return new CheckCodeOutput { CheckCode = "" };
             }
         }
-
+        [HttpPost]
         public async Task<UserUploadOutput> UploadUserHeadPic()
         {
+            
+
             HttpPostedFile file = HttpContext.Current.Request.Files["filedata"];
             if (file != null)
             {
-                int userid = int.Parse(HttpContext.Current.Request.Params["user_id"]);
+                var userid = int.Parse(HttpContext.Current.Request.Params["user_id"]);
                 var usermodel = await _userRepository.FirstOrDefaultAsync(t => t.Id == userid);
 
                 if (null == usermodel)
@@ -638,6 +640,7 @@ namespace ASBicycle.User
                     var img = ConfigurationManager.AppSettings["ServerPath"] + "Uploads/UserHead/" + saveName;
                     usermodel.HeadImg = img;
                     await _userRepository.UpdateAsync(usermodel);
+                    //await CurrentUnitOfWork.SaveChangesAsync();
                     var result = new UserUploadOutput
                     {
                         ImgUrl = img
