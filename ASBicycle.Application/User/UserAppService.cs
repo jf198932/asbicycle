@@ -190,8 +190,8 @@ namespace ASBicycle.User
         {
             var user = await _userRepository.FirstOrDefaultAsync(u => u.Id == userInput.Id);
             user.Name = userInput.Name;
-            user.Nickname = userInput.NickName;
-            user.School_id = 9;//todo 默认厦大
+            //user.Nickname = userInput.NickName;
+            user.User_type = userInput.User_type;
             if (!userInput.Phone.IsNullOrEmpty())
                 user.Phone = userInput.Phone;
             if(userInput.School_id != null)
@@ -202,7 +202,7 @@ namespace ASBicycle.User
                 user.Img = userInput.Img;
                 user.Certification = 3;//认证通过
             }
-            user.Email = userInput.Email;
+            //user.Email = userInput.Email;
 
             await _userRepository.UpdateAsync(user);
         }
