@@ -15,11 +15,16 @@ namespace ASBicycle.User.Dto
         public int? Balance { get; set; }
         public string Img { get; set; }
         public int? School_id { get; set; }
+        /// <summary>
+        /// 身份类型 0：游客  1：在校学生  2：教职工
+        /// </summary>
         public int? User_type { get; set; }
         public int? Device_os { get; set; }
         public string Device_id { get; set; }
         public string Headimg { get; set; }
 
         public int Payed { get; set; }
+        public string School_name { get; set; }
+        public string User_type_name { get; set; }
     }
 }

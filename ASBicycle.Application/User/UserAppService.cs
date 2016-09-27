@@ -76,7 +76,23 @@ namespace ASBicycle.User
                     await _userRepository.UpdateAsync(result);
 
                     var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
-
+                    xxx.UserDto.School_name = result.School == null ? "" : result.School.Name;
+                    if (xxx.UserDto.User_type == 0)
+                    {
+                        xxx.UserDto.User_type_name = "游客";
+                    }
+                    else if (xxx.UserDto.User_type == 1)
+                    {
+                        xxx.UserDto.User_type_name = "在校生";
+                    }
+                    else if (xxx.UserDto.User_type == 2)
+                    {
+                        xxx.UserDto.User_type_name = "教职工";
+                    }
+                    else
+                    {
+                        xxx.UserDto.User_type_name = "";
+                    }
                     StringBuilder sb = new StringBuilder();
                     sb.Append(
                         "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,a.start_point");
@@ -475,7 +491,23 @@ namespace ASBicycle.User
                 result = await _userRepository.UpdateAsync(result);
 
                 var xxx = new UserOutput {UserDto = Mapper.Map<UserDto>(result)};
-
+                xxx.UserDto.School_name = result.School == null ? "" : result.School.Name;
+                if (xxx.UserDto.User_type == 0)
+                {
+                    xxx.UserDto.User_type_name = "游客";
+                }
+                else if (xxx.UserDto.User_type == 1)
+                {
+                    xxx.UserDto.User_type_name = "在校生";
+                }
+                else if (xxx.UserDto.User_type == 2)
+                {
+                    xxx.UserDto.User_type_name = "教职工";
+                }
+                else
+                {
+                    xxx.UserDto.User_type_name = "";
+                }
                 StringBuilder sb = new StringBuilder();
                 sb.Append(
                     "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,a.start_point");
@@ -548,7 +580,23 @@ namespace ASBicycle.User
             Mapper.CreateMap<Entities.User, UserDto>();
 
             var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
-
+            xxx.UserDto.School_name = result.School == null ? "" : result.School.Name;
+            if (xxx.UserDto.User_type == 0)
+            {
+                xxx.UserDto.User_type_name = "游客";
+            }
+            else if (xxx.UserDto.User_type == 1)
+            {
+                xxx.UserDto.User_type_name = "在校生";
+            }
+            else if (xxx.UserDto.User_type == 2)
+            {
+                xxx.UserDto.User_type_name = "教职工";
+            }
+            else
+            {
+                xxx.UserDto.User_type_name = "";
+            }
             StringBuilder sb = new StringBuilder();
             sb.Append(
                 "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,a.start_point");
@@ -669,7 +717,23 @@ namespace ASBicycle.User
             await CurrentUnitOfWork.SaveChangesAsync();
 
             var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(user) };
-
+            xxx.UserDto.School_name = user.School == null ? "" : user.School.Name;
+            if (xxx.UserDto.User_type == 0)
+            {
+                xxx.UserDto.User_type_name = "游客";
+            }
+            else if (xxx.UserDto.User_type == 1)
+            {
+                xxx.UserDto.User_type_name = "在校生";
+            }
+            else if (xxx.UserDto.User_type == 2)
+            {
+                xxx.UserDto.User_type_name = "教职工";
+            }
+            else
+            {
+                xxx.UserDto.User_type_name = "";
+            }
             StringBuilder sb = new StringBuilder();
             sb.Append(
                 "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,a.start_point");

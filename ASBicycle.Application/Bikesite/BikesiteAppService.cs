@@ -22,7 +22,7 @@ namespace ASBicycle.Bikesite
             _bikeRepository = bikeRepository;
         }
 
-        public async Task<BikesiteOutput> GetOneBikesiteInfo([FromUri]int id, int index, int pagesize)
+        public async Task<BikesiteOutput> GetOneBikesiteInfo([FromUri]int id, int index=1, int pagesize=10)
         {
             //var bikesite = await _bikesiteRepository.GetAsync(id);
             //var bikes = _bikeRepository.GetAll();

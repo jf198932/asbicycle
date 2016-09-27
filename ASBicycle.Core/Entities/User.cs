@@ -42,7 +42,9 @@ namespace ASBicycle.Entities
         public string Img { get; set; }
 
         public string HeadImg { get; set; }
-
+        /// <summary>
+        /// 身份类型 0：游客  1：在校学生  2：教职工
+        /// </summary>
         public int? User_type { get; set; }
         public int? Device_os { get; set; }
         public string Device_id { get; set; }
