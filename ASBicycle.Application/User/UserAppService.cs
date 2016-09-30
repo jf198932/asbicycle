@@ -565,11 +565,19 @@ namespace ASBicycle.User
             //    return new UserOutput { UserDto = Mapper.Map<UserDto>(model) };
             //}
         }
+
         [HttpGet]
         public MianzeOutput Mianze()
         {
-            return new MianzeOutput {Url = "http://bms.isriding.com/isriding/Uploads/mianze.html" };
+            return new MianzeOutput {Url = "http://api.isriding.com/isriding/Uploads/mianze.html" };
         }
+
+        [HttpGet]
+        public MianzeOutput About()
+        {
+            return new MianzeOutput { Url = "http://api.isriding.com/isriding/Uploads/about.html" };
+        }
+
         [HttpGet]
         public async Task<UserOutput> GetUserInfo([FromUri] PhoneNumInput phoneNumInput)
         {
@@ -715,7 +723,7 @@ namespace ASBicycle.User
             await _userRepository.UpdateAsync(user);
 
             await CurrentUnitOfWork.SaveChangesAsync();
-
+            Mapper.CreateMap<Entities.User, UserDto>();
             var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(user) };
             xxx.UserDto.School_name = user.School == null ? "" : user.School.Name;
             if (xxx.UserDto.User_type == 0)

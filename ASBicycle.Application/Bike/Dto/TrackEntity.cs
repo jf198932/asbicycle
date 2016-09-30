@@ -21,7 +21,9 @@ namespace ASBicycle.Bike.Dto
         public int User_id { get; set; }
         public int? Bike_id { get; set; }
         public string Start_site_name { get; set; }
+        public string End_site_name { get; set; }
         public string School_name { get; set; }
         public string Ble_name { get; set; }
+        public double time_charge { get; set; }
     }
 }

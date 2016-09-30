@@ -49,7 +49,7 @@ namespace ASBicycle.Track
                     Start_time = t.Start_time.ToString(),
                     End_time = t.End_time.ToString(),
                     Payment = t.Payment,
-                    Pay_status = t.Pay_status>=4?1:0,
+                    Pay_status = t.Pay_status>= 3 ? 1 : 0,
                     Remark = t.Remark.ToString(),
                     Remarkstatus = t.Remark.ToString() == "" ? 0: 1,
                     Bike_id = t.Bike_id,

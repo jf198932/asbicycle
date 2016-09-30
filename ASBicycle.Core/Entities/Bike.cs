@@ -31,6 +31,8 @@ namespace ASBicycle.Entities
         public int? Battery { get; set; }
 
         public string Bike_img { get; set; }
+        public string Lock_pwd { get; set; }
+        public int? rent_type { get; set; }
 
         public int? User_id { get; set; }
         public int? School_id { get; set; }

@@ -27,9 +27,8 @@ namespace ASBicycle.AliPay.App
         public static string private_key =
             "MIICXQIBAAKBgQCovZaBaOVZpuADX2eP3tlDhq6SdgnOOqgjyTIBeOdc/8FjUFU/C+7VCVzH4xUn2dnNTG7+OWvvr96j2UoK1abC1h15V8tg6mLHQtG1KIki2ndU3I6um9E1o1neNSOrUUe0+hGhB6YAoTa0R6ixZdpjGE+bI06Q0qxtgO5jJkPanwIDAQABAoGAVSDomDr6UiNtKmZsUdnklDuTQNKKGd/fycYME1ASsQlaYCc8CoWTpSiHBVTb7HHsfrVL3bfMa2y3jsPlpdepvBmGfKF5JVHdz2HFZgzlYEzkrBH7tFlHnpzmDf3grbtSNV7UJoi6Hcy7gcKviKbH/8D9iu5T0mxGgOiDOF0Ya5kCQQDgO3RzwAhqGAwo0rKGjhy1rWqzK+yM5He0gYXnd9dnMjPFpZfD6B40uc+//oL8LpQ8a4j5tW1gqIErNI1cpIRjAkEAwKWJ920fkXrbr7xYoTH7F7gXUAQtX6DPJiGXtazKedZRcmoe9ABcKjcElWfscRVsYOD7cDrZQM942dkUB4sPlQJAZANAwqwBVMjbC45GoGtcdNAfikDqJkF0/ubSgdZbFiU3IE3mrjOm3V+PQRRU+gQQjA5urun0GiuuSUYMUyjx/wJBAJtJ1TjZgcTnYAb8sATgISMxhbk+ZMTc/54hHgWYT25+0BCGcoUFdUWiK9Ozfeh5+G7vbD8/cLjJhQU18utRsTECQQCsU8FUcACYh8aDWiDwNVO/fMLx5dSlZHX0RmVwc0ubBC2SBdVmR6/zHaMaxGiOp2hiUA1BLVVTBITZcWH52lNe";
 
-        //支付宝的公钥，查看地址：https://b.alipay.com/order/pidAndKey.htm 
-        public static string alipay_public_key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCovZaBaOVZpuADX2eP3tlDhq6SdgnOOqgjyTIBeOdc/8FjUFU/C+7VCVzH4xUn2dnNTG7+OWvvr96j2UoK1abC1h15V8tg6mLHQtG1KIki2ndU3I6um9E1o1neNSOrUUe0+hGhB6YAoTa0R6ixZdpjGE+bI06Q0qxtgO5jJkPanwIDAQAB";
-        
+        //支付宝的公钥，查看地址：https://b.alipay.com/order/pidAndKey.htm
+        public static string alipay_public_key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRAFljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQEB/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5KsiNG9zpgmLCUYuLkxpLQIDAQAB";
         // 签名方式
         public static string sign_type = "RSA";
 

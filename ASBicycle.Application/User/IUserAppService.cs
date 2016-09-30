@@ -101,6 +101,8 @@ namespace ASBicycle.User
         [HttpGet]
         MianzeOutput Mianze();
         [HttpGet]
+        MianzeOutput About();
+        [HttpGet]
         Task<UserOutput> GetUserInfo([FromUri] PhoneNumInput phoneNumInput);
 
         [HttpGet]

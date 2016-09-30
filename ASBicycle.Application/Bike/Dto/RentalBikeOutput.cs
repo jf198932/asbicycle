@@ -14,5 +14,6 @@ namespace ASBicycle.Bike.Dto
 
         public double lat_end { get; set; }
         public double lon_end { get; set; }
+        public string pwd { get; set; }
     }
 }

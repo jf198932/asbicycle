@@ -126,7 +126,9 @@
     <Compile Include="Bike\Dto\RentalBikeOutput.cs" />
     <Compile Include="Bike\Dto\RentalCostOutput.cs" />
     <Compile Include="Bike\Dto\RentalFinishOutput.cs" />
+    <Compile Include="Bike\Dto\RentalInfoOutput.cs" />
     <Compile Include="Bike\Dto\TrackEntity.cs" />
+    <Compile Include="Bike\Dto\TrackInfoOutput.cs" />
     <Compile Include="Bike\IBikeAppService.cs" />
     <Compile Include="Common\LatlonHelper.cs" />
     <Compile Include="Common\PushMsgHelper.cs" />

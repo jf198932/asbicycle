@@ -9,9 +9,5 @@ namespace ASBicycle.AliPay
     {
         [HttpPost]
         AlipayOutput signatures(SignaturesInput input);
-        [HttpPost, DontWrapResult]
-        void return_url();
-        [HttpPost, DontWrapResult]
-        void notify_url();
     }
 }

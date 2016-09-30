@@ -22,10 +22,10 @@ namespace ASBicycle.AliPay.App
     public class Notify
     {
         #region 字段
-        private string _partner = "2088421507099722";               //合作身份者ID
-        private string alipay_public_key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCovZaBaOVZpuADX2eP3tlDhq6SdgnOOqgjyTIBeOdc/8FjUFU/C+7VCVzH4xUn2dnNTG7+OWvvr96j2UoK1abC1h15V8tg6mLHQtG1KIki2ndU3I6um9E1o1neNSOrUUe0+hGhB6YAoTa0R6ixZdpjGE+bI06Q0qxtgO5jJkPanwIDAQAB";            //支付宝的公钥
-        private string _input_charset = "utf-8";         //编码格式
-        private string _sign_type = "RSA";             //签名方式
+        private string _partner = "";               //合作身份者ID
+        private string alipay_public_key = "";            //支付宝的公钥
+        private string _input_charset = "";         //编码格式
+        private string _sign_type = "";             //签名方式
 
         //支付宝消息验证地址
         private string Https_veryfy_url = "https://mapi.alipay.com/gateway.do?service=notify_verify&";
