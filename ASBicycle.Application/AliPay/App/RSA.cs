@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using Abp.Logging;
 
 namespace ASBicycle.AliPay.App
 {
@@ -118,12 +119,16 @@ namespace ASBicycle.AliPay.App
         {
             bool result = false;
 
+            //LogHelper.Logger.Info($"content:{content},signedString:{signedString},publicKey:{publicKey},input_charset:{input_charset}");
+
             Encoding code = Encoding.GetEncoding(input_charset);
             byte[] Data = code.GetBytes(content);
             byte[] data = Convert.FromBase64String(signedString);
             RSAParameters paraPub = ConvertFromPublicKey(publicKey);
             RSACryptoServiceProvider rsaPub = new RSACryptoServiceProvider();
             rsaPub.ImportParameters(paraPub);
+
+            //LogHelper.Logger.Info($"Data:{Data},data:{data}");
 
             SHA1 sh = new SHA1CryptoServiceProvider();
             result = rsaPub.VerifyData(Data, sh, data);

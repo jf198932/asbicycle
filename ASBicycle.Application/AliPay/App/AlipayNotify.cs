@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using Abp.Logging;
 
 namespace ASBicycle.AliPay.App
 {
@@ -81,7 +82,9 @@ namespace ASBicycle.AliPay.App
             sPara = Core.FilterPara(inputPara);
             
             //获取待签名字符串
-            string preSignStr = Core.CreateLinkString(sPara);
+            string preSignStr = Core.CreateLinkString2(sPara);
+
+            //LogHelper.Logger.Info($"preSignStr:{preSignStr}");
 
             //获得签名验证结果
             bool isSgin = false;

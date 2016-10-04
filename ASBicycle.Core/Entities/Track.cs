@@ -22,7 +22,7 @@ namespace ASBicycle.Entities
         public string Pay_method { get; set; }
         public string Pay_docno { get; set; }
         public string Remark { get; set; }
-
+        public string Trade_no { get; set; }
 
         public int User_id { get; set; }
         public int? Bike_id { get; set; }

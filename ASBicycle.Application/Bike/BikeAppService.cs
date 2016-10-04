@@ -460,11 +460,12 @@ namespace ASBicycle.Bike
             
             StringBuilder sb = new StringBuilder();
             sb.Append(
-                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name,c.time_charge");
+                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name,c.time_charge");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
-            sb.AppendFormat(" where a.user_id={0} and a.bike_id = {1} and end_site_id is NULL", input.user_id, bike.Id);
+            sb.Append(" left join bike as e on a.bike_id = e.id");
+            sb.AppendFormat(" where a.pay_docno={0}", input.out_trade_no);
             var tracktemp = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
             if (tracktemp == null)
             {
@@ -500,36 +501,13 @@ namespace ASBicycle.Bike
 
         public async Task<RentalBikeOutput> RefreshBiketemp(RentalBikeInput input)
         {
-            var bike = await _bikeRepository.FirstOrDefaultAsync(t => t.Ble_name == input.Ble_name);
-            if (bike == null)
-            {
-                throw new UserFriendlyException("车辆编号错误");
-            }
-
-            var gpsinput = input.gps_point.Split(',');
-            var ip_lon = double.Parse(gpsinput[0]);
-            var ip_lat = double.Parse(gpsinput[1]);
-            var bikesitelist = _bikesiteRepository.GetAll().Where(t => t.School_id == bike.School_id).ToList();
-
-            Entities.Bikesite bsite = null;
-
-            foreach (var bikesite in bikesitelist)
-            {
-                var bikesitegps = bikesite.Gps_point.Split(',');
-                var bs_lon = double.Parse(bikesitegps[0]);
-                var bs_lat = double.Parse(bikesitegps[1]);
-
-                var distance = LatlonHelper.GetDistance(ip_lat, ip_lon, bs_lat, bs_lon) * 1000;//KM->M
-                if (distance <= bikesite.Radius)//15米
-                {
-                    bsite = bikesite;
-                    break;
-                }
-            }
-
             StringBuilder sb = new StringBuilder();
-            sb.Append("select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,a.start_point, c.ble_name");
-            sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id left join bike as c on a.bike_id = c.id");
+            sb.Append(
+                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,d.`name` as end_site_name,a.start_point,b.school_id,c.`name` as school_name,c.time_charge,e.Lock_pwd");
+            sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
+            sb.Append(" left join school as c on b.school_id = c.id");
+            sb.Append(" left join bikesite as d on a.end_site_id = d.id");
+            sb.Append(" left join bike as e on a.bike_id = e.id");
             if (input.out_trade_no.IsNullOrEmpty())
             {
                 sb.AppendFormat(" where a.user_id={0} and end_site_id is NULL", input.user_id);
@@ -544,6 +522,29 @@ namespace ASBicycle.Bike
             {
                 throw new UserFriendlyException("没有行程单!");
             }
+            var gpsinput = input.gps_point.Split(',');
+            var ip_lon = double.Parse(gpsinput[0]);
+            var ip_lat = double.Parse(gpsinput[1]);
+            var bikesitelist = _bikesiteRepository.GetAll().Where(t => t.School_id == track.School_id).ToList();
+
+            Entities.Bikesite bsite = null;
+
+            foreach (var bikesite in bikesitelist)
+            {
+                var bikesitegps = bikesite.Gps_point.Split(',');
+                var bs_lon = double.Parse(bikesitegps[0]);
+                var bs_lat = double.Parse(bikesitegps[1]);
+
+                var distance = LatlonHelper.GetDistance(ip_lat, ip_lon, bs_lat, bs_lon) * 1000;//KM->M
+                Logger.Info($"distance:{distance}---Radius:{bikesite.Radius}");
+                if (distance <= bikesite.Radius)//15米
+                {
+                    bsite = bikesite;
+                    break;
+                }
+            }
+
+            
 
             var output = new RentalBikeOutput();
             if (bsite != null)
@@ -562,6 +563,7 @@ namespace ASBicycle.Bike
             output.ble_name = track.Ble_name;
             output.start_time = track.Start_time.ToString();
             output.end_site_name = bsite == null ? "" : bsite.Name;
+            output.pwd = track.Lock_pwd;
 
             return output;
         }

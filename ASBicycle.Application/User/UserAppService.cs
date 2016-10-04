@@ -471,7 +471,7 @@ namespace ASBicycle.User
                 var checkCode = await cacheCheckCode.GetOrDefaultAsync(checkLoginInput.Phone);
                 if (checkCode == null || checkLoginInput.CheckCode != ((CheckCodeOutput)checkCode).CheckCode)
                 {
-                    throw new UserFriendlyException("验证码错误");
+                    throw new UserFriendlyException("验证码已过期，请在一分钟之内输入！");
 
                 }
             }
@@ -537,7 +537,7 @@ namespace ASBicycle.User
                 var checkCode = await cacheCheckCode.GetOrDefaultAsync(modelIntput.Phone);
                 if (checkCode == null || modelIntput.CheckCode != ((CheckCodeOutput)checkCode).CheckCode)
                 {
-                    throw new UserFriendlyException("验证码错误");
+                    throw new UserFriendlyException("验证码已过期，请在一分钟之内输入！");
 
                 }
             }
