@@ -14,6 +14,7 @@ namespace ASBicycle.Bike.Dto
         public DateTime? Start_time { get; set; }
         public DateTime? End_time { get; set; }
         public double? Payment { get; set; }
+        public double? Should_pay { get; set; }
         public int? Pay_status { get; set; }
         public string Pay_method { get; set; }
         public string Pay_docno { get; set; }
@@ -27,5 +28,7 @@ namespace ASBicycle.Bike.Dto
         public string Ble_name { get; set; }
         public double time_charge { get; set; }
         public string Lock_pwd { get; set; }
+
+        public string Start_gps_point { get; set; }
     }
 }

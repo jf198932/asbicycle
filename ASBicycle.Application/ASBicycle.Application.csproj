@@ -113,6 +113,7 @@
     <Compile Include="ASBicycleApplicationModule.cs" />
     <Compile Include="ASBicycleAppServiceBase.cs" />
     <Compile Include="Bikesite\BikesiteAppService.cs" />
+    <Compile Include="Bikesite\Dto\BikesiteInput.cs" />
     <Compile Include="Bikesite\Dto\BikesiteOutput.cs" />
     <Compile Include="Bikesite\IBikesiteAppService.cs" />
     <Compile Include="Bike\BikeAppService.cs" />

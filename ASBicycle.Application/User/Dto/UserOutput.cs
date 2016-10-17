@@ -5,5 +5,6 @@ namespace ASBicycle.User.Dto
     public class UserOutput : IOutputDto
     {
         public UserDto UserDto { get; set; }
+        public int IsRegisted { get; set; }
     }
 }

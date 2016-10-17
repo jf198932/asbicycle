@@ -44,7 +44,8 @@ namespace ASBicycle.Web.Models.School
         public int? Bikesite_id { get; set; }
         public string Bikesite_name { get; set; }
         public string Phone { get; set; }
-
+        public int? School_id { get; set; }
+        public string School_name { get; set; }
         public DateTime? AlarmTime { get; set; }
         public string AlarmBikesiteName { get; set; }
 

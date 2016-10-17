@@ -83,7 +83,7 @@ namespace ASBicycle.User
                     }
                     else if (xxx.UserDto.User_type == 1)
                     {
-                        xxx.UserDto.User_type_name = "在校生";
+                        xxx.UserDto.User_type_name = "学生";
                     }
                     else if (xxx.UserDto.User_type == 2)
                     {
@@ -97,7 +97,7 @@ namespace ASBicycle.User
                     sb.Append(
                         "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,a.start_point");
                     sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
-                    sb.AppendFormat(" where a.user_id={0} and end_site_id is NULL", result.Id);
+                    sb.AppendFormat(" where a.user_id={0} and a.pay_status < 3", result.Id);
                     var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
                     if (track != null)
                     {
@@ -164,14 +164,14 @@ namespace ASBicycle.User
         //}
         public async Task<CheckCodeOutput> GetCheckCode([FromUri]PhoneNumInput phoneNumInput)
         {
-            var result =
-                await
-                    _userRepository.FirstOrDefaultAsync(
-                        u => u.Phone == phoneNumInput.Phone);
-            if (result == null)
-            {
-                throw new UserFriendlyException("请先进行注册");
-            }
+            //var result =
+            //    await
+            //        _userRepository.FirstOrDefaultAsync(
+            //            u => u.Phone == phoneNumInput.Phone);
+            //if (result == null)
+            //{
+            //    throw new UserFriendlyException("请先进行注册");
+            //}
 
             //生成验证码并存储在缓存中，用手机号做key
             //生成6位数字随机数
@@ -190,7 +190,7 @@ namespace ASBicycle.User
             string[] msg = resp.Split(',');
             CheckCodeOutput checkCodeOutput = new CheckCodeOutput { CheckCode = i.ToString() };
             var cacheCheckCode = _cacheManager.GetCache("CheckCode");
-            await cacheCheckCode.SetAsync(phoneNumInput.Phone, checkCodeOutput, new TimeSpan(0, 0, 70));
+            await cacheCheckCode.SetAsync(phoneNumInput.Phone, checkCodeOutput, new TimeSpan(0, 0, 60));
             if (msg[0] == "0")
             {
                 return new CheckCodeOutput {CheckCode = ""};
@@ -469,10 +469,14 @@ namespace ASBicycle.User
             {
                 var cacheCheckCode = _cacheManager.GetCache("CheckCode");
                 var checkCode = await cacheCheckCode.GetOrDefaultAsync(checkLoginInput.Phone);
-                if (checkCode == null || checkLoginInput.CheckCode != ((CheckCodeOutput)checkCode).CheckCode)
+                if (checkCode == null)
                 {
-                    throw new UserFriendlyException("验证码已过期，请在一分钟之内输入！");
+                    throw new UserFriendlyException("验证码错误！");
 
+                }
+                else if (checkLoginInput.CheckCode != ((CheckCodeOutput)checkCode).CheckCode)
+                {
+                    throw new UserFriendlyException("验证码错误！");
                 }
             }
 
@@ -491,6 +495,7 @@ namespace ASBicycle.User
                 result = await _userRepository.UpdateAsync(result);
 
                 var xxx = new UserOutput {UserDto = Mapper.Map<UserDto>(result)};
+                xxx.IsRegisted = 1;
                 xxx.UserDto.School_name = result.School == null ? "" : result.School.Name;
                 if (xxx.UserDto.User_type == 0)
                 {
@@ -498,7 +503,7 @@ namespace ASBicycle.User
                 }
                 else if (xxx.UserDto.User_type == 1)
                 {
-                    xxx.UserDto.User_type_name = "在校生";
+                    xxx.UserDto.User_type_name = "学生";
                 }
                 else if (xxx.UserDto.User_type == 2)
                 {
@@ -512,7 +517,7 @@ namespace ASBicycle.User
                 sb.Append(
                     "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,a.start_point");
                 sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
-                sb.AppendFormat(" where a.user_id={0} and end_site_id is NULL", result.Id);
+                sb.AppendFormat(" where a.user_id={0} and a.pay_status < 3", result.Id);
                 var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
                 if (track != null)
                 {
@@ -526,7 +531,8 @@ namespace ASBicycle.User
 
                 return xxx;
             }
-            throw new UserFriendlyException("请先进行注册");
+            return new UserOutput { IsRegisted = 0};
+            //throw new UserFriendlyException("请先进行注册");
         }
         [HttpPost]
         public async Task<UserOutput> UserRegister(RegisterUserInput modelIntput)
@@ -535,10 +541,14 @@ namespace ASBicycle.User
             {
                 var cacheCheckCode = _cacheManager.GetCache("CheckCode");
                 var checkCode = await cacheCheckCode.GetOrDefaultAsync(modelIntput.Phone);
-                if (checkCode == null || modelIntput.CheckCode != ((CheckCodeOutput)checkCode).CheckCode)
+                if (checkCode == null)
                 {
-                    throw new UserFriendlyException("验证码已过期，请在一分钟之内输入！");
+                    throw new UserFriendlyException("验证码错误！");
 
+                }
+                else if (modelIntput.CheckCode != ((CheckCodeOutput) checkCode).CheckCode)
+                {
+                    throw new UserFriendlyException("验证码错误！");
                 }
             }
 
@@ -569,13 +579,13 @@ namespace ASBicycle.User
         [HttpGet]
         public MianzeOutput Mianze()
         {
-            return new MianzeOutput {Url = "http://api.isriding.com/isriding/Uploads/mianze.html" };
+            return new MianzeOutput {Url = "http://api.isriding.com/app/Uploads/mianze.html" };
         }
 
         [HttpGet]
         public MianzeOutput About()
         {
-            return new MianzeOutput { Url = "http://api.isriding.com/isriding/Uploads/about.html" };
+            return new MianzeOutput { Url = "http://api.isriding.com/app/Uploads/about.html" };
         }
 
         [HttpGet]
@@ -595,7 +605,7 @@ namespace ASBicycle.User
             }
             else if (xxx.UserDto.User_type == 1)
             {
-                xxx.UserDto.User_type_name = "在校生";
+                xxx.UserDto.User_type_name = "学生";
             }
             else if (xxx.UserDto.User_type == 2)
             {
@@ -609,7 +619,7 @@ namespace ASBicycle.User
             sb.Append(
                 "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,a.start_point");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
-            sb.AppendFormat(" where a.user_id={0} and end_site_id is NULL", result.Id);
+            sb.AppendFormat(" where a.user_id={0} and a.pay_status < 3", result.Id);
             var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
             if (track != null)
             {
@@ -652,7 +662,7 @@ namespace ASBicycle.User
             string[] msg = resp.Split(',');
             CheckCodeOutput checkCodeOutput = new CheckCodeOutput { CheckCode = i.ToString() };
             var cacheCheckCode = _cacheManager.GetCache("CheckCode");
-            await cacheCheckCode.SetAsync(phoneNumInput.Phone, checkCodeOutput, new TimeSpan(0, 0, 70));
+            await cacheCheckCode.SetAsync(phoneNumInput.Phone, checkCodeOutput, new TimeSpan(0, 0, 60));
             if (msg[0] == "0")
             {
                 return new CheckCodeOutput { CheckCode = "" };
@@ -732,7 +742,7 @@ namespace ASBicycle.User
             }
             else if (xxx.UserDto.User_type == 1)
             {
-                xxx.UserDto.User_type_name = "在校生";
+                xxx.UserDto.User_type_name = "学生";
             }
             else if (xxx.UserDto.User_type == 2)
             {
@@ -746,7 +756,7 @@ namespace ASBicycle.User
             sb.Append(
                 "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,a.start_point");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
-            sb.AppendFormat(" where a.user_id={0} and end_site_id is NULL", user.Id);
+            sb.AppendFormat(" where a.user_id={0} and a.pay_status < 3", user.Id);
             var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
             if (track != null)
             {

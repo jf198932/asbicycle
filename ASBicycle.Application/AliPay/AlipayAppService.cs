@@ -25,7 +25,7 @@ namespace ASBicycle.AliPay
             sPara.Add("service", Config.service);
             sPara.Add("partner", Config.partner);
             sPara.Add("_input_charset", Config.input_charset);
-            sPara.Add("notify_url", "http://121.40.34.43/isriding/Alipay/Notify");
+            sPara.Add("notify_url", "http://api.isriding.com/app/Alipay/Notify");
             sPara.Add("payment_type", Config.payment_type);
             sPara.Add("seller_id", Config.seller_id);
 

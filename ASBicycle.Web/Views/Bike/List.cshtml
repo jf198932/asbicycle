@@ -46,6 +46,10 @@
                             render = '追踪器';
                         } else if (t === "2") {
                             render = '智能锁';
+                        } else if (t === "3") {
+                            render = '蓝牙锁';
+                        } else if (t === "4") {
+                            render = "机械锁";
                         } else {
                             render = '异常';
                         }
@@ -53,6 +57,7 @@
                         return render;
                     }
                 },
+                { "sName": "school_name" },
                 {
                     "sName": "vlock_status",
                     "fnRender": function (oObj) {

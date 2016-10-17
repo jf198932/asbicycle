@@ -28,7 +28,7 @@ namespace ASBicycle.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-            //用户
+            //系统管理员
             context.BackUsers.AddOrUpdate( 
                 u => u.Id,
                 new BackUser

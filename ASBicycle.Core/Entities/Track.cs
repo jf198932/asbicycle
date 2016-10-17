@@ -18,6 +18,7 @@ namespace ASBicycle.Entities
         public DateTime? Start_time { get; set; }
         public DateTime? End_time { get; set; }
         public double? Payment { get; set; }
+        public double? Should_pay { get; set; }
         public int? Pay_status { get; set; }
         public string Pay_method { get; set; }
         public string Pay_docno { get; set; }
@@ -28,6 +29,8 @@ namespace ASBicycle.Entities
         public int? Bike_id { get; set; }
         public int? Start_site_id { get; set; }
         public int? End_site_id { get; set; }
+
+
         //[ForeignKey("User_id")]
         //public virtual User User { get; set; }
         [ForeignKey("Bike_id")]

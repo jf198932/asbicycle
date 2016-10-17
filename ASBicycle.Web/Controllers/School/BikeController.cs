@@ -78,7 +78,9 @@ namespace ASBicycle.Web.Controllers.School
                 Insite_status = t.Bikesite_id == null ? 2 : 1,
                 Bikesite_name = t.Bikesite ==null ? "" : t.Bikesite.Name,
                 User_name = t.User == null ? "" : t.User.Name,
-                Phone = t.User == null ? "" : t.User.Phone
+                Phone = t.User == null ? "" : t.User.Phone,
+                School_id = t.School_id,
+                School_name = t.School.Name
             }).ToList();
             int sortId = param.iDisplayStart + 1;
             var result = from t in filterResult
@@ -88,6 +90,7 @@ namespace ASBicycle.Web.Controllers.School
                                 t.Ble_serial,
                                 t.Ble_name,
                                 t.Ble_type.ToString(),
+                                t.School_name,
                                 t.Vlock_status.ToString(),
                                 t.Bikesite_name,
                                 t.Phone,

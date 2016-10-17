@@ -9,9 +9,12 @@ namespace ASBicycle.Bikesite
     public interface IBikesiteAppService : IApplicationService
     {
         [HttpGet]
-        Task<BikesiteOutput> GetOneBikesiteInfo([FromUri]int id, int index, int pagesize);
+        Task<BikesiteOutput> GetOneBikesiteInfo([FromUri]BikesitePageInput input);
 
         [HttpGet]
-        Task<List<BikesiteListOutput>> GetNearbyBikesites([FromUri]double lat, double lon);
+        Task<List<BikesiteListOutput>> GetNearbyBikesites([FromUri]BikesiteInput input);
+
+        [HttpGet]
+        Task<List<BikesiteListOutput>> GetSchoolBikesites([FromUri]BikesiteInput input);
     }
 }

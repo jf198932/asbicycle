@@ -7,7 +7,6 @@ using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.UI;
 using ASBicycle.Track.Dto;
-using ASBicycle.User;
 using AutoMapper;
 
 namespace ASBicycle.Track
@@ -40,8 +39,8 @@ namespace ASBicycle.Track
                 .Take(trackInput.Pagesize)
                 .Select(t=> new TrackOutput
                 {
-                    Start_point = t.Start_point.ToString(),
-                    End_point = t.End_point.ToString(),
+                    Start_point = t.Bikesitestart == null ? "" : t.Bikesitestart.Gps_point.ToString(),
+                    End_point = t.Bikesiteend == null ? "" : t.Bikesiteend.Gps_point.ToString(),
                     Start_site_id = t.Start_site_id,
                     Start_site_name = t.Bikesitestart == null ? "" : t.Bikesitestart.Name,
                     End_site_id = t.End_site_id,
@@ -49,6 +48,7 @@ namespace ASBicycle.Track
                     Start_time = t.Start_time.ToString(),
                     End_time = t.End_time.ToString(),
                     Payment = t.Payment,
+                    Should_pay = t.Should_pay,
                     Pay_status = t.Pay_status,
                     Remark = t.Remark.ToString(),
                     Remarkstatus = t.Remark.ToString() == "" ? 0: 1,

@@ -22,7 +22,7 @@ namespace ASBicycle.Bikesite
             _bikeRepository = bikeRepository;
         }
 
-        public async Task<BikesiteOutput> GetOneBikesiteInfo([FromUri]int id, int index=1, int pagesize=10)
+        public async Task<BikesiteOutput> GetOneBikesiteInfo([FromUri]BikesitePageInput input)
         {
             //var bikesite = await _bikesiteRepository.GetAsync(id);
             //var bikes = _bikeRepository.GetAll();
@@ -31,14 +31,19 @@ namespace ASBicycle.Bikesite
             //var result = bikesite.MapTo<BikesiteOutput>();
             //result.Bikes = bike.MapTo<List<BikeDto>>();
             //return result;
-            var bike = _bikeRepository.GetAll().Where(b => b.Bikesite_id == id).OrderBy(b => b.Id).Skip(pagesize * (index - 1)).Take(pagesize);
+            var bike =
+                _bikeRepository.GetAll()
+                    .Where(b => b.Bikesite_id == input.id)
+                    .OrderBy(b => b.Id)
+                    .Skip(input.pagesize*(input.index - 1))
+                    .Take(input.pagesize);
 
             return new BikesiteOutput {Bikes = bike.MapTo<List<BikeDto>>()};
         }
 
-        public async Task<List<BikesiteListOutput>> GetNearbyBikesites([FromUri]double lat, double lon)
+        public async Task<List<BikesiteListOutput>> GetNearbyBikesites([FromUri]BikesiteInput input)
         {
-            var model = _bikesiteRepository.GetAll().Where(t=>t.Sitemonitors.Count>0 && !string.IsNullOrEmpty(t.Gps_point)).ToList();
+            var model = await _bikesiteRepository.GetAllListAsync(t=>t.Sitemonitors.Count>0 && !string.IsNullOrEmpty(t.Gps_point));
             List<BikesiteListOutput> result = new List<BikesiteListOutput>();
             foreach (var item in model)
             {
@@ -48,12 +53,17 @@ namespace ASBicycle.Bikesite
                 double.TryParse(gps.Split(',')[0],out _lon);
                 double _lat = 0;
                 double.TryParse(gps.Split(',')[1], out _lat);
-                b.Distance = LatlonHelper.GetDistance(lat, lon, _lat, _lon);
+                b.Distance = LatlonHelper.GetDistance(input.lat, input.lon, _lat, _lon);
                 result.Add(b);
             }
 
             var res = result.Where(r => r.Distance < 5).ToList();
             return res;
+        }
+
+        public Task<List<BikesiteListOutput>> GetSchoolBikesites(BikesiteInput input)
+        {
+            throw new NotImplementedException();
         }
     }
 }
