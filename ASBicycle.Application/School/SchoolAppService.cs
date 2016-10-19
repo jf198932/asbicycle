@@ -27,7 +27,7 @@ namespace ASBicycle.School
 
         public async Task<List<SchoolBikeSiteOutput>> GetSchoolBikeSiteList([FromUri] int id)
         {
-            var bikesites = await _bikesiteRepository.GetAllListAsync(b => b.School_id == id);
+            var bikesites = await _bikesiteRepository.GetAllListAsync(b => b.School_id == id && b.Enable);
             return bikesites.Select(item => new SchoolBikeSiteOutput
             {
                 Id = item.Id,
@@ -59,7 +59,7 @@ namespace ASBicycle.School
             sb.Append(
                 "select s.id,s.`name`,s.areacode,s.gps_point,SUM(DISTINCT b.available_count) as bike_count,s.time_charge,s.refresh_date,COUNT(DISTINCT b.id) as site_count");
             sb.Append(" from school as s LEFT JOIN bikesite as b on s.id = b.school_id");
-            sb.Append(" WHERE s.gps_point is not null");
+            sb.Append(" WHERE s.gps_point is not null and b.`enable` = true");
             sb.Append(" GROUP BY s.id,s.`name`,s.areacode,s.gps_point,s.bike_count,s.time_charge,s.refresh_date");
 
             var result = _sqlExecuter.SqlQuery<SchoolOutput>(sb.ToString());

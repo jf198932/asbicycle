@@ -34,6 +34,7 @@ namespace ASBicycle.Entities
         public int? Radius { get; set; }
         public int? Bike_count { get; set; }
         public int? Available_count { get; set; }
+        public bool Enable { get; set; }
 
         public int? School_id { get; set; }
         [ForeignKey("School_id")]

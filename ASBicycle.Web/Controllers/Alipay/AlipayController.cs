@@ -140,6 +140,7 @@ namespace ASBicycle.Web.Controllers.Alipay
                             track.Trade_no = trade_no;
                             track.Pay_method = "支付宝";
                             track.Payment = double.Parse(Request.Form["total_fee"]);
+                            //LogHelper.Logger.Info(Request.Form["total_fee"]);
                             _trackRepository.Update(track);
                             //注意：
                             //退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
@@ -157,6 +158,7 @@ namespace ASBicycle.Web.Controllers.Alipay
                             track.Trade_no = trade_no;
                             track.Pay_method = "支付宝";
                             track.Payment = double.Parse(Request.Form["total_fee"]);
+                            //LogHelper.Logger.Info(Request.Form["total_fee"]);
                             _trackRepository.Update(track);
 
 

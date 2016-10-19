@@ -250,7 +250,7 @@ namespace ASBicycle.Bike
             }
             else
             {
-                sb.AppendFormat(" where a.out_trade_no={0}", input.out_trade_no);
+                sb.AppendFormat(" where a.pay_docno='{0}'", input.out_trade_no);
             }
             var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
             if (track == null)
@@ -318,7 +318,7 @@ namespace ASBicycle.Bike
             output.end_time = end_time.ToString("yyyy/MM/dd HH:mm:ss");
             output.school_name = track.School_name;
 
-
+            
             TimeSpan costtime = (track.End_time == null ? end_time : DateTime.Parse(track.End_time.ToString())) -
                                 DateTime.Parse(track.Start_time.ToString());
 
@@ -334,10 +334,14 @@ namespace ASBicycle.Bike
             var bike =
                 await
                     _bikeRepository.FirstOrDefaultAsync(
-                        t => t.Ble_name == input.Ble_name && t.rent_type == 1 && t.Bike_status == 1 && t.Ble_type == 4);
+                        t => t.Ble_name == input.Ble_name && t.rent_type == 1 && t.Ble_type == 4);
             if (bike == null)
             {
                 throw new UserFriendlyException("车辆编号错误或该车不可租");
+            }
+            if (bike.Bike_status == 0)
+            {
+                throw new UserFriendlyException("该车辆出租中");
             }
 
             if (bike.Bike_status == 0)
@@ -348,7 +352,7 @@ namespace ASBicycle.Bike
             var ip_lon = double.Parse(gpsinput[0]);
             var ip_lat = double.Parse(gpsinput[1]);
 
-            var bikesitelist = _bikesiteRepository.GetAll().Where(t => t.School_id == bike.School_id && t.Type == 3).ToList();
+            var bikesitelist = await _bikesiteRepository.GetAllListAsync(t => t.School_id == bike.School_id && t.Enable && t.Type == 3);
 
             Entities.Bikesite bsite = null;
             //Dictionary<string,string> temp = new Dictionary<string, string>();
@@ -414,7 +418,7 @@ namespace ASBicycle.Bike
             var gpsinput = input.gps_point.Split(',');
             var ip_lon = double.Parse(gpsinput[0]);
             var ip_lat = double.Parse(gpsinput[1]);
-            var bikesitelist = _bikesiteRepository.GetAll().Where(t => t.School_id == bike.School_id && t.Type == 3).ToList();
+            var bikesitelist = await _bikesiteRepository.GetAllListAsync(t => t.School_id == bike.School_id && t.Enable && t.Type == 3);
 
             Entities.Bikesite bsite = null;
 
@@ -458,7 +462,7 @@ namespace ASBicycle.Bike
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
             sb.Append(" left join bike as e on a.bike_id = e.id");
-            sb.AppendFormat(" where a.pay_docno={0}", input.out_trade_no);
+            sb.AppendFormat(" where a.pay_docno='{0}'", input.out_trade_no);
             var tracktemp = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
             if (tracktemp == null)
             {
@@ -511,7 +515,7 @@ namespace ASBicycle.Bike
             }
             else
             {
-                sb.AppendFormat(" where a.out_trade_no={0}", input.out_trade_no);
+                sb.AppendFormat(" where a.pay_docno='{0}'", input.out_trade_no);
             }
 
             var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
@@ -522,7 +526,7 @@ namespace ASBicycle.Bike
             var gpsinput = input.gps_point.Split(',');
             var ip_lon = double.Parse(gpsinput[0]);
             var ip_lat = double.Parse(gpsinput[1]);
-            var bikesitelist = _bikesiteRepository.GetAll().Where(t => t.School_id == track.School_id && t.Type == 3).ToList();
+            var bikesitelist = await _bikesiteRepository.GetAllListAsync(t => t.School_id == track.School_id && t.Enable && t.Type == 3);
 
             Entities.Bikesite bsite = null;
 
@@ -576,7 +580,7 @@ namespace ASBicycle.Bike
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
             sb.Append(" left join bike as e on a.bike_id = e.id");
-            sb.AppendFormat(" where a.pay_docno={0}", input.out_trade_no);
+            sb.AppendFormat(" where a.pay_docno='{0}'", input.out_trade_no);
             var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
             
             if (track == null)

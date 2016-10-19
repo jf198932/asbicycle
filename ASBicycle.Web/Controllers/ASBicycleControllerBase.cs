@@ -1,14 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
-using System.Web.Security;
-using Abp.Domain.Repositories;
-using Abp.Json;
 using Abp.Web.Mvc.Controllers;
-using ASBicycle.Entities.Authen;
-using ASBicycle.Web.Extension.Fliter;
-using ASBicycle.Web.Models.Authen;
-using ASBicycle.Web.Models.Common;
 
 namespace ASBicycle.Web.Controllers
 {

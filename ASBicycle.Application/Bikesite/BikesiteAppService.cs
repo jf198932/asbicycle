@@ -43,7 +43,7 @@ namespace ASBicycle.Bikesite
 
         public async Task<List<BikesiteListOutput>> GetNearbyBikesites([FromUri]BikesiteInput input)
         {
-            var model = await _bikesiteRepository.GetAllListAsync(t=>t.Sitemonitors.Count>0 && !string.IsNullOrEmpty(t.Gps_point));
+            var model = await _bikesiteRepository.GetAllListAsync(t=> !string.IsNullOrEmpty(t.Gps_point) && t.School != null && t.Enable);
             List<BikesiteListOutput> result = new List<BikesiteListOutput>();
             foreach (var item in model)
             {
@@ -57,13 +57,8 @@ namespace ASBicycle.Bikesite
                 result.Add(b);
             }
 
-            var res = result.Where(r => r.Distance < 5).ToList();
+            var res = result.Where(r => r.Distance < 10).ToList();
             return res;
-        }
-
-        public Task<List<BikesiteListOutput>> GetSchoolBikesites(BikesiteInput input)
-        {
-            throw new NotImplementedException();
         }
     }
 }

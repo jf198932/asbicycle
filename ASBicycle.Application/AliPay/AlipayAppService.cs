@@ -43,7 +43,7 @@ namespace ASBicycle.AliPay
                     //将获取的订单信息，按照“参数=参数值”的模式用“&”字符拼接成字符串.
                     string data = Core.CreateLinkString(sPara);
                     //调试用，打印日志信息，默认在项目路径下的log文件夹.
-                    Core.LogResult(data);
+                    //Core.LogResult(data);
 
                     //使用商户的私钥进行RSA签名，并且把sign做一次urleccode.
                     string sign = HttpUtility.UrlEncode(RSA.sign(data, Config.private_key, Config.input_charset));

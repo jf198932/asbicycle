@@ -13,8 +13,5 @@ namespace ASBicycle.Bikesite
 
         [HttpGet]
         Task<List<BikesiteListOutput>> GetNearbyBikesites([FromUri]BikesiteInput input);
-
-        [HttpGet]
-        Task<List<BikesiteListOutput>> GetSchoolBikesites([FromUri]BikesiteInput input);
     }
 }
