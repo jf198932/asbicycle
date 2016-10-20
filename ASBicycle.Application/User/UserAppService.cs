@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -115,64 +113,9 @@ namespace ASBicycle.User
             }
             throw new UserFriendlyException("请重新登录");
         }
-        //[HttpPost]
-        //public async Task<UserOutput> CheckLogin(CheckLoginInput checkLoginInput)
-        //{
-        //    if (checkLoginInput.CheckCode != "666666")
-        //    {
-        //        var cacheCheckCode = _cacheManager.GetCache("CheckCode");
-        //        var checkCode = await cacheCheckCode.GetOrDefaultAsync(checkLoginInput.Phone);
-        //        if (checkCode == null || checkLoginInput.CheckCode != ((CheckCodeOutput)checkCode).CheckCode)
-        //        {
-        //            throw new UserFriendlyException("验证码错误");
-
-        //        }
-        //    }
-            
-        //    var result =
-        //        await
-        //            _userRepository.FirstOrDefaultAsync(
-        //                u => u.Phone == checkLoginInput.Phone);
-        //    Mapper.CreateMap<Entities.User, UserDto>();
-        //    if (result != null)
-        //    {
-        //        //todo 时间戳+手机号+盐 对称加密
-        //        result.Remember_token = DateTime.Now.ToString("yyyyMMddhhmmssffff") + checkLoginInput.Phone;
-        //        // 生成token放入数据库并返回给app
-        //        result.Updated_at = DateTime.Now;
-        //        result = await _userRepository.UpdateAsync(result);
-        //        return new UserOutput {UserDto = Mapper.Map<UserDto>(result) };
-        //    }
-        //    else
-        //    {
-        //        var model = await _userRepository.InsertAsync(new Entities.User
-        //        {
-        //            Phone = checkLoginInput.Phone,
-        //            Certification = 1,//未申请
-        //            School_id = 1,//todo 默认厦大
-        //            Remember_token = DateTime.Now.ToString("yyyyMMddhhmmssffff") + checkLoginInput.Phone,
-        //            Created_at = DateTime.Now,
-        //            Updated_at = DateTime.Now
-        //        });
-        //        await CurrentUnitOfWork.SaveChangesAsync();
-        //        if (model != null)
-        //        {
-        //            return new UserOutput { UserDto = Mapper.Map<UserDto>(model) };
-        //        }
-        //    }
-        //    throw new UserFriendlyException("添加user实体出错");
-        //}
+        
         public async Task<CheckCodeOutput> GetCheckCode([FromUri]PhoneNumInput phoneNumInput)
         {
-            //var result =
-            //    await
-            //        _userRepository.FirstOrDefaultAsync(
-            //            u => u.Phone == phoneNumInput.Phone);
-            //if (result == null)
-            //{
-            //    throw new UserFriendlyException("请先进行注册");
-            //}
-
             //生成验证码并存储在缓存中，用手机号做key
             //生成6位数字随机数
             Random rand = new Random();
@@ -276,11 +219,7 @@ namespace ASBicycle.User
                 bike.Vlock_status = 1;//锁车
 
                 await _bikeRepository.UpdateAsync(bike);
-
-                //string sql = "call SP_InsertLog(" + 1 + "," + bike.Bikesite_id + ",'" + bike.Ble_serial + "')";
-
-                //await _sqlExecuter.ExecuteAsync(sql);
-
+                
                 await
                     _logRepository.InsertAsync(new Log
                     {
@@ -311,11 +250,7 @@ namespace ASBicycle.User
                     throw new UserFriendlyException("没有该车辆");
                 if(bike.Vlock_status >= 3)
                     throw new UserFriendlyException("车辆异常");
-
-                //string sql = "call SP_InsertLog(" + 2 + "," + bike.Bikesite_id + ",'" + bike.Ble_serial + "')";
-
-                //await _sqlExecuter.ExecuteAsync(sql);
-
+                
                 bike.Vlock_status = 2;//开锁
 
                 await _bikeRepository.UpdateAsync(bike);
@@ -421,11 +356,6 @@ namespace ASBicycle.User
             HttpPostedFile file = HttpContext.Current.Request.Files["filedata"];
             if (file != null)
             {
-                //var usermodel = await _userRepository.FirstOrDefaultAsync(t => t.Id == num);
-
-                //if (null == usermodel)
-                //    throw new UserFriendlyException("会员信息不正确");
-
                 try
                 {
                     // 文件上传后的保存路径

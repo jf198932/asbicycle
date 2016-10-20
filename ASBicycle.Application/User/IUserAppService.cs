@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Http;
 using Abp.Application.Services;
 using ASBicycle.Bike.Dto;
-using ASBicycle.School.Dto;
 using ASBicycle.User.Dto;
 
 namespace ASBicycle.User
@@ -17,13 +15,6 @@ namespace ASBicycle.User
         /// <returns></returns>
         [HttpPost]
         Task<UserOutput> CheckIdentity(CheckIdentityInput checkIdentityInput);
-        ///// <summary>
-        ///// 登录验证，手机验证码
-        ///// </summary>
-        ///// <param name="checkLoginInput"></param>
-        ///// <returns></returns>
-        //[HttpPost]
-        //Task<UserOutput> CheckLogin(CheckLoginInput checkLoginInput);
         /// <summary>
         /// 获取验证码
         /// </summary>
