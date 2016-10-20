@@ -14,7 +14,7 @@ namespace ASBicycle.Bike
         [HttpPost]
         Task UpdateBike(BikeInput bikeInput);
         [HttpPost]
-        Task<BikeUploadOutput> UploadBikePic();
+        BikeUploadOutput UploadBikePic();
 
         [HttpGet]
         Task<AlarmBikeOutput> GetAlarmBikeWay([FromUri] string phone);

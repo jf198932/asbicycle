@@ -82,7 +82,7 @@ namespace ASBicycle.User
         [HttpGet]
         Task<UserBikeOutput> GetUserBike([FromUri]UserIdInput userIdInput);
         [HttpPost]
-        Task<UserUploadOutput> UploadUserPic();
+        UserUploadOutput UploadUserPic();
 
         [HttpPost]
         Task<UserOutput> UserLogin(CheckLoginInput checkLoginInput);

@@ -88,22 +88,11 @@ namespace ASBicycle.Bike
             await _bikeRepository.UpdateAsync(bike);
         }
         [HttpPost]
-        public async Task<BikeUploadOutput> UploadBikePic()
+        public BikeUploadOutput UploadBikePic()
         {
-            //foreach (string f in HttpContext.Current.Request.Files.AllKeys)
-            //{
-            //var bikeid = HttpContext.Current.Request.Params["bikeid"];
-
-            //if (bikeid.IsNullOrEmpty())
-            //    throw new UserFriendlyException("没有接收到bikeid");
             HttpPostedFile file = HttpContext.Current.Request.Files["filedata"];
             if (file != null)
             {
-                //var bikemodel = await _bikeRepository.FirstOrDefaultAsync(t => t.Ble_name == bikeid);
-
-                //if (null == bikemodel)
-                //    throw new UserFriendlyException("请输入正确的追踪器编号");
-
                 try
                 {
                     // 文件上传后的保存路径
@@ -118,11 +107,10 @@ namespace ASBicycle.Bike
 
                     file.SaveAs(filePath + saveName);
 
-                    
+
 
                     var img = ConfigurationManager.AppSettings["ServerPath"] + "Uploads/Bike/" + saveName;
-                    //bikemodel.Bike_img = img;
-                    //await _bikeRepository.UpdateAsync(bikemodel);
+
                     var result = new BikeUploadOutput
                     {
                         ImgUrl = img
@@ -139,7 +127,7 @@ namespace ASBicycle.Bike
             {
                 throw new UserFriendlyException("请选择一张图片上传");
             }
-            //}
+
         }
 
         [HttpPost]
@@ -421,7 +409,7 @@ namespace ASBicycle.Bike
             var bikesitelist = await _bikesiteRepository.GetAllListAsync(t => t.School_id == bike.School_id && t.Enable && t.Type == 3);
 
             Entities.Bikesite bsite = null;
-
+            double mindistance = 99999999;
             foreach (var bikesite in bikesitelist)
             {
                 var bikesitegps = bikesite.Gps_point.Split(',');
@@ -429,12 +417,13 @@ namespace ASBicycle.Bike
                 var bs_lat = double.Parse(bikesitegps[1]);
 
                 var distance = LatlonHelper.GetDistance(ip_lat, ip_lon, bs_lat, bs_lon) * 1000;//KM->M
-                if (distance <= bikesite.Radius)//15米
+                if (distance < mindistance && distance <= bikesite.Radius)//
                 {
+                    mindistance = distance;
                     bsite = bikesite;
-                    break;
                 }
             }
+            
             if (bsite == null)
             {
                 throw new UserFriendlyException("范围内没有桩点");
@@ -529,7 +518,7 @@ namespace ASBicycle.Bike
             var bikesitelist = await _bikesiteRepository.GetAllListAsync(t => t.School_id == track.School_id && t.Enable && t.Type == 3);
 
             Entities.Bikesite bsite = null;
-
+            double mindistance = 99999999;
             foreach (var bikesite in bikesitelist)
             {
                 var bikesitegps = bikesite.Gps_point.Split(',');
@@ -537,11 +526,10 @@ namespace ASBicycle.Bike
                 var bs_lat = double.Parse(bikesitegps[1]);
 
                 var distance = LatlonHelper.GetDistance(ip_lat, ip_lon, bs_lat, bs_lon) * 1000;//KM->M
-                //Logger.Info($"distance:{distance}---Radius:{bikesite.Radius}");
-                if (distance <= bikesite.Radius)//15米
+                if (distance < mindistance && distance <= bikesite.Radius)//
                 {
+                    mindistance = distance;
                     bsite = bikesite;
-                    break;
                 }
             }
 

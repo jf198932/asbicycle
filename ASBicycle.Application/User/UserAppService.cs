@@ -351,7 +351,7 @@ namespace ASBicycle.User
         }
 
         [HttpPost]
-        public async Task<UserUploadOutput> UploadUserPic()
+        public UserUploadOutput UploadUserPic()
         {
             HttpPostedFile file = HttpContext.Current.Request.Files["filedata"];
             if (file != null)
