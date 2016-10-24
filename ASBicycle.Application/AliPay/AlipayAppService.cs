@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Configuration;
 using System.Security.Policy;
 using System.Web;
 using System.Web.Http;
@@ -25,7 +26,7 @@ namespace ASBicycle.AliPay
             sPara.Add("service", Config.service);
             sPara.Add("partner", Config.partner);
             sPara.Add("_input_charset", Config.input_charset);
-            sPara.Add("notify_url", "http://api.isriding.com/app/Alipay/Notify");
+            sPara.Add("notify_url", ConfigurationManager.AppSettings["Alipay_notify_url"]);
             sPara.Add("payment_type", Config.payment_type);
             sPara.Add("seller_id", Config.seller_id);
 
