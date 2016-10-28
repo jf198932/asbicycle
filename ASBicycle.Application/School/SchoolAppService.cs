@@ -7,31 +7,28 @@ using Abp.AutoMapper;
 using Abp.UI;
 using ASBicycle.Bikesite;
 using ASBicycle.School.Dto;
-using AutoMapper;
 
 namespace ASBicycle.School
 {
     public class SchoolAppService : ASBicycleAppServiceBase, ISchoolAppService
     {
-        private readonly ISchoolRepository _schoolRepository;
-        private readonly IBikesiteRepository _bikesiteRepository;
-        private readonly ISqlExecuter _sqlExecuter;
+        private readonly IBikesiteReadRepository _bikesiteReadRepository;
+        private readonly ISqlReadExecuter _sqlReadExecuter;
 
-        public SchoolAppService(ISchoolRepository schoolRepository, IBikesiteRepository bikesiteRepository,
-            ISqlExecuter sqlExecuter)
+        public SchoolAppService(IBikesiteReadRepository bikesiteReadRepository
+            , ISqlReadExecuter sqlReadExecuter)
         {
-            _schoolRepository = schoolRepository;
-            _bikesiteRepository = bikesiteRepository;
-            _sqlExecuter = sqlExecuter;
+            _bikesiteReadRepository = bikesiteReadRepository;
+            _sqlReadExecuter = sqlReadExecuter;
         }
 
-        public async Task<List<SchoolBikeSiteOutput>> GetSchoolBikeSiteList([FromUri] int id)
+        public async Task<List<SchoolBikeSiteOutput>> GetSchoolBikeSiteList([FromUri] SchoolInput input)
         {
-            var bikesites = await _bikesiteRepository.GetAllListAsync(b => b.School_id == id && b.Enable);
+            var bikesites = await _bikesiteReadRepository.GetAllListAsync(b => b.School_id == input.id && b.Enable);
             return bikesites.Select(item => new SchoolBikeSiteOutput
             {
                 Id = item.Id,
-                School_id = id,
+                School_id = input.id,
                 Type = item.Type,
                 Name = item.Name,
                 Description = item.Description,
@@ -62,7 +59,7 @@ namespace ASBicycle.School
             sb.Append(" WHERE s.gps_point is not null");
             sb.Append(" GROUP BY s.id,s.`name`,s.areacode,s.gps_point,s.bike_count,s.time_charge,s.refresh_date");
 
-            var result = _sqlExecuter.SqlQuery<SchoolOutput>(sb.ToString());
+            var result = _sqlReadExecuter.SqlQuery<SchoolOutput>(sb.ToString());
 
             //var school = _schoolRepository.GetAll().Where(t=> !string.IsNullOrEmpty(t.Gps_point) && t.TenancyName.ToLower() != "default").ToList();
             //if (school == null)

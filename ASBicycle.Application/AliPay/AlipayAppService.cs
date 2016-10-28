@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
-using System.Security.Policy;
 using System.Web;
 using System.Web.Http;
-using System.Web.Http.Routing;
-using Abp.Web.Models;
 using ASBicycle.AliPay.App;
 using ASBicycle.AliPay.Dto;
 

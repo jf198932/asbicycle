@@ -43,11 +43,13 @@ namespace ASBicycle.Entities
 
         public string HeadImg { get; set; }
         /// <summary>
-        /// 身份类型 0：游客  1：在校学生  2：教职工
+        /// 身份类型 0：非校园用户  1：在校学生  2：教职工
         /// </summary>
         public int? User_type { get; set; }
         public int? Device_os { get; set; }
         public string Device_id { get; set; }
+        //身份证
+        public string Id_no { get; set; }
 
         public int? School_id { get; set; }
         [ForeignKey("School_id")]

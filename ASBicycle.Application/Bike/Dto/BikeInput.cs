@@ -12,4 +12,10 @@ namespace ASBicycle.Bike.Dto
         public string Position { get; set; }
         public string Bike_img { get; set; }
     }
+
+    public class BikegetInput : IInputDto
+    {
+        public string serial { get; set; }
+        public string phone { get; set; }
+    }
 }

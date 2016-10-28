@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using ASBicycle.VersionUpdate.Dto;
 using System.Web.Http;
-using Abp.Domain.Repositories;
 
 namespace ASBicycle.VersionUpdate
 {
     public class VersionUpdateAppService : ASBicycleAppServiceBase, IVersionUpdateAppService
     {
-        private readonly IRepository<Entities.VersionUpdate> _versionUpdateRepository;
+        private readonly IVersionUpdateReadRespository _versionUpdateReadRepository;
 
-        public VersionUpdateAppService(IRepository<Entities.VersionUpdate> versionUpdateRepository)
+        public VersionUpdateAppService(IVersionUpdateReadRespository versionUpdateReadRepository)
         {
-            _versionUpdateRepository = versionUpdateRepository;
+            _versionUpdateReadRepository = versionUpdateReadRepository;
         }
 
         public async Task<VersionUpdateOutput> UpdateApp([FromUri] VersionUpdateInput input)
         {
-            var model = _versionUpdateRepository.GetAll().Where(t => t.device_os == input.device_os).OrderByDescending(t => t.versionCode)
+            var model = _versionUpdateReadRepository.GetAll().Where(t => t.device_os == input.device_os).OrderByDescending(t => t.versionCode)
                 .Select(t=> new VersionUpdateOutput
                 {
                     device_os = t.device_os,

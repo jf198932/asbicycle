@@ -4,35 +4,40 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Abp.AutoMapper;
-using Abp.Domain.Repositories;
 using Abp.UI;
 using ASBicycle.Track.Dto;
+using ASBicycle.User;
 using AutoMapper;
 
 namespace ASBicycle.Track
 {
     public class TrackAppService : ASBicycleAppServiceBase, ITrackAppService
     {
-        private readonly IRepository<Entities.Track> _trackRepository;
-        private readonly IRepository<Entities.User> _userRepository;
-        private readonly ISqlExecuter _sqlExecuter;
+        private readonly ITrackWriteRepository _trackRepository;
+        private readonly IUserWriteRepository _userRepository;
+        private readonly ITrackReadRepository _trackReadRepository;
+        private readonly IUserReadRepository _userReadRepository;
 
-        public TrackAppService(IRepository<Entities.Track> trackRepository, IRepository<Entities.User> userRepository, ISqlExecuter sqlExecuter)
+        public TrackAppService(ITrackWriteRepository trackRepository
+            , IUserWriteRepository userRepository
+            , ITrackReadRepository trackReadRepository
+            , IUserReadRepository userReadRepository)
         {
             _trackRepository = trackRepository;
             _userRepository = userRepository;
-            _sqlExecuter = sqlExecuter;
+            _trackReadRepository = trackReadRepository;
+            _userReadRepository = userReadRepository;
         }
 
         public async Task<List<TrackOutput>> GetAllTrack([FromUri]TrackInput trackInput)
         {
             var user =
                 await
-                    _userRepository.FirstOrDefaultAsync(
+                    _userReadRepository.FirstOrDefaultAsync(
                         u => u.Id == trackInput.User_id);
             if (user == null)
                 throw new UserFriendlyException("请先登录");
-            var track = _trackRepository.GetAll()
+            var track = _trackReadRepository.GetAll()
                 .Where(t => t.User_id == trackInput.User_id)
                 .OrderByDescending(t=>t.Start_time)
                 .Skip((trackInput.Index-1)* trackInput.Pagesize)
@@ -65,11 +70,11 @@ namespace ASBicycle.Track
         {
             var user =
                 await
-                    _userRepository.FirstOrDefaultAsync(
+                    _userReadRepository.FirstOrDefaultAsync(
                         u => u.Id == trackInput.User_id);
             if (user == null)
                 throw new UserFriendlyException("请先登录");
-            var track = _trackRepository.GetAll()
+            var track = _trackReadRepository.GetAll()
                 .Where(t => t.User_id == trackInput.User_id && t.Pay_status == 2)
                 .OrderBy(t => t.Id)
                 .Skip((trackInput.Index - 1) * trackInput.Pagesize)

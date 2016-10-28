@@ -2,7 +2,7 @@
 
 namespace ASBicycle.Track
 {
-    public interface ITrackRepository : IRepository<Entities.Track, int>
+    public interface ITrackWriteRepository : IRepository<Entities.Track, int>
     {
          
     }

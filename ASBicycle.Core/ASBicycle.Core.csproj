@@ -91,8 +91,10 @@
     <Compile Include="AppVersionHelper.cs" />
     <Compile Include="ASBicycleConsts.cs" />
     <Compile Include="ASBicycleCoreModule.cs" />
-    <Compile Include="Bikesite\IBikesiteRepository.cs" />
-    <Compile Include="Bike\IBikeRepository.cs" />
+    <Compile Include="Bikesite\IBikesiteReadRepository.cs" />
+    <Compile Include="Bikesite\IBikesiteWriteRepository.cs" />
+    <Compile Include="Bike\IBikeReadRepository.cs" />
+    <Compile Include="Bike\IBikeWriteRepository.cs" />
     <Compile Include="Entities\Authen\BackUser.cs" />
     <Compile Include="Entities\Authen\Module.cs" />
     <Compile Include="Entities\Authen\ModulePermission.cs" />
@@ -115,12 +117,21 @@
     <Compile Include="Entities\VersionUpdate.cs" />
     <Compile Include="IAppFolders.cs" />
     <Compile Include="ISqlExecuter.cs" />
+    <Compile Include="ISqlReadExecuter.cs" />
     <Compile Include="Localization\CultureHelper.cs" />
+    <Compile Include="Log\ILogReadRepository.cs" />
+    <Compile Include="Log\ILogWriteRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="School\ISchoolRepository.cs" />
-    <Compile Include="Sitebeacon\ISitebeaconRepository.cs" />
-    <Compile Include="Track\ITrackRepository.cs" />
-    <Compile Include="User\IUserRepository.cs" />
+    <Compile Include="School\ISchoolReadRepository.cs" />
+    <Compile Include="School\ISchoolWriteRepository.cs" />
+    <Compile Include="Sitemonitor\ISitemonitorReadRepository.cs" />
+    <Compile Include="Sitemonitor\ISitemonitorWriteRepository.cs" />
+    <Compile Include="Track\ITrackReadRepository.cs" />
+    <Compile Include="Track\ITrackWriteRepository.cs" />
+    <Compile Include="User\IUserReadRepository.cs" />
+    <Compile Include="User\IUserWriteRepository.cs" />
+    <Compile Include="VersionUpdate\IVersionUpdateReadRespository.cs" />
+    <Compile Include="VersionUpdate\IVersionUpdateWriteRespository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

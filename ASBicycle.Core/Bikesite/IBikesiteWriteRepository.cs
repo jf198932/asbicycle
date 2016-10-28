@@ -2,7 +2,7 @@
 
 namespace ASBicycle.Bikesite
 {
-    public interface IBikesiteRepository : IRepository<Entities.Bikesite, int>
+    public interface IBikesiteWriteRepository : IRepository<Entities.Bikesite, int>
     {
          
     }

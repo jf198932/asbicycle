@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using Abp.EntityFramework;
 
 namespace ASBicycle.EntityFramework
@@ -50,6 +51,19 @@ namespace ASBicycle.EntityFramework
             : base(nameOrConnectionString)
         {
 
+        }
+    }
+
+    public class ReadonlyASBicycleDbContext : ASBicycleDbContext
+    {
+        public ReadonlyASBicycleDbContext() : base("Read")
+        {
+
+        }
+        public override int SaveChanges()
+        {
+            // Throw if they try to call this
+            throw new InvalidOperationException("This context is read-only.");
         }
     }
 }

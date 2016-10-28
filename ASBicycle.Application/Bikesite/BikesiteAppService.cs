@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abp.AutoMapper;
 using ASBicycle.Bike;
@@ -13,13 +12,14 @@ namespace ASBicycle.Bikesite
 {
     public class BikesiteAppService : ASBicycleAppServiceBase, IBikesiteAppService
     {
-        private readonly IBikesiteRepository _bikesiteRepository;
-        private readonly IBikeRepository _bikeRepository;
+        private readonly IBikesiteReadRepository _bikesiteReadRepository;
+        private readonly IBikeReadRepository _bikeReadRepository;
 
-        public BikesiteAppService(IBikesiteRepository bikesiteRepository, IBikeRepository bikeRepository)
+        public BikesiteAppService(IBikesiteReadRepository bikesiteReadRepository
+            , IBikeReadRepository bikeReadRepository)
         {
-            _bikesiteRepository = bikesiteRepository;
-            _bikeRepository = bikeRepository;
+            _bikesiteReadRepository = bikesiteReadRepository;
+            _bikeReadRepository = bikeReadRepository;
         }
 
         public async Task<BikesiteOutput> GetOneBikesiteInfo([FromUri]BikesitePageInput input)
@@ -32,7 +32,7 @@ namespace ASBicycle.Bikesite
             //result.Bikes = bike.MapTo<List<BikeDto>>();
             //return result;
             var bike =
-                _bikeRepository.GetAll()
+                _bikeReadRepository.GetAll()
                     .Where(b => b.Bikesite_id == input.id)
                     .OrderBy(b => b.Id)
                     .Skip(input.pagesize*(input.index - 1))
@@ -43,7 +43,7 @@ namespace ASBicycle.Bikesite
 
         public async Task<List<BikesiteListOutput>> GetNearbyBikesites([FromUri]BikesiteInput input)
         {
-            var model = await _bikesiteRepository.GetAllListAsync(t=> !string.IsNullOrEmpty(t.Gps_point) && t.School != null && t.Enable);
+            var model = await _bikesiteReadRepository.GetAllListAsync(t=> !string.IsNullOrEmpty(t.Gps_point) && t.School != null && t.Enable);
             List<BikesiteListOutput> result = new List<BikesiteListOutput>();
             foreach (var item in model)
             {

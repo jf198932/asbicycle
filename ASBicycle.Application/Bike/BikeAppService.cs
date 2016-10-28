@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web;
@@ -11,33 +10,46 @@ using Abp.UI;
 using ASBicycle.Bike.Dto;
 using System.Linq;
 using System.Text;
-using Abp.Domain.Repositories;
-using Abp.Domain.Uow;
 using Abp.Extensions;
+using ASBicycle.Bikesite;
 using ASBicycle.Common;
+using ASBicycle.Track;
 
 namespace ASBicycle.Bike
 {
     public class BikeAppService : ASBicycleAppServiceBase, IBikeAppService
     {
-        private readonly IBikeRepository _bikeRepository;
-        private readonly IRepository<Entities.Track> _trackRepository;
+        private readonly IBikeWriteRepository _bikeRepository;
+        private readonly IBikeReadRepository _bikeReadRepository;
+        private readonly ITrackWriteRepository _trackRepository;
+        private readonly ITrackReadRepository _trackReadRepository;
         private readonly ISqlExecuter _sqlExecuter;
-        private readonly IRepository<Entities.Bikesite> _bikesiteRepository;
-        private readonly IRepository<Entities.User> _useRepository; 
+        private readonly ISqlReadExecuter _sqlReadExecuter;
+        private readonly IBikesiteWriteRepository _bikesiteRepository;
+        private readonly IBikesiteReadRepository _bikesiteReadRepository;
 
-        public BikeAppService(IBikeRepository bikeRepository, IRepository<Entities.Track> trackRepository, ISqlExecuter sqlExecuter, IRepository<Entities.Bikesite> bikesiteRepository, IRepository<Entities.User> useRepository)
+        public BikeAppService(IBikeWriteRepository bikeRepository
+            , ITrackWriteRepository trackRepository
+            , ISqlExecuter sqlExecuter
+            , IBikesiteWriteRepository bikesiteRepository
+            , IBikeReadRepository bikeReadRepository
+            , ITrackReadRepository trackReadRepository
+            , ISqlReadExecuter sqlReadExecuter
+            , IBikesiteReadRepository bikesiteReadRepository)
         {
             _bikeRepository = bikeRepository;
             _trackRepository = trackRepository;
             _sqlExecuter = sqlExecuter;
             _bikesiteRepository = bikesiteRepository;
-            _useRepository = useRepository;
+            _bikeReadRepository = bikeReadRepository;
+            _trackReadRepository = trackReadRepository;
+            _sqlReadExecuter = sqlReadExecuter;
+            _bikesiteReadRepository = bikesiteReadRepository;
         }
         [HttpGet]
-        public async Task<AlarmBikeOutput> GetAlarmBikeWay([FromUri] string phone)
+        public async Task<AlarmBikeOutput> GetAlarmBikeWay([FromUri] BikegetInput input)
         {
-            var bike = await _bikeRepository.FirstOrDefaultAsync(t => t.User.Phone == phone);
+            var bike = await _bikeReadRepository.FirstOrDefaultAsync(t => t.User.Phone == input.phone);
             var model = new AlarmBikeOutput();
             if (bike == null)
             {
@@ -48,7 +60,7 @@ namespace ASBicycle.Bike
 
             var sqlstr =
                 "select b.gps_point,b.`name` as sitename,DATE_FORMAT(op_time,'%Y-%m-%d %H:%i:%S') as alarmtime,bikesite_id,bike_id from log as l JOIN bikesite as b on l.bikesite_id = b.id WHERE op_time >= (select op_time from log where type = 3 and bike_id = " + bike.Id+" ORDER BY op_time DESC LIMIT 1) and l.bike_id="+bike.Id+" order by op_time desc";
-            model.alarmlist = _sqlExecuter.SqlQuery<AlarmBikeDto>(sqlstr).ToList();
+            model.alarmlist = _sqlReadExecuter.SqlQuery<AlarmBikeDto>(sqlstr).ToList();
             foreach (var item in model.alarmlist)
             {
                 if (!item.gps_point.IsNullOrEmpty())
@@ -61,9 +73,9 @@ namespace ASBicycle.Bike
             return model;
         }
 
-        public async Task<BikeOutput> GetBikeInfo([FromUri]string serial)
+        public async Task<BikeOutput> GetBikeInfo([FromUri]BikegetInput input)
         {
-            var model = await _bikeRepository.FirstOrDefaultAsync(b => b.Ble_name == serial);
+            var model = await _bikeReadRepository.FirstOrDefaultAsync(b => b.Ble_name == input.serial);
             if(model == null)
                 throw new UserFriendlyException("没有该车辆");
             var result = model.MapTo<BikeOutput>();
@@ -85,6 +97,9 @@ namespace ASBicycle.Bike
             if(bikeInput.Bikesite_id != null)
                 bike.Bikesite_id = bikeInput.Bikesite_id;
             bike.Position = bikeInput.Position;
+
+
+
             await _bikeRepository.UpdateAsync(bike);
         }
         [HttpPost]
@@ -206,7 +221,7 @@ namespace ASBicycle.Bike
             {
                 throw new UserFriendlyException("无该订单号!");
             }
-            var bike = await _bikeRepository.FirstOrDefaultAsync(t => t.Ble_name == input.Ble_name);
+            var bike = await _bikeReadRepository.FirstOrDefaultAsync(t => t.Ble_name == input.Ble_name);
             if (bike.Bikesite_id == null)
             {
                 throw new UserFriendlyException("请到桩点还车!");
@@ -240,13 +255,13 @@ namespace ASBicycle.Bike
             {
                 sb.AppendFormat(" where a.pay_docno='{0}'", input.out_trade_no);
             }
-            var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
+            var track = _sqlReadExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
             if (track == null)
             {
                 throw new UserFriendlyException("没有行程单!");
             }
 
-            var bike = await _bikeRepository.FirstOrDefaultAsync(t => t.Ble_name == track.Ble_name);
+            var bike = await _bikeReadRepository.FirstOrDefaultAsync(t => t.Ble_name == track.Ble_name);
             if (bike == null)
             {
                 throw new UserFriendlyException("车辆编号错误");
@@ -276,7 +291,7 @@ namespace ASBicycle.Bike
         [HttpPost]
         public async Task<RentalCostOutput> RentalCast(RentalBikeInput input)
         {
-            var bike = await _bikeRepository.FirstOrDefaultAsync(t => t.Ble_name == input.Ble_name);
+            var bike = await _bikeReadRepository.FirstOrDefaultAsync(t => t.Ble_name == input.Ble_name);
             if (bike == null)
             {
                 throw new UserFriendlyException("车辆编号错误");
@@ -289,7 +304,7 @@ namespace ASBicycle.Bike
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
             sb.AppendFormat(" where a.user_id={0} and a.bike_id = {1} and a.pay_status < 3", input.user_id, bike.Id);
-            var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
+            var track = _sqlReadExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
             if (track == null)
             {
                 throw new UserFriendlyException("没有行程单!");
@@ -507,7 +522,7 @@ namespace ASBicycle.Bike
                 sb.AppendFormat(" where a.pay_docno='{0}'", input.out_trade_no);
             }
 
-            var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
+            var track = _sqlReadExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
             if (track == null)
             {
                 throw new UserFriendlyException("没有行程单!");
@@ -515,7 +530,7 @@ namespace ASBicycle.Bike
             var gpsinput = input.gps_point.Split(',');
             var ip_lon = double.Parse(gpsinput[0]);
             var ip_lat = double.Parse(gpsinput[1]);
-            var bikesitelist = await _bikesiteRepository.GetAllListAsync(t => t.School_id == track.School_id && t.Enable && t.Type == 3);
+            var bikesitelist = await _bikesiteReadRepository.GetAllListAsync(t => t.School_id == track.School_id && t.Enable && t.Type == 3);
 
             Entities.Bikesite bsite = null;
             double mindistance = 99999999;
@@ -569,7 +584,7 @@ namespace ASBicycle.Bike
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
             sb.Append(" left join bike as e on a.bike_id = e.id");
             sb.AppendFormat(" where a.pay_docno='{0}'", input.out_trade_no);
-            var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
+            var track = _sqlReadExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
             
             if (track == null)
             {
@@ -607,7 +622,7 @@ namespace ASBicycle.Bike
             sb.AppendFormat(" where a.user_id={0} and a.pay_status < 3", input.user_id);
             sb.Append(" order by a.updated_at desc LIMIT 1");
 
-            var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).FirstOrDefault();
+            var track = _sqlReadExecuter.SqlQuery<TrackEntity>(sb.ToString()).FirstOrDefault();
             if (track == null)
             {
                 return new TrackInfoOutput {out_trade_no = "", pay_status = 0};

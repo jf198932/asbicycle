@@ -2,13 +2,11 @@
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Abp.AutoMapper;
-using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.Runtime.Caching;
@@ -16,7 +14,7 @@ using Abp.UI;
 using ASBicycle.Bike;
 using ASBicycle.Bike.Dto;
 using ASBicycle.Common;
-using ASBicycle.Entities;
+using ASBicycle.Log;
 using ASBicycle.User.Dto;
 using AutoMapper;
 
@@ -24,14 +22,31 @@ namespace ASBicycle.User
 {
     public class UserAppService : ASBicycleAppServiceBase, IUserAppService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IBikeRepository _bikeRepository;
         private readonly ICacheManager _cacheManager;
-        private readonly ISqlExecuter _sqlExecuter;
-        private readonly IRepository<Log> _logRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        public UserAppService(IUserRepository userRepository, ICacheManager cacheManager, IBikeRepository bikeRepository, ISqlExecuter sqlExecuter, IRepository<Log> logRepository, IUnitOfWorkManager unitOfWorkManager)
+        private readonly IUserWriteRepository _userRepository;
+        private readonly IBikeWriteRepository _bikeRepository;
+        private readonly ISqlExecuter _sqlExecuter;
+        private readonly ILogWriteRepository _logRepository;
+
+        private readonly IUserReadRepository _userReadRepository;
+        private readonly IBikeReadRepository _bikeReadRepository;
+        private readonly ISqlReadExecuter _sqlReadExecuter;
+        private readonly ILogReadRepository _logReadRepository;
+
+
+        public UserAppService(ICacheManager cacheManager
+            , IUnitOfWorkManager unitOfWorkManager
+            , IUserWriteRepository userRepository
+            , IBikeWriteRepository bikeRepository
+            , ISqlExecuter sqlExecuter
+            , ILogWriteRepository logRepository
+            , IUserReadRepository userReadRepository
+            , IBikeReadRepository bikeReadRepository
+            , ISqlReadExecuter sqlReadExecuter
+            , ILogReadRepository logReadRepository
+            )
         {
             _userRepository = userRepository;
             _cacheManager = cacheManager;
@@ -39,6 +54,11 @@ namespace ASBicycle.User
             _sqlExecuter = sqlExecuter;
             _logRepository = logRepository;
             _unitOfWorkManager = unitOfWorkManager;
+
+            _userReadRepository = userReadRepository;
+            _bikeReadRepository = bikeReadRepository;
+            _sqlReadExecuter = sqlReadExecuter;
+            _logReadRepository = logReadRepository;
         }
 
         [HttpPost]
@@ -73,12 +93,21 @@ namespace ASBicycle.User
                 {
                     result.Device_os = checkIdentityInput.device_os;
                     await _userRepository.UpdateAsync(result);
-
+                    
                     var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
+                    var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.User_id == result.Id);
+                    if (bike == null)
+                    {
+                        xxx.UserDto.IsBindBike = false;
+                    }
+                    else
+                    {
+                        xxx.UserDto.IsBindBike = true;
+                    }
                     xxx.UserDto.School_name = result.School == null ? "" : result.School.Name;
                     if (xxx.UserDto.User_type == 0)
                     {
-                        xxx.UserDto.User_type_name = "游客";
+                        xxx.UserDto.User_type_name = "非校园用户";
                     }
                     else if (xxx.UserDto.User_type == 1)
                     {
@@ -154,13 +183,23 @@ namespace ASBicycle.User
             user.User_type = userInput.User_type;
             if (!userInput.Phone.IsNullOrEmpty())
                 user.Phone = userInput.Phone;
-            if(userInput.School_id != null)
+            if (!userInput.Id_no.IsNullOrEmpty())
+                user.Id_no = userInput.Id_no;
+            if (userInput.School_id != null)
                 user.School_id = userInput.School_id;
             user.Weixacc = userInput.Weixacc;
             if (!userInput.Img.IsNullOrEmpty())
             {
                 user.Img = userInput.Img;
-                user.Certification = 3;//认证通过
+                user.Certification = 3; //认证通过
+            }
+            else
+            {
+                //非校园用户，传身份证，属于认证通过
+                if (userInput.User_type == 0 && !userInput.Id_no.IsNullOrEmpty())
+                {
+                    user.Certification = 3; //认证通过
+                }
             }
             //user.Email = userInput.Email;
 
@@ -222,7 +261,7 @@ namespace ASBicycle.User
                 await _bikeRepository.UpdateAsync(bike);
                 
                 await
-                    _logRepository.InsertAsync(new Log
+                    _logRepository.InsertAsync(new Entities.Log
                     {
                         Created_at = DateTime.Now,
                         Updated_at = DateTime.Now,
@@ -257,7 +296,7 @@ namespace ASBicycle.User
                 await _bikeRepository.UpdateAsync(bike);
 
                 await
-                    _logRepository.InsertAsync(new Log
+                    _logRepository.InsertAsync(new Entities.Log
                     {
                         Created_at = DateTime.Now,
                         Updated_at = DateTime.Now,
@@ -272,10 +311,10 @@ namespace ASBicycle.User
 
         public async Task<UserBikeOutput> GetUserBike([FromUri]UserIdInput userIdInput)
         {
-            var user = await _userRepository.FirstOrDefaultAsync(u => u.Id == userIdInput.User_id);
+            var user = await _userReadRepository.FirstOrDefaultAsync(u => u.Id == userIdInput.User_id);
             if(user == null)
                 throw new UserFriendlyException("请重新登录");
-            var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.User_id == user.Id);
+            var bike = await _bikeReadRepository.FirstOrDefaultAsync(b => b.User_id == user.Id);
             var result = new UserBikeOutput();
             if (bike == null)
             {
@@ -426,11 +465,20 @@ namespace ASBicycle.User
                 result = await _userRepository.UpdateAsync(result);
 
                 var xxx = new UserOutput {UserDto = Mapper.Map<UserDto>(result)};
+                var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.User_id == result.Id);
+                if (bike == null)
+                {
+                    xxx.UserDto.IsBindBike = false;
+                }
+                else
+                {
+                    xxx.UserDto.IsBindBike = true;
+                }
                 xxx.IsRegisted = 1;
                 xxx.UserDto.School_name = result.School == null ? "" : result.School.Name;
                 if (xxx.UserDto.User_type == 0)
                 {
-                    xxx.UserDto.User_type_name = "游客";
+                    xxx.UserDto.User_type_name = "非校园用户";
                 }
                 else if (xxx.UserDto.User_type == 1)
                 {
@@ -510,13 +558,13 @@ namespace ASBicycle.User
         [HttpGet]
         public MianzeOutput Mianze()
         {
-            return new MianzeOutput {Url = "http://api.isriding.com/app/Uploads/mianze.html" };
+            return new MianzeOutput {Url = "https://api.isriding.com/app/Uploads/mianze.html" };
         }
 
         [HttpGet]
         public MianzeOutput About()
         {
-            return new MianzeOutput { Url = "http://api.isriding.com/app/Uploads/about.html" };
+            return new MianzeOutput { Url = "https://api.isriding.com/app/Uploads/about.html" };
         }
 
         [HttpGet]
@@ -524,7 +572,7 @@ namespace ASBicycle.User
         {
             var result =
                 await
-                    _userRepository.FirstOrDefaultAsync(
+                    _userReadRepository.FirstOrDefaultAsync(
                         u => u.Phone == phoneNumInput.Phone);
             Mapper.CreateMap<Entities.User, UserDto>();
 
@@ -532,7 +580,7 @@ namespace ASBicycle.User
             xxx.UserDto.School_name = result.School == null ? "" : result.School.Name;
             if (xxx.UserDto.User_type == 0)
             {
-                xxx.UserDto.User_type_name = "游客";
+                xxx.UserDto.User_type_name = "非校园用户";
             }
             else if (xxx.UserDto.User_type == 1)
             {
@@ -551,7 +599,7 @@ namespace ASBicycle.User
                 "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,a.start_point");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.AppendFormat(" where a.user_id={0} and a.pay_status < 3", result.Id);
-            var track = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
+            var track = _sqlReadExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
             if (track != null)
             {
                 xxx.UserDto.Payed = 1;
@@ -569,7 +617,7 @@ namespace ASBicycle.User
         {
             var result =
                 await
-                    _userRepository.FirstOrDefaultAsync(
+                    _userReadRepository.FirstOrDefaultAsync(
                         u => u.Phone == phoneNumInput.Phone);
             if (result != null)
             {
@@ -669,7 +717,7 @@ namespace ASBicycle.User
             xxx.UserDto.School_name = user.School == null ? "" : user.School.Name;
             if (xxx.UserDto.User_type == 0)
             {
-                xxx.UserDto.User_type_name = "游客";
+                xxx.UserDto.User_type_name = "非校园用户";
             }
             else if (xxx.UserDto.User_type == 1)
             {
