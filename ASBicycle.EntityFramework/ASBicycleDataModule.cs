@@ -18,6 +18,7 @@ namespace ASBicycle
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
             Database.SetInitializer<ASBicycleDbContext>(null);
+            Database.SetInitializer<ReadonlyASBicycleDbContext>(null);
         }
     }
 }

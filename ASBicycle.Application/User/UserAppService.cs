@@ -577,6 +577,15 @@ namespace ASBicycle.User
             Mapper.CreateMap<Entities.User, UserDto>();
 
             var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
+            var bike = await _bikeReadRepository.FirstOrDefaultAsync(b => b.User_id == result.Id);
+            if (bike == null)
+            {
+                xxx.UserDto.IsBindBike = false;
+            }
+            else
+            {
+                xxx.UserDto.IsBindBike = true;
+            }
             xxx.UserDto.School_name = result.School == null ? "" : result.School.Name;
             if (xxx.UserDto.User_type == 0)
             {
@@ -714,6 +723,15 @@ namespace ASBicycle.User
             await CurrentUnitOfWork.SaveChangesAsync();
             Mapper.CreateMap<Entities.User, UserDto>();
             var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(user) };
+            var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.User_id == user.Id);
+            if (bike == null)
+            {
+                xxx.UserDto.IsBindBike = false;
+            }
+            else
+            {
+                xxx.UserDto.IsBindBike = true;
+            }
             xxx.UserDto.School_name = user.School == null ? "" : user.School.Name;
             if (xxx.UserDto.User_type == 0)
             {

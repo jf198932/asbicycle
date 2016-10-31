@@ -12,6 +12,6 @@ namespace ASBicycle.School
         Task<List<SchoolOutput>> GetSchoolList();
 
         [HttpGet]
-        Task<List<SchoolBikeSiteOutput>> GetSchoolBikeSiteList([FromUri] SchoolInput id);
+        Task<List<SchoolBikeSiteOutput>> GetSchoolBikeSiteList([FromUri] SchoolInput input);
     }
 }

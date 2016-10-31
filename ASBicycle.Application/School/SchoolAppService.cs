@@ -13,12 +13,15 @@ namespace ASBicycle.School
     public class SchoolAppService : ASBicycleAppServiceBase, ISchoolAppService
     {
         private readonly IBikesiteReadRepository _bikesiteReadRepository;
+        private readonly IBikesiteWriteRepository _bikesiteRepository;
         private readonly ISqlReadExecuter _sqlReadExecuter;
 
         public SchoolAppService(IBikesiteReadRepository bikesiteReadRepository
+            , IBikesiteWriteRepository bikesiteRepository
             , ISqlReadExecuter sqlReadExecuter)
         {
             _bikesiteReadRepository = bikesiteReadRepository;
+            _bikesiteRepository = bikesiteRepository;
             _sqlReadExecuter = sqlReadExecuter;
         }
 

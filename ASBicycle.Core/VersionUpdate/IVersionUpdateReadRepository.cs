@@ -2,7 +2,7 @@
 
 namespace ASBicycle.VersionUpdate
 {
-    public interface IVersionUpdateReadRespository : IRepository<Entities.VersionUpdate>
+    public interface IVersionUpdateReadRepository : IRepository<Entities.VersionUpdate>
     {
          
     }

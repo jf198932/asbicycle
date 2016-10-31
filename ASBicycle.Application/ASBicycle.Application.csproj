@@ -135,6 +135,7 @@
     <Compile Include="Common\PushMsgHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="School\Dto\SchoolBikeSiteOutput.cs" />
+    <Compile Include="School\Dto\SchoolInput.cs" />
     <Compile Include="School\Dto\SchoolOutput.cs" />
     <Compile Include="School\ISchoolAppService.cs" />
     <Compile Include="School\SchoolAppService.cs" />

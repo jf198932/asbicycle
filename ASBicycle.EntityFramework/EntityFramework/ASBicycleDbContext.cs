@@ -21,13 +21,13 @@ namespace ASBicycle.EntityFramework
         public virtual IDbSet<Entities.Sitemonitor> Sitemonitors { get; set; }
         public virtual IDbSet<Entities.VersionUpdate> VersionUpdates { get; set; }
         //权限
-        public virtual IDbSet<Entities.Authen.BackUser> BackUsers { get; set; }
-        public virtual IDbSet<Entities.Authen.Role> Roles { get; set; }
-        public virtual IDbSet<Entities.Authen.Module> Modules { get; set; }
-        public virtual IDbSet<Entities.Authen.Permission> Permissions { get; set; }
-        public virtual IDbSet<Entities.Authen.UserRole> UserRoles { get; set; }
-        public virtual IDbSet<Entities.Authen.ModulePermission> ModulePermissions { get; set; }
-        public virtual IDbSet<Entities.Authen.RoleModulePermission> RoleModulePermissions { get; set; }
+        //public virtual IDbSet<Entities.Authen.BackUser> BackUsers { get; set; }
+        //public virtual IDbSet<Entities.Authen.Role> Roles { get; set; }
+        //public virtual IDbSet<Entities.Authen.Module> Modules { get; set; }
+        //public virtual IDbSet<Entities.Authen.Permission> Permissions { get; set; }
+        //public virtual IDbSet<Entities.Authen.UserRole> UserRoles { get; set; }
+        //public virtual IDbSet<Entities.Authen.ModulePermission> ModulePermissions { get; set; }
+        //public virtual IDbSet<Entities.Authen.RoleModulePermission> RoleModulePermissions { get; set; }
 
         //Example:
         //public virtual IDbSet<User> Users { get; set; }

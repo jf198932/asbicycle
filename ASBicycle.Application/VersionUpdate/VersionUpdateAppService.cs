@@ -7,11 +7,14 @@ namespace ASBicycle.VersionUpdate
 {
     public class VersionUpdateAppService : ASBicycleAppServiceBase, IVersionUpdateAppService
     {
-        private readonly IVersionUpdateReadRespository _versionUpdateReadRepository;
+        private readonly IVersionUpdateReadRepository _versionUpdateReadRepository;
+        private readonly IVersionUpdateWriteRepository _versionUpdateRepository;
 
-        public VersionUpdateAppService(IVersionUpdateReadRespository versionUpdateReadRepository)
+        public VersionUpdateAppService(IVersionUpdateReadRepository versionUpdateReadRepository
+            , IVersionUpdateWriteRepository versionUpdateRepository)
         {
             _versionUpdateReadRepository = versionUpdateReadRepository;
+            _versionUpdateRepository = versionUpdateRepository;
         }
 
         public async Task<VersionUpdateOutput> UpdateApp([FromUri] VersionUpdateInput input)
