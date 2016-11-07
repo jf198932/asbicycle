@@ -30,5 +30,8 @@ namespace ASBicycle.User.Dto
         public string User_type_name { get; set; }
 
         public bool IsBindBike { get; set; }
+
+        public double Deposit { get; set; }
+        public int Refound_status { get; set; }
     }
 }

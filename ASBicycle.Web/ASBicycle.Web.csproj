@@ -2381,6 +2381,7 @@
     <Compile Include="Controllers\Alipay\AlipayController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ASBicycleControllerBase.cs" />
+    <Compile Include="Controllers\Weixin\WxpayController.cs" />
     <Compile Include="Extension\DynamicLambda.cs" />
     <Compile Include="Extension\HtmlHelperExtend.cs" />
     <Compile Include="Global.asax.cs">
@@ -2409,6 +2410,7 @@
     <Content Include="Scripts\sweetalert\sweet-alert.scss" />
     <Content Include="Views\Alipay\Notify.cshtml" />
     <Content Include="Views\Alipay\Return.cshtml" />
+    <Content Include="Views\Wxpay\Notify.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

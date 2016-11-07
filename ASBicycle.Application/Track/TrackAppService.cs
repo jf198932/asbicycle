@@ -86,6 +86,8 @@ namespace ASBicycle.Track
         {
             Mapper.CreateMap<TrackInsertInput, Entities.Track> ();
             var track = trackInsertInput.MapTo<Entities.Track>();
+            var paydocno = DateTime.Now.ToString("yyyyMMddHHmmss") + new Random().Next(1000, 9999);
+            track.Pay_docno = paydocno;
             track.Created_at = DateTime.Now;
             track.Updated_at = DateTime.Now;
             track.Pay_status = 2;

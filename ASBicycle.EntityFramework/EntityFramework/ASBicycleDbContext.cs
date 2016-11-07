@@ -12,6 +12,7 @@ namespace ASBicycle.EntityFramework
         public virtual IDbSet<Entities.Sitebeacon> Sitebeacons { get; set; }
         public virtual IDbSet<Entities.School> Schools { get; set; }
         public virtual IDbSet<Entities.Refound> Refounds { get; set; }
+        public virtual IDbSet<Entities.Recharge_detail> Recharge_details { get; set; }
         public virtual IDbSet<Entities.Recharge> Recharges { get; set; }
         public virtual IDbSet<Entities.Message> Messages { get; set; }
         public virtual IDbSet<Entities.Log> Logs { get; set; }
@@ -20,6 +21,7 @@ namespace ASBicycle.EntityFramework
         public virtual IDbSet<Entities.Bike> Bikes { get; set; }
         public virtual IDbSet<Entities.Sitemonitor> Sitemonitors { get; set; }
         public virtual IDbSet<Entities.VersionUpdate> VersionUpdates { get; set; }
+        public virtual IDbSet<Entities.Parameter> Parameters { get; set; } 
         //权限
         //public virtual IDbSet<Entities.Authen.BackUser> BackUsers { get; set; }
         //public virtual IDbSet<Entities.Authen.Role> Roles { get; set; }

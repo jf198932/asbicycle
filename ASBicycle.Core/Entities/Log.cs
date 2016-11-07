@@ -9,6 +9,9 @@ namespace ASBicycle.Entities
     {
         public DateTime? Created_at { get; set; }
         public DateTime? Updated_at { get; set; }
+        /// <summary>
+        /// 3.异常离开，4.用户报警，5 报警车辆
+        /// </summary>
         public int? Type { get; set; }
         public DateTime? Op_Time { get; set; }
 

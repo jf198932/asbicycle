@@ -123,6 +123,7 @@
     <Compile Include="Bike\Dto\BikeOutput.cs" />
     <Compile Include="Bike\Dto\BikeUploadInput.cs" />
     <Compile Include="Bike\Dto\BikeUploadOutput.cs" />
+    <Compile Include="Bike\Dto\CanRentalOutput.cs" />
     <Compile Include="Bike\Dto\RentalBikeInput.cs" />
     <Compile Include="Bike\Dto\RentalBikeOutput.cs" />
     <Compile Include="Bike\Dto\RentalCostOutput.cs" />
@@ -131,9 +132,14 @@
     <Compile Include="Bike\Dto\TrackEntity.cs" />
     <Compile Include="Bike\Dto\TrackInfoOutput.cs" />
     <Compile Include="Bike\IBikeAppService.cs" />
+    <Compile Include="Common\HttpHelper.cs" />
     <Compile Include="Common\LatlonHelper.cs" />
     <Compile Include="Common\PushMsgHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Recharge\Dto\RechargeInput.cs" />
+    <Compile Include="Recharge\Dto\RechargeOutput.cs" />
+    <Compile Include="Recharge\IRechargeAppService.cs" />
+    <Compile Include="Recharge\RechargeAppService.cs" />
     <Compile Include="School\Dto\SchoolBikeSiteOutput.cs" />
     <Compile Include="School\Dto\SchoolInput.cs" />
     <Compile Include="School\Dto\SchoolOutput.cs" />
@@ -145,6 +151,7 @@
     <Compile Include="Track\Dto\TrackUpdateInput.cs" />
     <Compile Include="Track\ITrackAppService.cs" />
     <Compile Include="Track\TrackAppService.cs" />
+    <Compile Include="User\Dto\CertificationOutput .cs" />
     <Compile Include="User\Dto\CheckCodeOutput.cs" />
     <Compile Include="User\Dto\MianzeOutput.cs" />
     <Compile Include="User\Dto\PhoneNumInput.cs" />
@@ -161,6 +168,17 @@
     <Compile Include="VersionUpdate\Dto\VersionUpdateOutput.cs" />
     <Compile Include="VersionUpdate\IVersionUpdateAppService.cs" />
     <Compile Include="VersionUpdate\VersionUpdateAppService.cs" />
+    <Compile Include="WxPay\App\CommonUtil.cs" />
+    <Compile Include="WxPay\App\MD5SignUtil.cs" />
+    <Compile Include="WxPay\App\MD5Util.cs" />
+    <Compile Include="WxPay\App\SDKRuntimeException.cs" />
+    <Compile Include="WxPay\App\SHA1Util.cs" />
+    <Compile Include="WxPay\App\WxpayConfig.cs" />
+    <Compile Include="WxPay\App\WxPayHelper.cs" />
+    <Compile Include="WxPay\Dto\SignaturesInput.cs" />
+    <Compile Include="WxPay\Dto\WxpayOutput.cs" />
+    <Compile Include="WxPay\IWxpayAppService.cs" />
+    <Compile Include="WxPay\WxpayAppService.cs" />
     <Compile Include="XInGe\IXinGeAppService.cs" />
     <Compile Include="XInGe\XinGeAppService.cs" />
   </ItemGroup>

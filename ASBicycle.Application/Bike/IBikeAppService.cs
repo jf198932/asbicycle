@@ -31,6 +31,11 @@ namespace ASBicycle.Bike
         Task<RentalBikeOutput> RentalBiketemp(RentalBikeInput input);
         [HttpPost]
         Task<RentalCostOutput> RentalBikeFinishtemp(RentalBikeInput input);
+
+        [HttpPost]
+        Task<RentalCostOutput> RentalBikeForcedFinishtemp(RentalBikeInput input);
+
+
         [HttpPost]
         Task<RentalFinishOutput> RentalBikeFinishtempo(RentalBikeInput input);
         [HttpPost]
@@ -41,5 +46,8 @@ namespace ASBicycle.Bike
 
         [HttpGet]
         Task<TrackInfoOutput> RentalTrackInfo([FromUri] RentalBikeInput input);
+
+        [HttpGet]
+        Task<CanRentalOutput> CanReantalBike([FromUri] RentalBikeInput input);
     }
 }

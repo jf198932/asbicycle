@@ -104,5 +104,8 @@ namespace ASBicycle.User
 
         [HttpPost]
         Task<UserOutput> UpdateUserNickName(UserInput userInput);
+
+        [HttpGet]
+        Task<CertificationOutput> GetUserCertificationStatus([FromUri] UserIdInput userIdInput);
     }
 }

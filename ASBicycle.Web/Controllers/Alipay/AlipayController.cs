@@ -4,19 +4,19 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Logging;
 using ASBicycle.AliPay.App;
+using ASBicycle.Track;
 using ASBicycle.Web.Models.Alipay;
 
 namespace ASBicycle.Web.Controllers.Alipay
 {
     public class AlipayController : ASBicycleControllerBase
     {
-        private readonly IRepository<Entities.Track> _trackRepository;
+        private readonly ITrackWriteRepository _trackRepository;
 
-        public AlipayController(IRepository<Entities.Track> trackRepository)
+        public AlipayController(ITrackWriteRepository trackRepository)
         {
             _trackRepository = trackRepository;
         }

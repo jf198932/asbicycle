@@ -111,6 +111,14 @@
     <Compile Include="EntityFramework\Repositories\Bike\BikeWriteRepository.cs" />
     <Compile Include="EntityFramework\Repositories\Log\LogReadRepository.cs" />
     <Compile Include="EntityFramework\Repositories\Log\LogWriteRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\Parameter\ParameterReadRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\Parameter\ParameterWriteRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\Recharge\RechargeReadRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\Recharge\RechargeWriteRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\Recharge_detail\Recharge_detailReadRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\Recharge_detail\Recharge_detailWriteRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\Refound\RefoundReadRepositroy.cs" />
+    <Compile Include="EntityFramework\Repositories\Refound\RefoundWriteRepository.cs" />
     <Compile Include="EntityFramework\Repositories\School\SchoolReadRepository.cs" />
     <Compile Include="EntityFramework\Repositories\School\SchoolWriteRepository.cs" />
     <Compile Include="EntityFramework\Repositories\Sitemonitor\SitemonitorWriteRepository.cs" />

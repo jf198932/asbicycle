@@ -504,6 +504,102 @@ namespace ASBicycle.Bike
             return output;
         }
 
+        public async Task<RentalCostOutput> RentalBikeForcedFinishtemp(RentalBikeInput input)
+        {
+            var track = await _trackRepository.FirstOrDefaultAsync(
+                    t => t.Pay_docno == input.out_trade_no && t.User_id == input.user_id);
+            if (track == null)
+            {
+                throw new UserFriendlyException("无该订单号!");
+            }
+            var bike = await _bikeRepository.FirstOrDefaultAsync(t => t.Ble_name == input.Ble_name);
+
+            //var gpsinput = input.gps_point.Split(',');
+            //var ip_lon = double.Parse(gpsinput[0]);
+            //var ip_lat = double.Parse(gpsinput[1]);
+            //var bikesitelist = await _bikesiteRepository.GetAllListAsync(t => t.School_id == bike.School_id && t.Enable && t.Type == 3);
+
+            //Entities.Bikesite bsite = null;
+            //double mindistance = 99999999;
+            //foreach (var bikesite in bikesitelist)
+            //{
+            //    var bikesitegps = bikesite.Gps_point.Split(',');
+            //    var bs_lon = double.Parse(bikesitegps[0]);
+            //    var bs_lat = double.Parse(bikesitegps[1]);
+
+            //    var distance = LatlonHelper.GetDistance(ip_lat, ip_lon, bs_lat, bs_lon) * 1000;//KM->M
+            //    if (distance < mindistance && distance <= bikesite.Radius)//
+            //    {
+            //        mindistance = distance;
+            //        bsite = bikesite;
+            //    }
+            //}
+
+            //if (bsite == null)
+            //{
+            //    throw new UserFriendlyException("范围内没有桩点");
+            //}
+            var endtime = DateTime.Now;
+            track.End_point = input.gps_point;
+            track.End_site_id = 0;
+            track.End_time = endtime;
+            track.Updated_at = endtime;
+            track.Pay_status = 2;//还车未支付
+            await _trackRepository.UpdateAsync(track);
+
+            bike.Bike_status = 1;
+            await _bikeRepository.UpdateAsync(bike);
+
+            //bsite.Available_count = bsite.Available_count + 1;
+            //await _bikesiteRepository.UpdateAsync(bsite);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(
+                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name,c.time_charge");
+            sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
+            sb.Append(" left join school as c on b.school_id = c.id");
+            sb.Append(" left join bikesite as d on a.end_site_id = d.id");
+            sb.Append(" left join bike as e on a.bike_id = e.id");
+            sb.AppendFormat(" where a.pay_docno='{0}'", input.out_trade_no);
+            var tracktemp = _sqlExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
+            if (tracktemp == null)
+            {
+                throw new UserFriendlyException("没有行程单!");
+            }
+            var output = new RentalCostOutput();
+
+            //var end_time = DateTime.Now;
+
+            output.out_trade_no = tracktemp.Pay_docno;
+            output.start_site_name = tracktemp.Start_site_name;
+            output.ble_name = tracktemp.Ble_name;
+            output.start_time = tracktemp.Start_time.ToString();
+            output.end_site_name = tracktemp.End_site_name;
+            output.end_time = tracktemp.End_time.ToString();
+            output.school_name = tracktemp.School_name;
+
+
+
+            TimeSpan costtime = endtime - DateTime.Parse(tracktemp.Start_time.ToString());
+
+            var ctm = (int)costtime.TotalMinutes;//去掉多余的零头
+            output.rental_time = ctm;
+            if (ctm < 1)
+            {
+                output.allpay = "0";
+                track.Should_pay = 0;
+            }
+            else
+            {
+                output.allpay = (ctm * tracktemp.time_charge / 100.00).ToString();//分转元
+                track.Should_pay = ctm * tracktemp.time_charge / 100.00;//分转元
+            }
+            await _trackRepository.UpdateAsync(track);
+            return output;
+        }
+
         public async Task<RentalBikeOutput> RefreshBiketemp(RentalBikeInput input)
         {
             StringBuilder sb = new StringBuilder();
@@ -630,6 +726,31 @@ namespace ASBicycle.Bike
             var result = new TrackInfoOutput {out_trade_no = track.Pay_docno, pay_status = track.Pay_status};
             return result;
         }
+
+        public async Task<CanRentalOutput> CanReantalBike(RentalBikeInput input)
+        {
+            var bike =
+                await
+                    _bikeReadRepository.FirstOrDefaultAsync(
+                        t => t.Ble_name == input.Ble_name && t.rent_type == 1 && t.Ble_type == 4);
+            if (bike == null)
+            {
+                throw new UserFriendlyException("车辆编号错误或该车不可租");
+            }
+            if (bike.Bike_status == 0)
+            {
+                throw new UserFriendlyException("该车辆出租中");
+            }
+
+            if (bike.Bike_status == 0)
+            {
+                throw new UserFriendlyException("请先把租赁的自行车归还，再进行租车!");
+            }
+            var school = bike.School;
+            var msg = $"{school.Free_time}分钟免费，超过之后每分钟收费{school.Time_charge}分";
+            return new CanRentalOutput {charge = msg };
+        }
+
         /// <summary>
         /// 结束租车
         /// </summary>

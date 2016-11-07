@@ -15,6 +15,9 @@ using ASBicycle.Bike;
 using ASBicycle.Bike.Dto;
 using ASBicycle.Common;
 using ASBicycle.Log;
+using ASBicycle.Recharge;
+using ASBicycle.Recharge_detail;
+using ASBicycle.School;
 using ASBicycle.User.Dto;
 using AutoMapper;
 
@@ -35,6 +38,8 @@ namespace ASBicycle.User
         private readonly ISqlReadExecuter _sqlReadExecuter;
         private readonly ILogReadRepository _logReadRepository;
 
+        private readonly ISchoolReadRepository _schoolReadRepository;
+        private readonly IRechargeReadRepository _rechargeReadRepository;
 
         public UserAppService(ICacheManager cacheManager
             , IUnitOfWorkManager unitOfWorkManager
@@ -46,6 +51,8 @@ namespace ASBicycle.User
             , IBikeReadRepository bikeReadRepository
             , ISqlReadExecuter sqlReadExecuter
             , ILogReadRepository logReadRepository
+            , ISchoolReadRepository schoolReadRepository
+            , IRechargeReadRepository rechargeReadRepository
             )
         {
             _userRepository = userRepository;
@@ -59,6 +66,9 @@ namespace ASBicycle.User
             _bikeReadRepository = bikeReadRepository;
             _sqlReadExecuter = sqlReadExecuter;
             _logReadRepository = logReadRepository;
+
+            _schoolReadRepository = schoolReadRepository;
+            _rechargeReadRepository = rechargeReadRepository;
         }
 
         [HttpPost]
@@ -577,6 +587,10 @@ namespace ASBicycle.User
             Mapper.CreateMap<Entities.User, UserDto>();
 
             var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
+            var recharge = result.Recharges.FirstOrDefault();
+            var refound = result.Refounds.OrderByDescending(t => t.Created_at).FirstOrDefault();
+            if (recharge?.Deposit != null) xxx.UserDto.Deposit = (double) recharge.Deposit;
+            if (refound?.Refound_status != null) xxx.UserDto.Refound_status = (int) refound.Refound_status;
             var bike = await _bikeReadRepository.FirstOrDefaultAsync(b => b.User_id == result.Id);
             if (bike == null)
             {
@@ -766,6 +780,63 @@ namespace ASBicycle.User
 
 
             return xxx;
+        }
+
+        public async Task<CertificationOutput> GetUserCertificationStatus([FromUri]UserIdInput userIdInput)
+        {
+            //var recharge_d = await _rechargeDetailReadRepository.GetAllListAsync(t => t.Type == 1 && t.User_id == userIdInput.User_id);
+            var recharge = await _rechargeReadRepository.GetAllListAsync(t => t.User_id == userIdInput.User_id);
+
+            var result = new CertificationOutput();
+            //
+            if (recharge == null || recharge.Count == 0)
+            {
+                result.deposit_status = 1;
+            }
+            else if (recharge[0].Deposit == null || recharge[0].Deposit == 0)
+            {
+                result.deposit_status = 1;
+            }
+            else
+            {
+                result.deposit_status = 2;
+            }
+            var user = await _userReadRepository.GetAllListAsync(t => t.Id == userIdInput.User_id);
+            if (user[0].Id_no.IsNullOrEmpty())
+            {
+                result.identity_status = 1;
+            }
+            else
+            {
+                result.identity_status = 2;
+            }
+            if (result.identity_status > 1)
+            {
+                result.success_status = 2;
+            }
+            else
+            {
+                result.success_status = 1;
+            }
+
+            if (user[0].School_id == null)
+            {
+                var schoollist = await _schoolReadRepository.GetAllListAsync(t => t.Name == "社会");
+                result.deposit = 0;
+                if (schoollist != null && schoollist.Count > 0)
+                {
+                    var o = schoollist[0].Deposit;
+                    if (o != null) result.deposit = (double) o;
+                }
+            }
+            else
+            {
+                var o = user[0].School.Deposit;
+                if (o != null) result.deposit = (double) o;
+            }
+
+            return result;
+            throw new NotImplementedException();
         }
     }
 }
