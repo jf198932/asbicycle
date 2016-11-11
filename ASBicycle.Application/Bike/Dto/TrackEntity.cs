@@ -30,5 +30,7 @@ namespace ASBicycle.Bike.Dto
         public string Lock_pwd { get; set; }
 
         public string Start_gps_point { get; set; }
+
+        public int Free_time { get; set; }
     }
 }

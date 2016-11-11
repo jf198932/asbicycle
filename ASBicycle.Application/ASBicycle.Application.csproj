@@ -138,6 +138,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Recharge\Dto\RechargeInput.cs" />
     <Compile Include="Recharge\Dto\RechargeOutput.cs" />
+    <Compile Include="Recharge\Dto\RefoundInput.cs" />
     <Compile Include="Recharge\IRechargeAppService.cs" />
     <Compile Include="Recharge\RechargeAppService.cs" />
     <Compile Include="School\Dto\SchoolBikeSiteOutput.cs" />

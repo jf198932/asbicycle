@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ASBicycle.Recharge.Dto;
 using ASBicycle.Recharge_detail;
+using ASBicycle.Refound;
 
 namespace ASBicycle.Recharge
 {
@@ -9,12 +10,15 @@ namespace ASBicycle.Recharge
     {
         private readonly IRechargeWriteRepository _rechargeWriteRepository;
         private readonly IRecharge_detailWriteRepository _rechargeDetailWriteRepository;
+        private readonly IRefoundWriteRepository _refoundWriteRepository;
 
         public RechargeAppService(IRechargeWriteRepository rechargeWriteRepository,
-            IRecharge_detailWriteRepository rechargeDetailWriteRepository)
+            IRecharge_detailWriteRepository rechargeDetailWriteRepository,
+            IRefoundWriteRepository refoundWriteRepository)
         {
             _rechargeWriteRepository = rechargeWriteRepository;
             _rechargeDetailWriteRepository = rechargeDetailWriteRepository;
+            _refoundWriteRepository = refoundWriteRepository;
         }
 
         public async Task<RechargeOutput> CreateRecharge(RechargeInput input)
@@ -42,6 +46,19 @@ namespace ASBicycle.Recharge
                 Recharge_type = input.recharge_type,
             });
             return new RechargeOutput {out_trade_no = paydocno};
+        }
+
+        public async Task ApplyRefound(RefoundInput input)
+        {
+            await _refoundWriteRepository.InsertAsync(new Entities.Refound
+            {
+                Created_at = DateTime.Now,
+                Updated_at = DateTime.Now,
+                Refound_status = 1,
+                User_id = input.User_id,
+                Refound_amount = input.Amount
+            });
+            //throw new NotImplementedException();
         }
     }
 }

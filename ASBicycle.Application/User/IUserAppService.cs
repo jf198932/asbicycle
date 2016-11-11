@@ -89,10 +89,25 @@ namespace ASBicycle.User
         [HttpPost]
         Task<UserOutput> UserRegister(RegisterUserInput modelIntput);
 
+
+
         [HttpGet]
         MianzeOutput Mianze();
         [HttpGet]
         MianzeOutput About();
+        [HttpGet]
+        MianzeOutput Smrz();
+        [HttpGet]
+        MianzeOutput Yjxy();
+        [HttpGet]
+        MianzeOutput Smzc();
+        [HttpGet]
+        MianzeOutput Hcjy();
+        [HttpGet]
+        MianzeOutput Cfjs();
+
+
+
         [HttpGet]
         Task<UserOutput> GetUserInfo([FromUri] PhoneNumInput phoneNumInput);
 

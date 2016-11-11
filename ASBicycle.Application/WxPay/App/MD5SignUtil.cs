@@ -18,7 +18,7 @@ namespace ASBicycle.WxPay.App
             }
             signStr = content + "&key=" + key;
 
-            return MD5Util.MD5(signStr).ToUpper();
+            return MD5Util.MD5_utf8(signStr).ToUpper();
 
         }
 

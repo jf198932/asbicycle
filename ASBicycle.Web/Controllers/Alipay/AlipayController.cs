@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Abp.Domain.Uow;
 using Abp.Logging;
 using ASBicycle.AliPay.App;
+using ASBicycle.Recharge;
+using ASBicycle.Recharge_detail;
 using ASBicycle.Track;
 using ASBicycle.Web.Models.Alipay;
 
@@ -15,10 +18,14 @@ namespace ASBicycle.Web.Controllers.Alipay
     public class AlipayController : ASBicycleControllerBase
     {
         private readonly ITrackWriteRepository _trackRepository;
+        private readonly IRecharge_detailWriteRepository _rechargeDetailWriteRepository;
+        private readonly IRechargeWriteRepository _rechargeWriteRepository;
 
-        public AlipayController(ITrackWriteRepository trackRepository)
+        public AlipayController(ITrackWriteRepository trackRepository, IRecharge_detailWriteRepository rechargeDetailWriteRepository, IRechargeWriteRepository rechargeWriteRepository)
         {
             _trackRepository = trackRepository;
+            _rechargeDetailWriteRepository = rechargeDetailWriteRepository;
+            _rechargeWriteRepository = rechargeWriteRepository;
         }
 
         // GET: Alipay
@@ -90,7 +97,7 @@ namespace ASBicycle.Web.Controllers.Alipay
         //    return View();
         //}
         [HttpPost, UnitOfWork]
-        public virtual ActionResult Notify()
+        public virtual async Task<ActionResult> Notify()
         {
             //LogHelper.Logger.Info("进入回调");
 
@@ -135,13 +142,41 @@ namespace ASBicycle.Web.Controllers.Alipay
                             //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                             //如果有做过处理，不执行商户的业务程序
 
-                            var track = _trackRepository.GetAll().FirstOrDefault(t => t.Pay_docno == out_trade_no);
-                            track.Pay_status = 3;
-                            track.Trade_no = trade_no;
-                            track.Pay_method = "支付宝";
-                            track.Payment = double.Parse(Request.Form["total_fee"]);
-                            //LogHelper.Logger.Info(Request.Form["total_fee"]);
-                            _trackRepository.Update(track);
+                            var tracks = await _trackRepository.GetAllListAsync(t => t.Pay_docno == out_trade_no);
+                            if (tracks != null && tracks.Count > 0)
+                            {
+                                var track = tracks.FirstOrDefault();
+                                track.Pay_status = 3;
+                                track.Trade_no = trade_no;
+                                track.Pay_method = "支付宝";
+                                track.Payment = double.Parse(Request.Form["total_fee"]);
+                                //LogHelper.Logger.Info(Request.Form["total_fee"]);
+                                await _trackRepository.UpdateAsync(track);
+                            }
+                            else
+                            {
+                                var recharge_details =
+                                    await
+                                        _rechargeDetailWriteRepository.GetAllListAsync(
+                                            t => t.recharge_docno == out_trade_no);
+                                var recharge_detail = recharge_details.FirstOrDefault();
+                                recharge_detail.Updated_at = DateTime.Now;
+                                recharge_detail.Recharge_method = 1;
+                                recharge_detail.doc_no = trade_no;
+                                recharge_detail.Recharge_amount = double.Parse(Request.Form["total_fee"]);
+
+                                await _rechargeDetailWriteRepository.UpdateAsync(recharge_detail);
+
+                                var recharges = await _rechargeWriteRepository.GetAllListAsync(t => t.User_id == recharge_detail.User_id);
+
+                                var recharge = recharges.FirstOrDefault();
+
+                                recharge.Deposit = recharge_detail.Recharge_amount;
+                                recharge.Updated_at = DateTime.Now;
+
+                                await _rechargeWriteRepository.UpdateAsync(recharge);
+                            }
+                            
                             //注意：
                             //退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
                         }
@@ -153,13 +188,39 @@ namespace ASBicycle.Web.Controllers.Alipay
                             //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                             //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                             //如果有做过处理，不执行商户的业务程序
-                            var track = _trackRepository.GetAll().FirstOrDefault(t => t.Pay_docno == out_trade_no);
-                            track.Pay_status = 3;
-                            track.Trade_no = trade_no;
-                            track.Pay_method = "支付宝";
-                            track.Payment = double.Parse(Request.Form["total_fee"]);
-                            //LogHelper.Logger.Info(Request.Form["total_fee"]);
-                            _trackRepository.Update(track);
+                            var tracks = await _trackRepository.GetAllListAsync(t => t.Pay_docno == out_trade_no);
+                            if (tracks != null && tracks.Count > 0)
+                            {
+                                var track = tracks.FirstOrDefault();
+                                track.Pay_status = 3;
+                                track.Trade_no = trade_no;
+                                track.Pay_method = "支付宝";
+                                track.Payment = double.Parse(Request.Form["total_fee"]);
+                                //LogHelper.Logger.Info(Request.Form["total_fee"]);
+                                await _trackRepository.UpdateAsync(track);
+                            }
+                            else
+                            {
+                                var recharge_details =
+                                    await
+                                        _rechargeDetailWriteRepository.GetAllListAsync(
+                                            t => t.recharge_docno == out_trade_no);
+                                var recharge_detail = recharge_details.FirstOrDefault();
+                                recharge_detail.Updated_at = DateTime.Now;
+                                recharge_detail.Recharge_method = 1;
+                                recharge_detail.doc_no = trade_no;
+                                recharge_detail.Recharge_amount = double.Parse(Request.Form["total_fee"]);
+
+                                await _rechargeDetailWriteRepository.UpdateAsync(recharge_detail);
+
+                                var recharges = await _rechargeWriteRepository.GetAllListAsync(t => t.User_id == recharge_detail.User_id);
+
+                                var recharge = recharges.FirstOrDefault();
+                                recharge.Deposit = recharge_detail.Recharge_amount;
+                                recharge.Updated_at = DateTime.Now;
+
+                                await _rechargeWriteRepository.UpdateAsync(recharge);
+                            }
 
 
                             //注意：

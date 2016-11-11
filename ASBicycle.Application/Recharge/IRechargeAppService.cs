@@ -9,5 +9,8 @@ namespace ASBicycle.Recharge
     {
         [HttpPost]
         Task<RechargeOutput> CreateRecharge(RechargeInput input);
+
+        [HttpPost]
+        Task ApplyRefound(RefoundInput input);
     }
 }

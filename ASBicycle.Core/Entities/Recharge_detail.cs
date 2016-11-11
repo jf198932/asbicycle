@@ -4,6 +4,9 @@ using Abp.Domain.Entities;
 
 namespace ASBicycle.Entities
 {
+    /// <summary>
+    /// 充值退款记录
+    /// </summary>
     [Table("Recharge_detail")]
     public class Recharge_detail : Entity
     {

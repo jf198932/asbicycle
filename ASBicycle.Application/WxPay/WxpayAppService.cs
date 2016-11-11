@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Text;
 using System.Web;
 using System.Xml;
+using Abp.UI;
 using ASBicycle.Common;
 using ASBicycle.Track;
 using ASBicycle.WxPay.App;
@@ -36,7 +37,8 @@ namespace ASBicycle.WxPay
 
             Dictionary<string, string> sPara = new Dictionary<string, string>();
             sPara.Add("appid", WxpayConfig.appId);
-            sPara.Add("body", HttpUtility.UrlEncode(input.body));
+            sPara.Add("body", input.body);
+            //sPara.Add("input_charset", "UTF-8");
             sPara.Add("mch_id", WxpayConfig.mchid);
             sPara.Add("nonce_str", noncestr);
             sPara.Add("notify_url", ConfigurationManager.AppSettings["Wxpay_notify_url"]);
@@ -45,6 +47,7 @@ namespace ASBicycle.WxPay
             //sPara.Add("spbill_create_ip", "192.168.1.69");
             sPara.Add("total_fee", (input.total_fee * 100).ToString());
             sPara.Add("trade_type", "APP");
+            
 
             var wxpayhelper = new WxPayHelper();
 
@@ -54,6 +57,8 @@ namespace ASBicycle.WxPay
 
             var requestXml = CommonUtil.ArrayToXml(sPara);
 
+            //var convertXml = Encoding.GetEncoding("ISO-8859-1").GetString(Encoding.Default.GetBytes(requestXml));
+
             var result = HttpHelper.PostDataToServerForHttps("https://api.mch.weixin.qq.com/pay/unifiedorder", requestXml, HttpWebRequestMethod.POST);
 
             //获取预支付ID
@@ -61,31 +66,39 @@ namespace ASBicycle.WxPay
             xdoc.LoadXml(result);
             XmlNode xn = xdoc.SelectSingleNode("xml");
             XmlNodeList xnl = xn.ChildNodes;
-            if (xnl.Count > 7)
+            if (xnl[0].InnerText != "FAIL")
             {
-                prepayId = xnl[7].InnerText;
-                //package = string.Format("prepay_id={0}", prepayId);
+                if (xnl.Count > 7)
+                {
+                    prepayId = xnl[7].InnerText;
+                    //package = string.Format("prepay_id={0}", prepayId);
+                }
+                Dictionary<string, string> sPara2 = new Dictionary<string, string>();
+                sPara2.Add("appid", WxpayConfig.appId);
+                sPara2.Add("noncestr", noncestr);
+                sPara2.Add("package", WxpayConfig.package);
+                sPara2.Add("partnerid", WxpayConfig.mchid);
+                sPara2.Add("prepayid", prepayId);
+                sPara2.Add("timestamp", timespan);
+
+                var sign2 = wxpayhelper.GetBizSign(sPara2, false);
+
+                var outresult = new WxpayOutput();
+                outresult.appid = WxpayConfig.appId;
+                outresult.noncestr = noncestr;
+                outresult.package = WxpayConfig.package;
+                outresult.partnerid = WxpayConfig.mchid;
+                outresult.prepayid = prepayId;
+                outresult.timestamp = timespan;
+                outresult.sign = sign2;
+
+                return outresult;
             }
-            Dictionary<string, string> sPara2 = new Dictionary<string, string>();
-            sPara2.Add("appid", WxpayConfig.appId);
-            sPara2.Add("noncestr", noncestr);
-            sPara2.Add("package", WxpayConfig.package);
-            sPara2.Add("partnerid", WxpayConfig.mchid);
-            sPara2.Add("prepayid", prepayId);
-            sPara2.Add("timestamp", timespan);
+            else
+            {
+                throw new UserFriendlyException(xnl[1].InnerText);
+            }
 
-            var sign2 = wxpayhelper.GetBizSign(sPara2, false);
-            
-            var outresult = new WxpayOutput();
-            outresult.appid = WxpayConfig.appId;
-            outresult.noncestr = noncestr;
-            outresult.package = WxpayConfig.package;
-            outresult.partnerid = WxpayConfig.mchid;
-            outresult.prepayid = prepayId;
-            outresult.timestamp = timespan;
-            outresult.sign = sign2;
-
-            return outresult;
             //StringBuilder sb = new StringBuilder();
             //sb.Append("<xml>");
             //sb.AppendFormat("<appid>{0}</appid>", WxpayConfig.appId);

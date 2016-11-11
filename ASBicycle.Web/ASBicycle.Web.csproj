@@ -2072,6 +2072,8 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Image\share_icon_logo_normal.png" />
+    <Content Include="Image\share_icon_school_normal.png" />
     <Content Include="Localization\ASBicycle\ASBicycle-zh-CN.xml" />
     <Content Include="Localization\ASBicycle\ASBicycle.xml" />
     <Content Include="App\Main\main.less" />
@@ -2381,6 +2383,7 @@
     <Compile Include="Controllers\Alipay\AlipayController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ASBicycleControllerBase.cs" />
+    <Compile Include="Controllers\Share\ShareController.cs" />
     <Compile Include="Controllers\Weixin\WxpayController.cs" />
     <Compile Include="Extension\DynamicLambda.cs" />
     <Compile Include="Extension\HtmlHelperExtend.cs" />
@@ -2397,6 +2400,7 @@
     <Compile Include="Models\Common\KeyValueAttribute.cs" />
     <Compile Include="Models\Common\KeyValueModel.cs" />
     <Compile Include="Models\Common\SideBarMenuModel.cs" />
+    <Compile Include="Models\Share\ShareModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\ASBicycleWebViewPageBase.cs" />
   </ItemGroup>
@@ -2411,6 +2415,7 @@
     <Content Include="Views\Alipay\Notify.cshtml" />
     <Content Include="Views\Alipay\Return.cshtml" />
     <Content Include="Views\Wxpay\Notify.cshtml" />
+    <Content Include="Views\Share\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

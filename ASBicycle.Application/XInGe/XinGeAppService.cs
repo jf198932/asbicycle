@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using PushNotifications;
 using PushNotifications.Schema;
@@ -33,9 +34,10 @@ namespace ASBicycle.XInGe
             pc.PushSingleAccountAsync(account, an);
         }
 
-        public void SendIos(string account)
+        public string SendIos(string account)
         {
-            throw new System.NotImplementedException();
+            return Encoding.GetEncoding("utf-8").GetString(Encoding.Unicode.GetBytes("中阿打算"));
+            return "的是否敢";
         }
     }
 }

@@ -9,6 +9,6 @@ namespace ASBicycle.XInGe
         [HttpGet]
         void SendAndroid(string account);
         [HttpGet]
-        void SendIos(string account);
+        string SendIos(string account);
     }
 }

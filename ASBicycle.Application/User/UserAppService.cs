@@ -105,6 +105,10 @@ namespace ASBicycle.User
                     await _userRepository.UpdateAsync(result);
                     
                     var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
+                    var recharge = result.Recharges.FirstOrDefault();
+                    var refound = result.Refounds.OrderByDescending(t => t.Created_at).FirstOrDefault();
+                    if (recharge?.Deposit != null) xxx.UserDto.Deposit = (double)recharge.Deposit;
+                    if (refound?.Refound_status != null) xxx.UserDto.Refound_status = (int)refound.Refound_status;
                     var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.User_id == result.Id);
                     if (bike == null)
                     {
@@ -475,6 +479,10 @@ namespace ASBicycle.User
                 result = await _userRepository.UpdateAsync(result);
 
                 var xxx = new UserOutput {UserDto = Mapper.Map<UserDto>(result)};
+                var recharge = result.Recharges.FirstOrDefault();
+                var refound = result.Refounds.OrderByDescending(t => t.Created_at).FirstOrDefault();
+                if (recharge?.Deposit != null) xxx.UserDto.Deposit = (double)recharge.Deposit;
+                if (refound?.Refound_status != null) xxx.UserDto.Refound_status = (int)refound.Refound_status;
                 var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.User_id == result.Id);
                 if (bike == null)
                 {
@@ -575,6 +583,31 @@ namespace ASBicycle.User
         public MianzeOutput About()
         {
             return new MianzeOutput { Url = "https://api.isriding.com/app/Uploads/about.html" };
+        }
+
+        public MianzeOutput Smrz()
+        {
+            return new MianzeOutput { Url = "https://api.isriding.com/app/Uploads/shimingrenzheng.html" };
+        }
+
+        public MianzeOutput Yjxy()
+        {
+            return new MianzeOutput { Url = "https://api.isriding.com/app/Uploads/yajinxieyi.html" };
+        }
+
+        public MianzeOutput Smzc()
+        {
+            return new MianzeOutput { Url = "https://api.isriding.com/app/Uploads/saomazuche.html" };
+        }
+
+        public MianzeOutput Hcjy()
+        {
+            return new MianzeOutput { Url = "https://api.isriding.com/app/Uploads/huanchejianyi.html" };
+        }
+
+        public MianzeOutput Cfjs()
+        {
+            return new MianzeOutput { Url = "https://api.isriding.com/app/Uploads/chefeijisuan.html" };
         }
 
         [HttpGet]

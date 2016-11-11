@@ -342,10 +342,10 @@ namespace ASBicycle.Bike
             {
                 throw new UserFriendlyException("车辆编号错误或该车不可租");
             }
-            if (bike.Bike_status == 0)
-            {
-                throw new UserFriendlyException("该车辆出租中");
-            }
+            //if (bike.Bike_status == 0)
+            //{
+            //    throw new UserFriendlyException("该车辆出租中");
+            //}
 
             if (bike.Bike_status == 0)
             {
@@ -461,7 +461,9 @@ namespace ASBicycle.Bike
             
             StringBuilder sb = new StringBuilder();
             sb.Append(
-                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name,c.time_charge");
+                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id" +
+                ",a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,d.`name` as end_site_name" +
+                ",a.start_point, c.`name` as school_name,c.time_charge, c.free_time");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
@@ -490,7 +492,7 @@ namespace ASBicycle.Bike
 
             var ctm = (int)costtime.TotalMinutes;//去掉多余的零头
             output.rental_time = ctm;
-            if (ctm < 1)
+            if (ctm < tracktemp.Free_time)
             {
                 output.allpay = "0";
                 track.Should_pay = 0;
@@ -557,7 +559,9 @@ namespace ASBicycle.Bike
 
             StringBuilder sb = new StringBuilder();
             sb.Append(
-                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name,c.time_charge");
+                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id" +
+                ",a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,d.`name` as end_site_name" +
+                ",a.start_point, c.`name` as school_name,c.time_charge, c.free_time");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
@@ -586,7 +590,7 @@ namespace ASBicycle.Bike
 
             var ctm = (int)costtime.TotalMinutes;//去掉多余的零头
             output.rental_time = ctm;
-            if (ctm < 1)
+            if (ctm < tracktemp.Free_time)
             {
                 output.allpay = "0";
                 track.Should_pay = 0;
