@@ -108,7 +108,18 @@ namespace ASBicycle.User
                     var recharge = result.Recharges.FirstOrDefault();
                     var refound = result.Refounds.OrderByDescending(t => t.Created_at).FirstOrDefault();
                     if (recharge?.Deposit != null) xxx.UserDto.Deposit = (double)recharge.Deposit;
-                    if (refound?.Refound_status != null) xxx.UserDto.Refound_status = (int)refound.Refound_status;
+                    if (refound?.Refound_status != null)
+                    {
+                        if (xxx.UserDto.Deposit > 0 && (int) refound.Refound_status == 4)//退款后又充值了押金
+                        {
+                            xxx.UserDto.Refound_status = 0;
+                        }
+                        else
+                        {
+                            xxx.UserDto.Refound_status = (int)refound.Refound_status;
+                        }
+                        
+                    }
                     var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.User_id == result.Id);
                     if (bike == null)
                     {
@@ -482,7 +493,18 @@ namespace ASBicycle.User
                 var recharge = result.Recharges.FirstOrDefault();
                 var refound = result.Refounds.OrderByDescending(t => t.Created_at).FirstOrDefault();
                 if (recharge?.Deposit != null) xxx.UserDto.Deposit = (double)recharge.Deposit;
-                if (refound?.Refound_status != null) xxx.UserDto.Refound_status = (int)refound.Refound_status;
+                if (refound?.Refound_status != null)
+                {
+                    if (xxx.UserDto.Deposit > 0 && (int)refound.Refound_status == 4)//退款后又充值了押金
+                    {
+                        xxx.UserDto.Refound_status = 0;
+                    }
+                    else
+                    {
+                        xxx.UserDto.Refound_status = (int)refound.Refound_status;
+                    }
+
+                }
                 var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.User_id == result.Id);
                 if (bike == null)
                 {
@@ -623,7 +645,18 @@ namespace ASBicycle.User
             var recharge = result.Recharges.FirstOrDefault();
             var refound = result.Refounds.OrderByDescending(t => t.Created_at).FirstOrDefault();
             if (recharge?.Deposit != null) xxx.UserDto.Deposit = (double) recharge.Deposit;
-            if (refound?.Refound_status != null) xxx.UserDto.Refound_status = (int) refound.Refound_status;
+            if (refound?.Refound_status != null)
+            {
+                if (xxx.UserDto.Deposit > 0 && (int)refound.Refound_status == 4)//退款后又充值了押金
+                {
+                    xxx.UserDto.Refound_status = 0;
+                }
+                else
+                {
+                    xxx.UserDto.Refound_status = (int)refound.Refound_status;
+                }
+
+            }
             var bike = await _bikeReadRepository.FirstOrDefaultAsync(b => b.User_id == result.Id);
             if (bike == null)
             {

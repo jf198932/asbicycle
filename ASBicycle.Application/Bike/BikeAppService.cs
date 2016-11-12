@@ -704,8 +704,17 @@ namespace ASBicycle.Bike
             TimeSpan costtime = DateTime.Parse(track.End_time.ToString()) - DateTime.Parse(track.Start_time.ToString());
 
             var ctm = (int)costtime.TotalMinutes;//去掉多余的零头
+
+            if (ctm < track.Free_time)
+            {
+                output.allpay = "0";
+            }
+            else
+            {
+                output.allpay = track.Payment == null ? (ctm * track.time_charge / 100.00).ToString() : track.Payment.ToString();//分转元
+            }
+
             output.rental_time = ctm;
-            output.allpay = track.Payment == null ? (ctm * track.time_charge / 100.00).ToString() : track.Payment.ToString();//分转元
 
             return output;
         }
