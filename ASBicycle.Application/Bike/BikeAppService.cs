@@ -299,7 +299,9 @@ namespace ASBicycle.Bike
             
             StringBuilder sb = new StringBuilder();
             sb.Append(
-                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.should_pay,a.pay_docno,a.remark,b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name,c.time_charge");
+                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time" +
+                ",a.payment,a.pay_status,a.pay_method,a.should_pay,a.pay_docno,a.remark" +
+                ",b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name,c.time_charge, c.free_time");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
@@ -327,8 +329,15 @@ namespace ASBicycle.Bike
 
             var ctm = (int)costtime.TotalMinutes;//去掉多余的零头
             output.rental_time = ctm;
-            output.allpay = (ctm * track.time_charge / 100.00).ToString();//分转元
 
+            if (ctm < track.Free_time)
+            {
+                output.allpay = "0";
+            }
+            else
+            {
+                output.allpay = ((ctm - track.Free_time) * track.time_charge / 100.00).ToString();//分转元
+            }
             return output;
         }
 
@@ -463,7 +472,7 @@ namespace ASBicycle.Bike
             sb.Append(
                 "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id" +
                 ",a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,d.`name` as end_site_name" +
-                ",a.start_point, c.`name` as school_name,c.time_charge, c.free_time");
+                ",a.start_point, c.`name` as school_name,c.time_charge, e.Lock_pwd, c.free_time");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
@@ -499,8 +508,8 @@ namespace ASBicycle.Bike
             }
             else
             {
-                output.allpay = (ctm * tracktemp.time_charge / 100.00).ToString();//分转元
-                track.Should_pay = ctm * tracktemp.time_charge / 100.00;//分转元
+                output.allpay = ((ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00).ToString();//分转元
+                track.Should_pay = (ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00;//分转元
             }
             await _trackRepository.UpdateAsync(track);
             return output;
@@ -597,8 +606,8 @@ namespace ASBicycle.Bike
             }
             else
             {
-                output.allpay = (ctm * tracktemp.time_charge / 100.00).ToString();//分转元
-                track.Should_pay = ctm * tracktemp.time_charge / 100.00;//分转元
+                output.allpay = ((ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00).ToString();//分转元
+                track.Should_pay = (ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00;//分转元
             }
             await _trackRepository.UpdateAsync(track);
             return output;
@@ -608,7 +617,10 @@ namespace ASBicycle.Bike
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(
-                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.should_pay,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,b.gps_point as start_gps_point,d.`name` as end_site_name,a.start_point,b.school_id,c.`name` as school_name,c.time_charge,e.Lock_pwd");
+                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id" +
+                ",a.start_time,a.end_time,a.payment,a.should_pay,a.pay_status,a.pay_method,a.pay_docno,a.remark" +
+                ",b.`name` as start_site_name,b.gps_point as start_gps_point,d.`name` as end_site_name,a.start_point,b.school_id,c.`name` as school_name" +
+                ",c.time_charge,e.Lock_pwd, c.free_time");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
@@ -678,7 +690,10 @@ namespace ASBicycle.Bike
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(
-                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.should_pay,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name,c.time_charge");
+                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id" +
+                ",a.start_time,a.end_time,a.payment,a.should_pay,a.pay_status,a.pay_method,a.pay_docno,a.remark" +
+                ",b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name" +
+                ",c.time_charge,e.Lock_pwd, c.free_time");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
@@ -699,6 +714,7 @@ namespace ASBicycle.Bike
             output.end_time = track.End_time.ToString();
             output.school_name = track.School_name;
             output.remark = track.Remark;
+            output.pay_method = track.Pay_method;
 
 
             TimeSpan costtime = DateTime.Parse(track.End_time.ToString()) - DateTime.Parse(track.Start_time.ToString());
@@ -711,7 +727,7 @@ namespace ASBicycle.Bike
             }
             else
             {
-                output.allpay = track.Payment == null ? (ctm * track.time_charge / 100.00).ToString() : track.Payment.ToString();//分转元
+                output.allpay = track.Payment == null ? ((ctm - track.Free_time) * track.time_charge / 100.00).ToString() : track.Payment.ToString();//分转元
             }
 
             output.rental_time = ctm;
