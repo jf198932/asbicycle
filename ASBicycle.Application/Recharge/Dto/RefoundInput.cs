@@ -6,5 +6,6 @@ namespace ASBicycle.Recharge.Dto
     {
         public int User_id { get; set; }
         public double Amount { get; set; }
+        public int Recharge_type { get; set; }
     }
 }

@@ -343,13 +343,12 @@ namespace ASBicycle.Bike
 
         public async Task<RentalBikeOutput> RentalBiketemp(RentalBikeInput input)
         {
-            var bike =
-                await
+            var bike =await
                     _bikeRepository.FirstOrDefaultAsync(
                         t => t.Ble_name == input.Ble_name && t.rent_type == 1 && t.Ble_type == 4);
             if (bike == null)
             {
-                throw new UserFriendlyException("车辆编号错误或该车不可租");
+                throw new UserFriendlyException("没有该车辆或该车不可租!");
             }
             //if (bike.Bike_status == 0)
             //{
@@ -358,8 +357,13 @@ namespace ASBicycle.Bike
 
             if (bike.Bike_status == 0)
             {
-                throw new UserFriendlyException("请先把租赁的自行车归还，再进行租车!");
+                throw new UserFriendlyException("被租赁中!");
             }
+            //var track = await _trackRepository.FirstOrDefaultAsync(t => t.User_id == input.user_id && t.Pay_status < 3);
+            //if (track != null)
+            //{
+            //    throw new UserFriendlyException("请先把租赁的自行车归还或者结算，再进行租车!");
+            //}
             var gpsinput = input.gps_point.Split(',');
             var ip_lon = double.Parse(gpsinput[0]);
             var ip_lat = double.Parse(gpsinput[1]);
@@ -756,7 +760,7 @@ namespace ASBicycle.Bike
             return result;
         }
 
-        public async Task<CanRentalOutput> CanReantalBike(RentalBikeInput input)
+        public async Task<CanRentalOutput> CanReantalBike([FromUri]RentalBikeInput input)
         {
             var bike =
                 await

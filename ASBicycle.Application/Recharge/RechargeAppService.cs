@@ -58,6 +58,16 @@ namespace ASBicycle.Recharge
                 User_id = input.User_id,
                 Refound_amount = input.Amount
             });
+            //var paydocno = DateTime.Now.ToString("yyyyMMddHHmmss") + new Random().Next(1000, 9999);
+            //await _rechargeDetailWriteRepository.InsertAsync(new Entities.Recharge_detail
+            //{
+            //    Created_at = DateTime.Now,
+            //    Updated_at = DateTime.Now,
+            //    User_id = input.User_id,
+            //    recharge_docno = paydocno,
+            //    Type = 2,
+            //    Recharge_type = input.Recharge_type,
+            //});
             //throw new NotImplementedException();
         }
     }

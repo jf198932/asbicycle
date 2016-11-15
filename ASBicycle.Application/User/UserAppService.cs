@@ -39,6 +39,7 @@ namespace ASBicycle.User
         private readonly ILogReadRepository _logReadRepository;
 
         private readonly ISchoolReadRepository _schoolReadRepository;
+        private readonly ISchoolWriteRepository _schoolWriteRepository;
         private readonly IRechargeReadRepository _rechargeReadRepository;
 
         public UserAppService(ICacheManager cacheManager
@@ -52,6 +53,7 @@ namespace ASBicycle.User
             , ISqlReadExecuter sqlReadExecuter
             , ILogReadRepository logReadRepository
             , ISchoolReadRepository schoolReadRepository
+            , ISchoolWriteRepository schoolWriteRepository
             , IRechargeReadRepository rechargeReadRepository
             )
         {
@@ -68,6 +70,7 @@ namespace ASBicycle.User
             _logReadRepository = logReadRepository;
 
             _schoolReadRepository = schoolReadRepository;
+            _schoolWriteRepository = schoolWriteRepository;
             _rechargeReadRepository = rechargeReadRepository;
         }
 
@@ -223,7 +226,9 @@ namespace ASBicycle.User
                 //非校园用户，传身份证，属于认证通过
                 if (userInput.User_type == 0 && !userInput.Id_no.IsNullOrEmpty())
                 {
+                    var school = await _schoolWriteRepository.FirstOrDefaultAsync(t => t.Name == "社会");
                     user.Certification = 3; //认证通过
+                    user.School_id = school == null ? 0 : school.Id;
                 }
             }
             //user.Email = userInput.Email;
