@@ -652,7 +652,7 @@ namespace ASBicycle.User
             if (recharge?.Deposit != null) xxx.UserDto.Deposit = (double) recharge.Deposit;
             if (refound?.Refound_status != null)
             {
-                if (xxx.UserDto.Deposit > 0 && (int)refound.Refound_status == 4)//退款后又充值了押金
+                if (xxx.UserDto.Deposit > 0 && refound.Refound_status == 4)//退款后又充值了押金
                 {
                     xxx.UserDto.Refound_status = 0;
                 }

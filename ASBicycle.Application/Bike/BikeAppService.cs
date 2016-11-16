@@ -396,7 +396,7 @@ namespace ASBicycle.Bike
             var startdate = DateTime.Now;
             //pay_status 1  租车未还车
             var sqlstr =
-                "insert into track(bike_id,user_id,created_at,updated_at,start_site_id,start_point,start_time,pay_docno,pay_status) values(" + bike.Id + "," + input.user_id + ",'" + startdate + "','" + startdate + "'," + bsite.Id + ",'" + input.gps_point + "','" + startdate + "','" + paydocno + "',1)";
+                "insert into track(bike_id,user_id,created_at,updated_at,start_site_id,start_point,start_time,pay_docno,pay_status) values(" + bike.Id + "," + input.user_id + ",'" + startdate.ToString("yyyy/MM/dd HH:mm:ss") + "','" + startdate.ToString("yyyy/MM/dd HH:mm:ss") + "'," + bsite.Id + ",'" + input.gps_point + "','" + startdate.ToString("yyyy/MM/dd HH:mm:ss") + "','" + paydocno + "',1)";
             await _sqlExecuter.ExecuteAsync(sqlstr);
 
             

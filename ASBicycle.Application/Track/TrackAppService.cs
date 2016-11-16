@@ -31,12 +31,12 @@ namespace ASBicycle.Track
 
         public async Task<List<TrackOutput>> GetAllTrack([FromUri]TrackInput trackInput)
         {
-            var user =
-                await
-                    _userReadRepository.FirstOrDefaultAsync(
-                        u => u.Id == trackInput.User_id);
-            if (user == null)
-                throw new UserFriendlyException("请先登录");
+            //var user =
+            //    await
+            //        _userReadRepository.FirstOrDefaultAsync(
+            //            u => u.Id == trackInput.User_id);
+            //if (user == null)
+            //    throw new UserFriendlyException("请先登录");
             var track = _trackReadRepository.GetAll()
                 .Where(t => t.User_id == trackInput.User_id)
                 .OrderByDescending(t=>t.Start_time)
