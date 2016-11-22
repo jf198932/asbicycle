@@ -150,6 +150,7 @@ namespace ASBicycle.Web.Controllers.Alipay
                                 track.Trade_no = trade_no;
                                 track.Pay_method = "支付宝";
                                 track.Payment = double.Parse(Request.Form["total_fee"]);
+                                track.Updated_at = DateTime.Now;
                                 //LogHelper.Logger.Info(Request.Form["total_fee"]);
                                 await _trackRepository.UpdateAsync(track);
                             }
@@ -195,6 +196,7 @@ namespace ASBicycle.Web.Controllers.Alipay
                                 track.Pay_status = 3;
                                 track.Trade_no = trade_no;
                                 track.Pay_method = "支付宝";
+                                track.Updated_at = DateTime.Now;
                                 track.Payment = double.Parse(Request.Form["total_fee"]);
                                 //LogHelper.Logger.Info(Request.Form["total_fee"]);
                                 await _trackRepository.UpdateAsync(track);

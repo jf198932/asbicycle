@@ -154,6 +154,7 @@
     <Compile Include="Track\TrackAppService.cs" />
     <Compile Include="User\Dto\CertificationOutput .cs" />
     <Compile Include="User\Dto\CheckCodeOutput.cs" />
+    <Compile Include="User\Dto\DescriptionOutput.cs" />
     <Compile Include="User\Dto\MianzeOutput.cs" />
     <Compile Include="User\Dto\PhoneNumInput.cs" />
     <Compile Include="User\Dto\CheckLoginInput.cs" />

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Abp.Application.Services;
 using ASBicycle.Bike.Dto;
@@ -122,5 +123,8 @@ namespace ASBicycle.User
 
         [HttpGet]
         Task<CertificationOutput> GetUserCertificationStatus([FromUri] UserIdInput userIdInput);
+
+        [HttpGet]
+        List<DescriptionOutput> GetDescriptionList();
     }
 }

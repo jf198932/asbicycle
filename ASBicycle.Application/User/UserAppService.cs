@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace ASBicycle.User
         private readonly IUserReadRepository _userReadRepository;
         private readonly IBikeReadRepository _bikeReadRepository;
         private readonly ISqlReadExecuter _sqlReadExecuter;
-        private readonly ILogReadRepository _logReadRepository;
+        private readonly IRecharge_detailReadRepository _rechargeDetailReadRepository;
 
         private readonly ISchoolReadRepository _schoolReadRepository;
         private readonly ISchoolWriteRepository _schoolWriteRepository;
@@ -51,7 +52,7 @@ namespace ASBicycle.User
             , IUserReadRepository userReadRepository
             , IBikeReadRepository bikeReadRepository
             , ISqlReadExecuter sqlReadExecuter
-            , ILogReadRepository logReadRepository
+            , IRecharge_detailReadRepository rechargeDetailReadRepository
             , ISchoolReadRepository schoolReadRepository
             , ISchoolWriteRepository schoolWriteRepository
             , IRechargeReadRepository rechargeReadRepository
@@ -67,7 +68,7 @@ namespace ASBicycle.User
             _userReadRepository = userReadRepository;
             _bikeReadRepository = bikeReadRepository;
             _sqlReadExecuter = sqlReadExecuter;
-            _logReadRepository = logReadRepository;
+            _rechargeDetailReadRepository = rechargeDetailReadRepository;
 
             _schoolReadRepository = schoolReadRepository;
             _schoolWriteRepository = schoolWriteRepository;
@@ -109,19 +110,17 @@ namespace ASBicycle.User
                     
                     var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
                     var recharge = result.Recharges.FirstOrDefault();
-                    var refound = result.Refounds.OrderByDescending(t => t.Created_at).FirstOrDefault();
+                    var refound =
+                        _rechargeDetailReadRepository.GetAllList(
+                            t => t.status == 1 && t.Type == 1 && t.Recharge_type == 1 && t.User_id == result.Id);
                     if (recharge?.Deposit != null) xxx.UserDto.Deposit = (double)recharge.Deposit;
-                    if (refound?.Refound_status != null)
+                    if (refound != null && refound.Count > 0)
                     {
-                        if (xxx.UserDto.Deposit > 0 && (int) refound.Refound_status == 4)//退款后又充值了押金
-                        {
-                            xxx.UserDto.Refound_status = 0;
-                        }
-                        else
-                        {
-                            xxx.UserDto.Refound_status = (int)refound.Refound_status;
-                        }
-                        
+                        xxx.UserDto.Refound_status = 1;
+                    }
+                    else
+                    {
+                        xxx.UserDto.Refound_status = 0;
                     }
                     var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.User_id == result.Id);
                     if (bike == null)
@@ -496,19 +495,17 @@ namespace ASBicycle.User
 
                 var xxx = new UserOutput {UserDto = Mapper.Map<UserDto>(result)};
                 var recharge = result.Recharges.FirstOrDefault();
-                var refound = result.Refounds.OrderByDescending(t => t.Created_at).FirstOrDefault();
+                var refound =
+                    _rechargeDetailReadRepository.GetAllList(
+                        t => t.status == 1 && t.Type == 1 && t.Recharge_type == 1 && t.User_id == result.Id);
                 if (recharge?.Deposit != null) xxx.UserDto.Deposit = (double)recharge.Deposit;
-                if (refound?.Refound_status != null)
+                if (refound != null && refound.Count > 0)
                 {
-                    if (xxx.UserDto.Deposit > 0 && (int)refound.Refound_status == 4)//退款后又充值了押金
-                    {
-                        xxx.UserDto.Refound_status = 0;
-                    }
-                    else
-                    {
-                        xxx.UserDto.Refound_status = (int)refound.Refound_status;
-                    }
-
+                    xxx.UserDto.Refound_status = 1;
+                }
+                else
+                {
+                    xxx.UserDto.Refound_status = 0;
                 }
                 var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.User_id == result.Id);
                 if (bike == null)
@@ -648,19 +645,17 @@ namespace ASBicycle.User
 
             var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
             var recharge = result.Recharges.FirstOrDefault();
-            var refound = result.Refounds.OrderByDescending(t => t.Created_at).FirstOrDefault();
-            if (recharge?.Deposit != null) xxx.UserDto.Deposit = (double) recharge.Deposit;
-            if (refound?.Refound_status != null)
+            var refound =
+                _rechargeDetailReadRepository.GetAllList(
+                    t => t.status == 1 && t.Type == 1 && t.Recharge_type == 1 && t.User_id == result.Id);
+            if (recharge?.Deposit != null) xxx.UserDto.Deposit = (double)recharge.Deposit;
+            if (refound != null && refound.Count > 0)
             {
-                if (xxx.UserDto.Deposit > 0 && refound.Refound_status == 4)//退款后又充值了押金
-                {
-                    xxx.UserDto.Refound_status = 0;
-                }
-                else
-                {
-                    xxx.UserDto.Refound_status = (int)refound.Refound_status;
-                }
-
+                xxx.UserDto.Refound_status = 1;
+            }
+            else
+            {
+                xxx.UserDto.Refound_status = 0;
             }
             var bike = await _bikeReadRepository.FirstOrDefaultAsync(b => b.User_id == result.Id);
             if (bike == null)
@@ -908,6 +903,18 @@ namespace ASBicycle.User
 
             return result;
             throw new NotImplementedException();
+        }
+
+        public List<DescriptionOutput> GetDescriptionList()
+        {
+            var list = new List<DescriptionOutput>();
+            list.Add(new DescriptionOutput {name = "如何认证", url= "https://api.isriding.com/app/Uploads/shimingrenzheng.html" });
+            list.Add(new DescriptionOutput { name = "押金使用说明", url = "https://api.isriding.com/app/Uploads/yajinxieyi.html" });
+            list.Add(new DescriptionOutput { name = "如何租车", url = "https://api.isriding.com/app/Uploads/saomazuche.html" });
+            list.Add(new DescriptionOutput { name = "如何还车", url = "https://api.isriding.com/app/Uploads/huanchejianyi.html" });
+            list.Add(new DescriptionOutput { name = "计费于结算", url = "https://api.isriding.com/app/Uploads/chefeijisuan.html" });
+            list.Add(new DescriptionOutput { name = "用户注册协议", url = "https://api.isriding.com/app/Uploads/mianze.html" });
+            return list;
         }
     }
 }

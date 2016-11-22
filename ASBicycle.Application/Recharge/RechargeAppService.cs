@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Abp.UI;
 using ASBicycle.Recharge.Dto;
 using ASBicycle.Recharge_detail;
 using ASBicycle.Refound;
@@ -50,14 +52,45 @@ namespace ASBicycle.Recharge
 
         public async Task ApplyRefound(RefoundInput input)
         {
-            await _refoundWriteRepository.InsertAsync(new Entities.Refound
+            //var refound = await _refoundWriteRepository.FirstOrDefaultAsync(t => t.User_id == input.User_id);
+            //if (refound != null)
+            //{
+            //    refound.Refound_status = 1;
+            //    refound.Updated_at = DateTime.Now;
+            //    await _refoundWriteRepository.UpdateAsync(refound);
+            //}
+            //else
+            //{
+            //    await _refoundWriteRepository.InsertAsync(new Entities.Refound
+            //    {
+            //        Created_at = DateTime.Now,
+            //        Updated_at = DateTime.Now,
+            //        Refound_status = 1,
+            //        User_id = input.User_id,
+            //        Refound_amount = input.Amount
+            //    });
+            //}
+
+            var details =
+                await
+                    _rechargeDetailWriteRepository.GetAllListAsync(
+                        t => t.User_id == input.User_id && t.Type == 1 && t.Recharge_type == input.Recharge_type && t.status == 0);
+
+
+            foreach (var rechargeDetail in details)
             {
-                Created_at = DateTime.Now,
-                Updated_at = DateTime.Now,
-                Refound_status = 1,
-                User_id = input.User_id,
-                Refound_amount = input.Amount
-            });
+                if (rechargeDetail == null)
+                {
+                    throw new UserFriendlyException("没有可退款的订单");
+                }
+                if (rechargeDetail.Recharge_type == 1)
+                {
+                    rechargeDetail.status = 1;
+                    rechargeDetail.Updated_at = DateTime.Now;
+                    await _rechargeDetailWriteRepository.UpdateAsync(rechargeDetail);
+                }
+            }
+            
             //var paydocno = DateTime.Now.ToString("yyyyMMddHHmmss") + new Random().Next(1000, 9999);
             //await _rechargeDetailWriteRepository.InsertAsync(new Entities.Recharge_detail
             //{

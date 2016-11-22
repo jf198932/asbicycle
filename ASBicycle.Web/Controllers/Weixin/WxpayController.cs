@@ -51,6 +51,7 @@ namespace ASBicycle.Web.Controllers.Weixin
                     track.Pay_status = 3;
                     track.Trade_no = xnl[15].InnerText;
                     track.Pay_method = "微信";
+                    track.Updated_at = DateTime.Now;
                     track.Payment = double.Parse(total_fee)/100;
                     //LogHelper.Logger.Info(Request.Form["total_fee"]);
                     await _trackRepository.UpdateAsync(track);

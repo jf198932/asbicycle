@@ -36,6 +36,10 @@ namespace ASBicycle.Entities
         /// 支付宝/微信/银联充值单号
         /// </summary>
         public string doc_no { get; set; }
+        /// <summary>
+        /// 0正常 1：申请退款  2退款成功
+        /// </summary>
+        public int? status { get; set; }
 
         [ForeignKey("User_id")]
         public virtual User User { get; set; }
