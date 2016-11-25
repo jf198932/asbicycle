@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace ASBicycle.Common
@@ -412,6 +413,57 @@ namespace ASBicycle.Common
                 throw ex;
             }
             return str2;
+        }
+
+        /// <summary>
+        /// 向服务器提交XML数据(https调用，加入Tls协议)
+        /// 
+        /// </summary>
+        /// <param name="url">远程访问的地址</param><param name="data">参数</param><param name="method">Http页面请求方法</param>
+        /// <param name="cer">证书</param>
+        /// <param name="securityProtocolType">Schannel安全协议类型，默认为tls</param>
+        /// <returns>
+        /// 远程页面调用结果
+        /// </returns>
+        public static string PostDataToServerForHttps(string url, string data, HttpWebRequestMethod method, X509Certificate cer, SecurityProtocolType securityProtocolType = SecurityProtocolType.Tls, int timeout = 10000)
+        {
+            try
+            {
+                string str = string.Empty;
+                HttpWebRequest httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
+                httpWebRequest.Timeout = timeout;
+                httpWebRequest.ClientCertificates.Add(cer);
+                httpWebRequest.Proxy = (IWebProxy)null;
+                ServicePointManager.SecurityProtocol = securityProtocolType;
+                switch (method)
+                {
+                    case HttpWebRequestMethod.GET:
+                        httpWebRequest.Method = ((object)HttpWebRequestMethod.GET).ToString();
+                        break;
+                    case HttpWebRequestMethod.POST:
+                        httpWebRequest.Method = ((object)HttpWebRequestMethod.POST).ToString();
+                        byte[] bytes = Encoding.UTF8.GetBytes(data);
+                        httpWebRequest.ContentType = "application/xml;charset=utf-8";
+                        httpWebRequest.ContentLength = (long)bytes.Length;
+                        Stream requestStream = ((WebRequest)httpWebRequest).GetRequestStream();
+                        requestStream.Write(bytes, 0, bytes.Length);
+                        requestStream.Close();
+                        break;
+                }
+                using (HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse())
+                {
+                    using (Stream responseStream = httpWebResponse.GetResponseStream())
+                    {
+                        using (StreamReader streamReader = new StreamReader(responseStream))
+                            str = streamReader.ReadToEnd();
+                    }
+                }
+                return str;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 

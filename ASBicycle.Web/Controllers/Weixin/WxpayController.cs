@@ -41,6 +41,7 @@ namespace ASBicycle.Web.Controllers.Weixin
             
             if (xnl[9].InnerText == "SUCCESS")
             {
+                //LogHelper.Logger.Info(xnl[12].InnerText);2016 11 25 14 14 40
                 var out_trade_no = xnl[8].InnerText;
                 var total_fee = xnl[13].InnerText;
 
@@ -53,6 +54,7 @@ namespace ASBicycle.Web.Controllers.Weixin
                     track.Pay_method = "微信";
                     track.Updated_at = DateTime.Now;
                     track.Payment = double.Parse(total_fee)/100;
+                    track.Pay_time = DateTime.ParseExact(xnl[12].InnerText, "yyyyMMddHHmmss", System.Globalization.CultureInfo.CurrentCulture);
                     //LogHelper.Logger.Info(Request.Form["total_fee"]);
                     await _trackRepository.UpdateAsync(track);
                 }

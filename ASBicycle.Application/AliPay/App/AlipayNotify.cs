@@ -74,7 +74,7 @@ namespace ASBicycle.AliPay.App
         /// <param name="inputPara">通知返回参数数组</param>
         /// <param name="sign">对比的签名结果</param>
         /// <returns>签名验证结果</returns>
-        public bool GetSignVeryfy(Dictionary<string, string> inputPara, string sign)
+        public bool GetSignVeryfy(SortedDictionary<string, string> inputPara, string sign)
         {
             Dictionary<string, string> sPara = new Dictionary<string, string>();
 

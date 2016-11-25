@@ -32,6 +32,9 @@ namespace ASBicycle.User.Dto
         public bool IsBindBike { get; set; }
 
         public double Deposit { get; set; }
+        /// <summary>
+        /// 1:退款中 0 正常
+        /// </summary>
         public int Refound_status { get; set; }
     }
 }

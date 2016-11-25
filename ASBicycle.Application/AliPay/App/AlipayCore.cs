@@ -28,7 +28,7 @@ namespace ASBicycle.AliPay.App
         /// </summary>
         /// <param name="dicArrayPre">过滤前的参数组</param>
         /// <returns>过滤后的参数组</returns>
-        public static Dictionary<string, string> FilterPara(Dictionary<string, string> dicArrayPre)
+        public static Dictionary<string, string> FilterPara(SortedDictionary<string, string> dicArrayPre)
         {
             Dictionary<string, string> dicArray = new Dictionary<string, string>();
             foreach (KeyValuePair<string, string> temp in dicArrayPre)

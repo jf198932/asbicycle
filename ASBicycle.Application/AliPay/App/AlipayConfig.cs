@@ -31,6 +31,7 @@ namespace ASBicycle.AliPay.App
         public static string alipay_public_key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRAFljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQEB/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5KsiNG9zpgmLCUYuLkxpLQIDAQAB";
         // 签名方式
         public static string sign_type = "RSA";
+        //public static string sign_type2 = "MD5";
 
         // 调试用，创建TXT日志文件夹路径，见AlipayCore.cs类中的LogResult(string sWord)打印方法。
         public static string log_path = HttpRuntime.AppDomainAppPath.ToString() + "Logs";
@@ -43,6 +44,8 @@ namespace ASBicycle.AliPay.App
 
         // 调用的接口名，无需修改
         public static string service = "mobile.securitypay.pay";
+
+        public static string key = "22yoh3d543c42mxrvzwtvakkt0495yig";
 
         //↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 

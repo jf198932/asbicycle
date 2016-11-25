@@ -41,6 +41,10 @@ namespace ASBicycle.Entities
         /// </summary>
         public int? status { get; set; }
 
+        public string source_recharge_docno { get; set; }
+
+        public string source_doc_no { get; set; }
+
         [ForeignKey("User_id")]
         public virtual User User { get; set; }
     }

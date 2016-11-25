@@ -12,5 +12,8 @@ namespace ASBicycle.Recharge
 
         [HttpPost]
         Task ApplyRefound(RefoundInput input);
+
+        [HttpPost]
+        Task<RefoundOutput> ApplyRefoundTimely(RefoundInput input);
     }
 }

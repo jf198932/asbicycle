@@ -2320,6 +2320,7 @@
     <Content Include="Content\assets\plugins\select2\select2_locale_en.js.template" />
     <Content Include="Content\assets\plugins\uniform\css\uniform.default.scss" />
     <Content Include="Content\assets\plugins\uniform\README.textile" />
+    <Content Include="cert\apiclient_cert.p12" />
     <None Include="Properties\PublishProfiles\asbicycle.pubxml" />
     <None Include="Properties\PublishProfiles\asbicycle2.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />

@@ -76,7 +76,7 @@ namespace ASBicycle.Entities
         /// </summary>
         public int? End_site_id { get; set; }
 
-
+        public DateTime? Pay_time { get; set; }
         //[ForeignKey("User_id")]
         //public virtual User User { get; set; }
         [ForeignKey("Bike_id")]

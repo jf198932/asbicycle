@@ -101,7 +101,7 @@ namespace ASBicycle.Web.Controllers.Alipay
         {
             //LogHelper.Logger.Info("进入回调");
 
-            Dictionary<string, string> sPara = GetRequestPost();
+            SortedDictionary<string, string> sPara = GetRequestPost();
             string notify_id = Request.Form["notify_id"];//获取notify_id
 
             string sign = Request.Form["sign"];//获取sign
@@ -151,6 +151,7 @@ namespace ASBicycle.Web.Controllers.Alipay
                                 track.Pay_method = "支付宝";
                                 track.Payment = double.Parse(Request.Form["total_fee"]);
                                 track.Updated_at = DateTime.Now;
+                                track.Pay_time = DateTime.Parse(Request.Form["gmt_payment"]);
                                 //LogHelper.Logger.Info(Request.Form["total_fee"]);
                                 await _trackRepository.UpdateAsync(track);
                             }
@@ -255,7 +256,7 @@ namespace ASBicycle.Web.Controllers.Alipay
             Notify aliNotify = new Notify();
 
             //获取待验签数据
-            Dictionary<string, string> sPara = GetRequestPost();
+            SortedDictionary<string, string> sPara = GetRequestPost();
 
             //获取同步返回中的success.
             string success = Request.Form["success"];
@@ -296,10 +297,10 @@ namespace ASBicycle.Web.Controllers.Alipay
         /// 获取支付宝POST过来通知消息，并以“参数名=参数值”的形式组成数组
         /// </summary>
         /// <returns>request回来的信息组成的数组</returns>
-        public Dictionary<string, string> GetRequestPost()
+        public SortedDictionary<string, string> GetRequestPost()
         {
             int i = 0;
-            SortedDictionary<string, string> sArraytemp = new SortedDictionary<string, string>();
+            Dictionary<string, string> sArraytemp = new Dictionary<string, string>();
             NameValueCollection coll;
             //Load Form variables into NameValueCollection variable.
             coll = Request.Form;
@@ -311,7 +312,7 @@ namespace ASBicycle.Web.Controllers.Alipay
             {
                 sArraytemp.Add(requestItem[i], Request.Form[requestItem[i]]);
             }
-            Dictionary<string, string> sArray = new Dictionary<string, string>();
+            SortedDictionary<string, string> sArray = new SortedDictionary<string, string>();
             foreach (KeyValuePair<string, string> temp in sArraytemp)
             {
                 sArray.Add(temp.Key, temp.Value);

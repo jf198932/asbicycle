@@ -106,6 +106,8 @@
     <Compile Include="AliPay\App\AlipayConfig.cs" />
     <Compile Include="AliPay\App\AlipayCore.cs" />
     <Compile Include="AliPay\App\AlipayNotify.cs" />
+    <Compile Include="AliPay\App\AlipaySubmit.cs" />
+    <Compile Include="AliPay\App\MD5.cs" />
     <Compile Include="AliPay\App\RSA.cs" />
     <Compile Include="AliPay\Dto\AlipayOutput.cs" />
     <Compile Include="AliPay\Dto\SignaturesInput.cs" />
@@ -139,6 +141,7 @@
     <Compile Include="Recharge\Dto\RechargeInput.cs" />
     <Compile Include="Recharge\Dto\RechargeOutput.cs" />
     <Compile Include="Recharge\Dto\RefoundInput.cs" />
+    <Compile Include="Recharge\Dto\RefoundOutput.cs" />
     <Compile Include="Recharge\IRechargeAppService.cs" />
     <Compile Include="Recharge\RechargeAppService.cs" />
     <Compile Include="School\Dto\SchoolBikeSiteOutput.cs" />
@@ -146,6 +149,10 @@
     <Compile Include="School\Dto\SchoolOutput.cs" />
     <Compile Include="School\ISchoolAppService.cs" />
     <Compile Include="School\SchoolAppService.cs" />
+    <Compile Include="TbTroubleFeedback\Dto\TroubleInput.cs" />
+    <Compile Include="TbTroubleFeedback\Dto\TroubleOutput.cs" />
+    <Compile Include="TbTroubleFeedback\ITroubleAppService.cs" />
+    <Compile Include="TbTroubleFeedback\TroubleAppService.cs" />
     <Compile Include="Track\Dto\TrackAlipay.cs" />
     <Compile Include="Track\Dto\TrackInput.cs" />
     <Compile Include="Track\Dto\TrackOutput.cs" />

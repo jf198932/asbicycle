@@ -29,43 +29,43 @@ public partial class return_url : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        Notify aliNotify = new Notify();
+        //Notify aliNotify = new Notify();
 
-        //获取待验签数据
-        Dictionary<string, string> sPara = GetRequestPost();
+        ////获取待验签数据
+        //Dictionary<string, string> sPara = GetRequestPost();
 
-        //获取同步返回中的success.
-        string success = Request.Form["success"];
+        ////获取同步返回中的success.
+        //string success = Request.Form["success"];
 
-        //获取同步返回中的sign.
-        string sign = Request.Form["sign"].Replace("\"", "");
+        ////获取同步返回中的sign.
+        //string sign = Request.Form["sign"].Replace("\"", "");
 
-        //注意：在客户端把返回参数请求过来的时候务必要把sign做一次urlencode,保证特殊字符不会被转义。
-        if (success == "\"true\"")//判断success是否为true.
-        {
-            //判断配置是否匹配.
-            if (Request.Form["partner"].Replace("\"", "") == Config.partner && Request.Form["service"].Replace("\"", "") == Config.service)
-            {
-                //除去数组中的空值和签名参数,且把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
-                string data = Core.CreateLinkString(Core.FilterPara(sPara));
+        ////注意：在客户端把返回参数请求过来的时候务必要把sign做一次urlencode,保证特殊字符不会被转义。
+        //if (success == "\"true\"")//判断success是否为true.
+        //{
+        //    //判断配置是否匹配.
+        //    if (Request.Form["partner"].Replace("\"", "") == Config.partner && Request.Form["service"].Replace("\"", "") == Config.service)
+        //    {
+        //        //除去数组中的空值和签名参数,且把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+        //        string data = Core.CreateLinkString(Core.FilterPara(sPara));
 
-                //Core.LogResult(data);//调试用，判断待验签参数是否和客户端一致。
-                //Core.LogResult(sign);//调试用，判断sign值是否和客户端请求时的一致，                
-                bool issign = false;
+        //        //Core.LogResult(data);//调试用，判断待验签参数是否和客户端一致。
+        //        //Core.LogResult(sign);//调试用，判断sign值是否和客户端请求时的一致，                
+        //        bool issign = false;
 
-                //获得验签结果
-                issign = RSA.verify(data, sign, Notify.getPublicKeyStr(Config.alipay_public_key), Config.input_charset);
-                if (issign)
-                {
-                    //此处可做商家业务逻辑，建议商家以异步通知为准。
-                    Response.Write("return success!");
-                }
-                else
-                {
-                    Response.Write("return fail!");
-                }
-            }
-        }
+        //        //获得验签结果
+        //        issign = RSA.verify(data, sign, Notify.getPublicKeyStr(Config.alipay_public_key), Config.input_charset);
+        //        if (issign)
+        //        {
+        //            //此处可做商家业务逻辑，建议商家以异步通知为准。
+        //            Response.Write("return success!");
+        //        }
+        //        else
+        //        {
+        //            Response.Write("return fail!");
+        //        }
+        //    }
+        //}
     }
 
     public Dictionary<string, string> GetRequestPost()
