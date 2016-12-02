@@ -36,5 +36,13 @@ namespace ASBicycle.User.Dto
         /// 1:退款中 0 正常
         /// </summary>
         public int Refound_status { get; set; }
+        /// <summary>
+        /// 充值余额
+        /// </summary>
+        public double Recharge_count { get; set; }
+        /// <summary>
+        /// 追踪器名称
+        /// </summary>
+        public string Ble_name { get; set; }
     }
 }

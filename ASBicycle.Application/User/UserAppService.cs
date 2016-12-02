@@ -113,7 +113,12 @@ namespace ASBicycle.User
                     
                     var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
                     var recharge = result.Recharges.FirstOrDefault();
-                    if (recharge?.Deposit != null) xxx.UserDto.Deposit = (double)recharge.Deposit;
+                    if (recharge != null)
+                    {
+                        xxx.UserDto.Recharge_count = recharge.Recharge_count ?? 0;
+                        xxx.UserDto.Deposit = recharge.Deposit ?? 0;
+                    }
+                    xxx.UserDto.Credits = 100;
                     var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.User_id == result.Id);
                     if (bike == null)
                     {
@@ -121,6 +126,7 @@ namespace ASBicycle.User
                     }
                     else
                     {
+                        xxx.UserDto.Ble_name = bike.Ble_name;
                         xxx.UserDto.IsBindBike = true;
                     }
                     var detail =
@@ -499,18 +505,12 @@ namespace ASBicycle.User
 
                 var xxx = new UserOutput {UserDto = Mapper.Map<UserDto>(result)};
                 var recharge = result.Recharges.FirstOrDefault();
-                //var refound =
-                //    _rechargeDetailWriteRepository.GetAllList(
-                //        t => t.status == 1 && t.Type == 1 && t.Recharge_type == 1 && t.User_id == result.Id);
-                if (recharge?.Deposit != null) xxx.UserDto.Deposit = (double)recharge.Deposit;
-                //if (refound != null && refound.Count > 0)
-                //{
-                //    xxx.UserDto.Refound_status = 1;
-                //}
-                //else
-                //{
-                //    xxx.UserDto.Refound_status = 0;
-                //}
+                if (recharge != null)
+                {
+                    xxx.UserDto.Recharge_count = recharge.Recharge_count ?? 0;
+                    xxx.UserDto.Deposit = recharge.Deposit ?? 0;
+                }
+                xxx.UserDto.Credits = 100;
                 var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.User_id == result.Id);
                 if (bike == null)
                 {
@@ -518,6 +518,7 @@ namespace ASBicycle.User
                 }
                 else
                 {
+                    xxx.UserDto.Ble_name = bike.Ble_name;
                     xxx.UserDto.IsBindBike = true;
                 }
                 var detail =
@@ -661,18 +662,12 @@ namespace ASBicycle.User
 
             var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
             var recharge = result.Recharges.FirstOrDefault();
-            //var refound =
-            //    _rechargeDetailReadRepository.GetAllList(
-            //        t => t.status == 1 && t.Type == 1 && t.Recharge_type == 1 && t.User_id == result.Id);
-            if (recharge?.Deposit != null) xxx.UserDto.Deposit = (double)recharge.Deposit;
-            //if (refound != null && refound.Count > 0)
-            //{
-            //    xxx.UserDto.Refound_status = 1;
-            //}
-            //else
-            //{
-            //    xxx.UserDto.Refound_status = 0;
-            //}
+            if (recharge != null)
+            {
+                xxx.UserDto.Recharge_count = recharge.Recharge_count ?? 0;
+                xxx.UserDto.Deposit = recharge.Deposit ?? 0;
+            }
+            xxx.UserDto.Credits = 100;
             var bike = await _bikeReadRepository.FirstOrDefaultAsync(b => b.User_id == result.Id);
             if (bike == null)
             {
@@ -680,6 +675,7 @@ namespace ASBicycle.User
             }
             else
             {
+                xxx.UserDto.Ble_name = bike.Ble_name;
                 xxx.UserDto.IsBindBike = true;
             }
             var detail =
@@ -831,6 +827,13 @@ namespace ASBicycle.User
             await CurrentUnitOfWork.SaveChangesAsync();
             Mapper.CreateMap<Entities.User, UserDto>();
             var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(user) };
+            var recharge = user.Recharges.FirstOrDefault();
+            if (recharge != null)
+            {
+                xxx.UserDto.Recharge_count = recharge.Recharge_count ?? 0;
+                xxx.UserDto.Deposit = recharge.Deposit ?? 0;
+            }
+            xxx.UserDto.Credits = 100;
             var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.User_id == user.Id);
             if (bike == null)
             {
@@ -838,6 +841,7 @@ namespace ASBicycle.User
             }
             else
             {
+                xxx.UserDto.Ble_name = bike.Ble_name;
                 xxx.UserDto.IsBindBike = true;
             }
             var detail =
@@ -948,7 +952,7 @@ namespace ASBicycle.User
         public List<DescriptionOutput> GetDescriptionList()
         {
             var list = new List<DescriptionOutput>();
-            list.Add(new DescriptionOutput {name = "如何认证", url= "https://api.isriding.com/app/Uploads/shimingrenzheng.html" });
+            list.Add(new DescriptionOutput { name = "如何认证", url= "https://api.isriding.com/app/Uploads/shimingrenzheng.html" });
             list.Add(new DescriptionOutput { name = "押金使用说明", url = "https://api.isriding.com/app/Uploads/yajinxieyi.html" });
             list.Add(new DescriptionOutput { name = "如何租车", url = "https://api.isriding.com/app/Uploads/saomazuche.html" });
             list.Add(new DescriptionOutput { name = "如何还车", url = "https://api.isriding.com/app/Uploads/huanchejianyi.html" });

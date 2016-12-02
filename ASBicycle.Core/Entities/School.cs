@@ -67,6 +67,10 @@ namespace ASBicycle.Entities
         /// 押金
         /// </summary>
         public double? Deposit { get; set; }
+        /// <summary>
+        /// 固定金额
+        /// </summary>
+        public double? Fixed_amount { get; set; }
 
         //public virtual ICollection<Bike> Bikes { get; set; } 
         public virtual ICollection<Bikesite> Bikesites { get; set; }

@@ -90,6 +90,55 @@ namespace ASBicycle.Web.Controllers.Weixin
             return View();
         }
 
+        [HttpPost, UnitOfWork]
+        public virtual async Task<ActionResult> Notify2()
+        {
+            //LogHelper.Logger.Info("进入回调");
+            var wxxml = getPostStr();
+            //LogHelper.Logger.Info(wxxml);
+
+            var xdoc = new XmlDocument();
+            xdoc.LoadXml(wxxml);
+            XmlNode xn = xdoc.SelectSingleNode("xml");
+            XmlNodeList xnl = xn.ChildNodes;
+
+            if (xnl[9].InnerText == "SUCCESS")
+            {
+                //LogHelper.Logger.Info(xnl[12].InnerText);2016 11 25 14 14 40
+                var out_trade_no = xnl[8].InnerText;
+                var total_fee = xnl[13].InnerText;
+
+                
+                var recharge_details =
+                    await _rechargeDetailWriteRepository.GetAllListAsync(t => t.recharge_docno == out_trade_no);
+                var recharge_detail = recharge_details.FirstOrDefault();
+                recharge_detail.Updated_at = DateTime.Now;
+                recharge_detail.Recharge_method = 2;
+                recharge_detail.doc_no = xnl[15].InnerText;
+                recharge_detail.Recharge_amount = double.Parse(total_fee) / 100;
+
+                await _rechargeDetailWriteRepository.UpdateAsync(recharge_detail);
+
+                var recharges =
+                    await _rechargeWriteRepository.GetAllListAsync(t => t.User_id == recharge_detail.User_id);
+
+                var recharge = recharges.FirstOrDefault();
+                recharge.Recharge_count = recharge_detail.Recharge_amount;
+                recharge.Updated_at = DateTime.Now;
+
+                await _rechargeWriteRepository.UpdateAsync(recharge);
+                
+
+                Response.Write("SUCCESS");  //请不要修改或删除
+            }
+            else
+            {
+                Response.Write("FAIL");  //请不要修改或删除
+            }
+
+            return View();
+        }
+
         public string getPostStr()
         {
             Int32 intLen = Convert.ToInt32(Request.InputStream.Length);

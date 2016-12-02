@@ -2072,6 +2072,7 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Image\menu_photo_default_normal.png" />
     <Content Include="Image\share_icon_logo_normal.png" />
     <Content Include="Image\share_icon_school_normal.png" />
     <Content Include="Localization\ASBicycle\ASBicycle-zh-CN.xml" />
@@ -2417,6 +2418,8 @@
     <Content Include="Views\Alipay\Return.cshtml" />
     <Content Include="Views\Wxpay\Notify.cshtml" />
     <Content Include="Views\Share\Index.cshtml" />
+    <Content Include="Views\Wxpay\Notify2.cshtml" />
+    <Content Include="Views\Alipay\Notify2.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

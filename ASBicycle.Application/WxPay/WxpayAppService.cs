@@ -41,7 +41,7 @@ namespace ASBicycle.WxPay
             //sPara.Add("input_charset", "UTF-8");
             sPara.Add("mch_id", WxpayConfig.mchid);
             sPara.Add("nonce_str", noncestr);
-            sPara.Add("notify_url", ConfigurationManager.AppSettings["Wxpay_notify_url"]);
+            sPara.Add("notify_url", input.type == 1? ConfigurationManager.AppSettings["Wxpay_notify_url"] : ConfigurationManager.AppSettings["Wxpay_notify_url2"]);
             sPara.Add("out_trade_no", input.out_trade_no);
             sPara.Add("spbill_create_ip", HttpContext.Current.Request.UserHostAddress);
             //sPara.Add("spbill_create_ip", "192.168.1.69");

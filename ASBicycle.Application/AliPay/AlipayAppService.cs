@@ -23,7 +23,7 @@ namespace ASBicycle.AliPay
             sPara.Add("service", Config.service);
             sPara.Add("partner", Config.partner);
             sPara.Add("_input_charset", Config.input_charset);
-            sPara.Add("notify_url", ConfigurationManager.AppSettings["Alipay_notify_url"]);
+            sPara.Add("notify_url", input.type == 1 ? ConfigurationManager.AppSettings["Alipay_notify_url"]: ConfigurationManager.AppSettings["Alipay_notify_url2"]);
             sPara.Add("payment_type", Config.payment_type);
             sPara.Add("seller_id", Config.seller_id);
 

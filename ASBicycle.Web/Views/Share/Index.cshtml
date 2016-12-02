@@ -1,4 +1,5 @@
-﻿@model ASBicycle.Web.Models.Share.ShareModel
+﻿@using Abp.Extensions
+@model ASBicycle.Web.Models.Share.ShareModel
 @{
     Layout = null;
 }
@@ -247,7 +248,14 @@
     <div style="clear: both; display: none;"></div>
     <div class="test">
         <div id="user" class="to">
-            <img src='@Model.HeadImg' class="toimg" />
+            @if (!Model.HeadImg.IsNullOrEmpty())
+            {
+                <img src='@Model.HeadImg' class="toimg"/>
+            }
+            else
+            {
+                <img src="~/Image/menu_photo_default_normal.png" class="toimg"/>
+            }
         </div>
     </div>
     <div style="clear: both;display: none;"></div>

@@ -301,7 +301,7 @@ namespace ASBicycle.Bike
             sb.Append(
                 "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time" +
                 ",a.payment,a.pay_status,a.pay_method,a.should_pay,a.pay_docno,a.remark" +
-                ",b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name,c.time_charge, c.free_time");
+                ",b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name,c.time_charge, c.free_time, c.fixed_amount");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
@@ -332,11 +332,11 @@ namespace ASBicycle.Bike
 
             if (ctm < track.Free_time)
             {
-                output.allpay = "0";
+                output.allpay = track.Fixed_amount.ToString();
             }
             else
             {
-                output.allpay = ((ctm - track.Free_time) * track.time_charge / 100.00).ToString();//分转元
+                output.allpay = (((ctm - track.Free_time) * track.time_charge / 100.00) + track.Fixed_amount).ToString();//分转元
             }
             return output;
         }
@@ -345,8 +345,9 @@ namespace ASBicycle.Bike
         {
             var bike =await
                     _bikeRepository.FirstOrDefaultAsync(
-                        t => t.Ble_name == input.Ble_name && t.rent_type == 1 && t.Ble_type == 4);
-            if (bike == null)
+                        t => t.Ble_name == input.Ble_name && t.rent_type == 1);
+            
+            if (bike == null || bike.Ble_type < 3)
             {
                 throw new UserFriendlyException("没有该车辆或该车不可租!");
             }
@@ -359,6 +360,12 @@ namespace ASBicycle.Bike
             {
                 throw new UserFriendlyException("被租赁中!");
             }
+            //蓝牙锁密码逻辑//ble_searl  后2位 第一位转换10进制  *2，再除16 取余，第二位同
+            var ts = bike.Ble_serial.Substring(bike.Ble_serial.Length - 2, 2);
+            var first = (Int32.Parse(ts.Substring(0, 1), System.Globalization.NumberStyles.AllowHexSpecifier) * 2) % 16;
+            var second = (Int32.Parse(ts.Substring(1, 1), System.Globalization.NumberStyles.AllowHexSpecifier) * 2) % 16;
+            var bluetoothpwd = first.ToString() + second.ToString();
+
             //var track = await _trackRepository.FirstOrDefaultAsync(t => t.User_id == input.user_id && t.Pay_status < 3);
             //if (track != null)
             //{
@@ -411,7 +418,7 @@ namespace ASBicycle.Bike
                 start_site_name = bsite.Name,
                 ble_name = input.Ble_name,
                 start_time = startdate.ToString("yyyy/MM/dd HH:mm:ss"),
-                pwd = bike.Lock_pwd,
+                pwd = bike.Ble_type == 3 ? bluetoothpwd : bike.Lock_pwd,
                 BikesiteList = bikesitelist.MapTo<List<BikesiteEntity>>()
             };
             bike.Bike_status = 0; //出租中
@@ -476,7 +483,7 @@ namespace ASBicycle.Bike
             sb.Append(
                 "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id" +
                 ",a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,d.`name` as end_site_name" +
-                ",a.start_point, c.`name` as school_name,c.time_charge, e.Lock_pwd, c.free_time");
+                ",a.start_point, c.`name` as school_name,c.time_charge, e.Lock_pwd, c.free_time, c.fixed_amount");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
@@ -507,13 +514,13 @@ namespace ASBicycle.Bike
             output.rental_time = ctm;
             if (ctm < tracktemp.Free_time)
             {
-                output.allpay = "0";
-                track.Should_pay = 0;
+                output.allpay = tracktemp.Fixed_amount.ToString();
+                track.Should_pay = tracktemp.Fixed_amount;
             }
             else
             {
-                output.allpay = ((ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00).ToString();//分转元
-                track.Should_pay = (ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00;//分转元
+                output.allpay = (((ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00) + tracktemp.Fixed_amount).ToString();//分转元
+                track.Should_pay = ((ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00) + tracktemp.Fixed_amount;//分转元
             }
             await _trackRepository.UpdateAsync(track);
             return output;
@@ -689,7 +696,6 @@ namespace ASBicycle.Bike
         /// 
         /// </summary>
         /// <param name="input"></param>
-        /// <returns></returns>
         public async Task<RentalInfoOutput> RentalFinishInfo([FromUri] RentalBikeInput input)
         {
             StringBuilder sb = new StringBuilder();
@@ -697,7 +703,7 @@ namespace ASBicycle.Bike
                 "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id" +
                 ",a.start_time,a.end_time,a.payment,a.should_pay,a.pay_status,a.pay_method,a.pay_docno,a.remark" +
                 ",b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name" +
-                ",c.time_charge,e.Lock_pwd, c.free_time");
+                ",c.time_charge,e.Lock_pwd, c.free_time, c.fixed_amount");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
@@ -727,11 +733,11 @@ namespace ASBicycle.Bike
 
             if (ctm < track.Free_time)
             {
-                output.allpay = "0";
+                output.allpay = track.Fixed_amount.ToString();
             }
             else
             {
-                output.allpay = track.Payment == null ? ((ctm - track.Free_time) * track.time_charge / 100.00).ToString() : track.Payment.ToString();//分转元
+                output.allpay = track.Payment == null ? (((ctm - track.Free_time) * track.time_charge / 100.00) + track.Fixed_amount).ToString() : track.Payment.ToString();//分转元
             }
 
             output.rental_time = ctm;
@@ -780,7 +786,8 @@ namespace ASBicycle.Bike
                 throw new UserFriendlyException("请先把租赁的自行车归还，再进行租车!");
             }
             var school = bike.School;
-            var msg = $"{school.Free_time}分钟免费，超过之后每分钟收费{school.Time_charge}分";
+            decimal timecharge = school.Time_charge == null ? 0 :(decimal) school.Time_charge;
+            var msg = $"{school.Free_time}分钟内{school.Fixed_amount}元，超出部分每分钟{timecharge/100}元";
             return new CanRentalOutput {charge = msg };
         }
 

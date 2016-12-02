@@ -238,7 +238,7 @@ namespace ASBicycle.Recharge
                         Updated_at = DateTime.Now,
                         User_id = detail.User_id,
                         Recharge_amount = double.Parse(xnl[12].InnerText)/100,
-                        Recharge_method = 1,
+                        Recharge_method = 2,
                         Recharge_type = detail.Recharge_type,
                         recharge_docno = DateTime.Now.ToString("yyyyMMddHHmmss") + new Random().Next(1000, 9999),
                         doc_no = xnl[10].InnerText,
