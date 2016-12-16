@@ -106,6 +106,8 @@ namespace ASBicycle.User
         MianzeOutput Hcjy();
         [HttpGet]
         MianzeOutput Cfjs();
+        [HttpGet]
+        MianzeOutput Czxy();
 
 
 

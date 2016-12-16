@@ -60,7 +60,7 @@ namespace ASBicycle.Entities
         /// </summary>
         public DateTime? Refresh_date { get; set; }
         /// <summary>
-        /// 免费时间（分钟）
+        /// 起租时间（分钟）
         /// </summary>
         public int? Free_time { get; set; }
         /// <summary>
@@ -68,9 +68,13 @@ namespace ASBicycle.Entities
         /// </summary>
         public double? Deposit { get; set; }
         /// <summary>
-        /// 固定金额
+        /// 起租金额
         /// </summary>
         public double? Fixed_amount { get; set; }
+        /// <summary>
+        /// 封顶金额(元)
+        /// </summary>
+        public double? Top_amount { get; set; }
 
         //public virtual ICollection<Bike> Bikes { get; set; } 
         public virtual ICollection<Bikesite> Bikesites { get; set; }

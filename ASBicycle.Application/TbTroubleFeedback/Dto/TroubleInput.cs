@@ -21,6 +21,7 @@ namespace ASBicycle.TbTroubleFeedback.Dto
         ///// </summary>
         //public int? update_by { get; set; }
         public int User_id { get; set; }
+        public string ble_name { get; set; }
         /// <summary>
         /// 车辆损坏(坐垫损坏、链条损坏、踏脚损坏、龙头损坏、轮胎损坏、其他损坏)
         /// </summary>

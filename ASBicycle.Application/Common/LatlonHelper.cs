@@ -1,4 +1,5 @@
 ﻿using System;
+using Abp.Logging;
 
 namespace ASBicycle.Common
 {

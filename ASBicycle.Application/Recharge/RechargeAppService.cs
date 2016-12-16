@@ -86,7 +86,7 @@ namespace ASBicycle.Recharge
             var details =
                 await
                     _rechargeDetailWriteRepository.GetAllListAsync(
-                        t => t.User_id == input.User_id && t.Type == 1 && t.Recharge_type == input.Recharge_type && t.status == 0);
+                        t => t.User_id == input.User_id && t.Type == 1 && t.Recharge_type == input.Recharge_type && t.status == 0 && t.doc_no != null);
 
 
             foreach (var rechargeDetail in details)
@@ -118,7 +118,7 @@ namespace ASBicycle.Recharge
 
         public async Task<RefoundOutput> ApplyRefoundTimely(RefoundInput input)
         {
-            var detail = await _rechargeDetailWriteRepository.FirstOrDefaultAsync(t => t.User_id == input.User_id && t.Type == 1 && t.status == 0 && t.doc_no != null);
+            var detail = await _rechargeDetailWriteRepository.FirstOrDefaultAsync(t => t.User_id == input.User_id && t.Recharge_type == 1 && t.Type == 1 && t.status == 0 && t.doc_no != null);
             if(detail == null)
                 throw new UserFriendlyException("没有可以退款的订单");
             var result = new RefoundOutput {code = 1, msg = "FAIL"};

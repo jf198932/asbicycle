@@ -17,6 +17,8 @@ namespace ASBicycle.Bike.Dto
         public double lon { get; set; }
         public string start_site_name { get; set; }
         public string ble_name { get; set; }
+        public string ble_serial { get; set; }
+        public int ble_type { get; set; }
         public string start_time { get; set; }
         public string end_site_name { get; set; }
 

@@ -289,39 +289,7 @@ namespace ASBicycle.Web.Controllers.Alipay
 
                         //LogHelper.Logger.Info($"out_trade_no={out_trade_no}，trade_no={trade_no}，trade_status={trade_status}");
 
-                        if (trade_status == "TRADE_FINISHED")
-                        {
-                            //LogHelper.Logger.Info("进入交易结束");
-
-                            //判断该笔订单是否在商户网站中已经做过处理
-                            //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
-                            //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
-                            //如果有做过处理，不执行商户的业务程序
-
-                            
-                            var recharge_detail =
-                                await
-                                    _rechargeDetailWriteRepository.FirstOrDefaultAsync(
-                                        t => t.recharge_docno == out_trade_no);
-                            recharge_detail.Updated_at = DateTime.Now;
-                            recharge_detail.Recharge_method = 1;
-                            recharge_detail.doc_no = trade_no;
-                            recharge_detail.Recharge_amount = double.Parse(Request.Form["total_fee"]);
-
-                            await _rechargeDetailWriteRepository.UpdateAsync(recharge_detail);
-
-                            var recharge = await _rechargeWriteRepository.FirstOrDefaultAsync(t => t.User_id == recharge_detail.User_id);
-
-                            recharge.Recharge_count = recharge_detail.Recharge_amount;
-                            recharge.Updated_at = DateTime.Now;
-
-                            await _rechargeWriteRepository.UpdateAsync(recharge);
-                            
-
-                            //注意：
-                            //退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
-                        }
-                        else if (trade_status == "TRADE_SUCCESS")
+                        if (trade_status == "TRADE_SUCCESS")
                         {
                             //LogHelper.Logger.Info("进入交易成功");
                             //LogHelper.Logger.Info($"payment:{double.Parse(Request.Form["total_fee"])}");
@@ -342,7 +310,7 @@ namespace ASBicycle.Web.Controllers.Alipay
 
                             var recharge = await _rechargeWriteRepository.FirstOrDefaultAsync(t => t.User_id == recharge_detail.User_id);
 
-                            recharge.Recharge_count = recharge_detail.Recharge_amount;
+                            recharge.Recharge_count = (recharge.Recharge_count ?? 0) + recharge_detail.Recharge_amount; ;
                             recharge.Updated_at = DateTime.Now;
 
                             await _rechargeWriteRepository.UpdateAsync(recharge);

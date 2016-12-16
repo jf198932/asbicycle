@@ -131,6 +131,7 @@
     <Compile Include="Bike\Dto\RentalCostOutput.cs" />
     <Compile Include="Bike\Dto\RentalFinishOutput.cs" />
     <Compile Include="Bike\Dto\RentalInfoOutput.cs" />
+    <Compile Include="Bike\Dto\RentalRechargeInput.cs" />
     <Compile Include="Bike\Dto\TrackEntity.cs" />
     <Compile Include="Bike\Dto\TrackInfoOutput.cs" />
     <Compile Include="Bike\IBikeAppService.cs" />

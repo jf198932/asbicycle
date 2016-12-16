@@ -29,6 +29,7 @@ namespace ASBicycle.TbTroubleFeedback
                 update_time = DateTime.Now,
                 deal_status = input.deal_status,
                 verify_status = input.verify_status,
+                bike_number = input.ble_name,
                 img_url = input.img_url,
                 trouble1 = input.trouble1,
                 trouble2 = input.trouble2,

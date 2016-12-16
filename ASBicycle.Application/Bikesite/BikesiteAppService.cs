@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Abp.AutoMapper;
 using ASBicycle.Bike;
@@ -49,12 +50,22 @@ namespace ASBicycle.Bikesite
             {
                 var b = item.MapTo<BikesiteListOutput>();
                 string gps = item.Gps_point;
-                double _lon = 0;
-                double.TryParse(gps.Split(',')[0],out _lon);
-                double _lat = 0;
-                double.TryParse(gps.Split(',')[1], out _lat);
-                b.Distance = LatlonHelper.GetDistance(input.lat, input.lon, _lat, _lon);
-                result.Add(b);
+                var gpss = gps.Split(',');
+                if (gpss.Length == 2)
+                {
+                    double _lon = 0;
+                    double.TryParse(gpss[0], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"),
+                        out _lon);
+                    double _lat = 0;
+                    double.TryParse(gpss[1], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"),
+                        out _lat);
+                    b.Distance = LatlonHelper.GetDistance(input.lat, input.lon, _lat, _lon);
+                    result.Add(b);
+                }
+                else
+                {
+                    Logger.Debug("GetNearbyBikesites-67-" + item.Id);
+                }
             }
 
             var res = result.Where(r => r.Distance < 10).ToList();

@@ -132,7 +132,7 @@ namespace ASBicycle.User
                     var detail =
                         await
                             _rechargeDetailWriteRepository.FirstOrDefaultAsync(
-                                t => t.User_id == result.Id && t.status == 1);
+                                t => t.User_id == result.Id && t.status == 1 && t.doc_no != null);
                     if (detail != null)
                     {
                         xxx.UserDto.Refound_status = 1;
@@ -266,7 +266,7 @@ namespace ASBicycle.User
             }
             var bike = await _bikeRepository.FirstOrDefaultAsync(b => b.Ble_name.ToLower() == userBikeInput.Serial.ToLower().Substring(0,5));
             if (bike == null)
-                throw new UserFriendlyException("电子车牌或校验码不正确，请重新输入");
+                throw new UserFriendlyException("电子车牌不正确，请重新输入");
             if(bike.User_id != null)
                 throw new UserFriendlyException("该电子车牌已被绑");
             bike.User_id = user.Id;
@@ -524,7 +524,7 @@ namespace ASBicycle.User
                 var detail =
                         await
                             _rechargeDetailWriteRepository.FirstOrDefaultAsync(
-                                t => t.User_id == result.Id && t.status == 1);
+                                t => t.User_id == result.Id && t.status == 1 && t.doc_no != null);
                 if (detail != null)
                 {
                     xxx.UserDto.Refound_status = 1;
@@ -649,6 +649,11 @@ namespace ASBicycle.User
         public MianzeOutput Cfjs()
         {
             return new MianzeOutput { Url = "https://api.isriding.com/app/Uploads/chefeijisuan.html" };
+        }
+
+        public MianzeOutput Czxy()
+        {
+            return new MianzeOutput { Url = "https://api.isriding.com/app/Uploads/chongzhixieyi.html" };
         }
 
         [HttpGet]
@@ -847,7 +852,7 @@ namespace ASBicycle.User
             var detail =
                         await
                             _rechargeDetailWriteRepository.FirstOrDefaultAsync(
-                                t => t.User_id == user.Id && t.status == 1);
+                                t => t.User_id == user.Id && t.status == 1 && t.doc_no != null);
             if (detail != null)
             {
                 xxx.UserDto.Refound_status = 1;
@@ -895,15 +900,15 @@ namespace ASBicycle.User
         public async Task<CertificationOutput> GetUserCertificationStatus([FromUri]UserIdInput userIdInput)
         {
             //var recharge_d = await _rechargeDetailReadRepository.GetAllListAsync(t => t.Type == 1 && t.User_id == userIdInput.User_id);
-            var recharge = await _rechargeReadRepository.GetAllListAsync(t => t.User_id == userIdInput.User_id);
+            var recharge = await _rechargeReadRepository.FirstOrDefaultAsync(t => t.User_id == userIdInput.User_id);
 
             var result = new CertificationOutput();
             //
-            if (recharge == null || recharge.Count == 0)
+            if (recharge == null)
             {
                 result.deposit_status = 1;
             }
-            else if (recharge[0].Deposit == null || recharge[0].Deposit == 0)
+            else if (recharge.Deposit == null || recharge.Deposit == 0)
             {
                 result.deposit_status = 1;
             }
@@ -911,37 +916,21 @@ namespace ASBicycle.User
             {
                 result.deposit_status = 2;
             }
-            var user = await _userReadRepository.GetAllListAsync(t => t.Id == userIdInput.User_id);
-            if (user[0].Id_no.IsNullOrEmpty())
-            {
-                result.identity_status = 1;
-            }
-            else
-            {
-                result.identity_status = 2;
-            }
-            if (result.identity_status > 1)
-            {
-                result.success_status = 2;
-            }
-            else
-            {
-                result.success_status = 1;
-            }
+            var user = await _userReadRepository.FirstOrDefaultAsync(t => t.Id == userIdInput.User_id);
+            result.identity_status = user.Id_no.IsNullOrEmpty() ? 1 : 2;
+            result.success_status = result.identity_status > 1 ? 2 : 1;
 
-            if (user[0].School_id == null)
+            if (user.School_id == null)
             {
-                var schoollist = await _schoolReadRepository.GetAllListAsync(t => t.Name == "社会");
+                var schoollist = await _schoolReadRepository.FirstOrDefaultAsync(t => t.Name == "社会");
                 result.deposit = 0;
-                if (schoollist != null && schoollist.Count > 0)
-                {
-                    var o = schoollist[0].Deposit;
-                    if (o != null) result.deposit = (double) o;
-                }
+                if (schoollist == null) return result;
+                var o = schoollist.Deposit;
+                if (o != null) result.deposit = (double) o;
             }
             else
             {
-                var o = user[0].School.Deposit;
+                var o = user.School.Deposit;
                 if (o != null) result.deposit = (double) o;
             }
 
@@ -958,6 +947,7 @@ namespace ASBicycle.User
             list.Add(new DescriptionOutput { name = "如何还车", url = "https://api.isriding.com/app/Uploads/huanchejianyi.html" });
             list.Add(new DescriptionOutput { name = "计费与结算", url = "https://api.isriding.com/app/Uploads/chefeijisuan.html" });
             list.Add(new DescriptionOutput { name = "用户注册协议", url = "https://api.isriding.com/app/Uploads/mianze.html" });
+            list.Add(new DescriptionOutput { name = "充值协议", url = "https://api.isriding.com/app/Uploads/chongzhixieyi.html"});
             return list;
         }
     }

@@ -34,5 +34,12 @@ namespace ASBicycle.Bike.Dto
         public int Free_time { get; set; }
 
         public double Fixed_amount { get; set; }
+
+        public double Top_amount { get; set; }
+        public double? Recharge_count { get; set; }
+
+        public int Ble_type { get; set; }
+
+        public string Ble_serial { get; set; }
     }
 }

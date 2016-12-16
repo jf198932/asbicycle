@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web;
@@ -11,8 +12,10 @@ using ASBicycle.Bike.Dto;
 using System.Linq;
 using System.Text;
 using Abp.Extensions;
+using Abp.Logging;
 using ASBicycle.Bikesite;
 using ASBicycle.Common;
+using ASBicycle.Recharge;
 using ASBicycle.Track;
 
 namespace ASBicycle.Bike
@@ -22,7 +25,7 @@ namespace ASBicycle.Bike
         private readonly IBikeWriteRepository _bikeRepository;
         private readonly IBikeReadRepository _bikeReadRepository;
         private readonly ITrackWriteRepository _trackRepository;
-        private readonly ITrackReadRepository _trackReadRepository;
+        private readonly IRechargeWriteRepository _rechargeWriteRepository;
         private readonly ISqlExecuter _sqlExecuter;
         private readonly ISqlReadExecuter _sqlReadExecuter;
         private readonly IBikesiteWriteRepository _bikesiteRepository;
@@ -33,7 +36,7 @@ namespace ASBicycle.Bike
             , ISqlExecuter sqlExecuter
             , IBikesiteWriteRepository bikesiteRepository
             , IBikeReadRepository bikeReadRepository
-            , ITrackReadRepository trackReadRepository
+            , IRechargeWriteRepository rechargeWriteRepository
             , ISqlReadExecuter sqlReadExecuter
             , IBikesiteReadRepository bikesiteReadRepository)
         {
@@ -42,7 +45,7 @@ namespace ASBicycle.Bike
             _sqlExecuter = sqlExecuter;
             _bikesiteRepository = bikesiteRepository;
             _bikeReadRepository = bikeReadRepository;
-            _trackReadRepository = trackReadRepository;
+            _rechargeWriteRepository = rechargeWriteRepository;
             _sqlReadExecuter = sqlReadExecuter;
             _bikesiteReadRepository = bikesiteReadRepository;
         }
@@ -66,8 +69,15 @@ namespace ASBicycle.Bike
                 if (!item.gps_point.IsNullOrEmpty())
                 {
                     var tempgps = item.gps_point.Split(',');
-                    item.lon = double.Parse(tempgps[0]);
-                    item.lat = double.Parse(tempgps[1]);
+                    if (tempgps.Length == 2)
+                    {
+                        item.lon = double.Parse(tempgps[0], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+                        item.lat = double.Parse(tempgps[1], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+                    }
+                    else
+                    {
+                        Logger.Debug("GetAlarmBikeWay-79");
+                    }
                 }
             }
             return model;
@@ -92,8 +102,10 @@ namespace ASBicycle.Bike
                 bike.Vlock_status = bikeInput.Vlock_status;
             if(bikeInput.Bike_status != null)
                 bike.Bike_status = bikeInput.Bike_status;
-            bike.Bike_img = bikeInput.Bike_img;
-            bike.Battery = bikeInput.Battery;
+            if(!bikeInput.Bike_img.IsNullOrEmpty())
+                bike.Bike_img = bikeInput.Bike_img;
+            if(bikeInput.Battery > 0)
+                bike.Battery = bikeInput.Battery;
             if(bikeInput.Bikesite_id != null)
                 bike.Bikesite_id = bikeInput.Bikesite_id;
             bike.Position = bikeInput.Position;
@@ -194,11 +206,23 @@ namespace ASBicycle.Bike
 
             var gps = bike.Bikesite.Gps_point;
             var gpss = gps.Split(',');
+            double gpss1 = 0;
+            double pgss2 = 0;
+            if (gpss.Length == 2)
+            {
+                gpss1 = double.Parse(gpss[0], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+                pgss2 = double.Parse(gpss[1], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+            }
+            else
+            {
+                Logger.Debug("RentalBike-218");
+            }
+
             var output = new RentalBikeOutput
             {
                 out_trade_no = paydocno,
-                lon = double.Parse(gpss[0]),
-                lat = double.Parse(gpss[1]),
+                lon = gpss1,
+                lat = pgss2,
                 start_site_name = bike.Bikesite.Name,
                 ble_name = input.Ble_name,
                 start_time = startdate.ToString("yyyy/MM/dd HH:mm:ss"),
@@ -272,13 +296,26 @@ namespace ASBicycle.Bike
             {
                 var gps = bike.Bikesite.Gps_point;
                 var gpss = gps.Split(',');
-                output.lon_end = double.Parse(gpss[0]);
-                output.lat_end = double.Parse(gpss[1]);
+                if (gpss.Length == 2)
+                {
+                    output.lon_end = double.Parse(gpss[0], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+                    output.lat_end = double.Parse(gpss[1], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+                }
+                else
+                {
+                    Logger.Debug("RefreshBike-306");
+                }
             }
             var gpsstart = track.Start_point.Split(',');
-            output.lon = double.Parse(gpsstart[0]);
-            output.lat = double.Parse(gpsstart[1]);
-
+            if (gpsstart.Length == 2)
+            {
+                output.lon = double.Parse(gpsstart[0], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+                output.lat = double.Parse(gpsstart[1], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+            }
+            else
+            {
+                Logger.Debug("RefreshBike-317");
+            }
             output.out_trade_no = track.Pay_docno;
             output.start_site_name = track.Start_site_name;
             output.ble_name = track.Ble_name;
@@ -301,7 +338,7 @@ namespace ASBicycle.Bike
             sb.Append(
                 "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time" +
                 ",a.payment,a.pay_status,a.pay_method,a.should_pay,a.pay_docno,a.remark" +
-                ",b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name,c.time_charge, c.free_time, c.fixed_amount");
+                ",b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name,c.time_charge, c.free_time, c.fixed_amount, c.top_amount");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
@@ -327,16 +364,46 @@ namespace ASBicycle.Bike
             TimeSpan costtime = (track.End_time == null ? end_time : DateTime.Parse(track.End_time.ToString())) -
                                 DateTime.Parse(track.Start_time.ToString());
 
-            var ctm = (int)costtime.TotalMinutes;//去掉多余的零头
-            output.rental_time = ctm;
+            TimeSpan costday = (track.End_time == null ? end_time.Date : DateTime.Parse(track.End_time.ToString()).Date) -
+                               DateTime.Parse(track.Start_time.ToString()).Date;
 
-            if (ctm < track.Free_time)
+            var ctm = (int)Math.Floor(costtime.TotalMinutes);//去掉多余的零头
+            var day = (int)Math.Ceiling(costday.TotalDays);
+            if (costtime.TotalMinutes < 1)
             {
-                output.allpay = track.Fixed_amount.ToString();
+                output.rental_time = Math.Ceiling(costtime.TotalSeconds)/100;
             }
             else
             {
-                output.allpay = (((ctm - track.Free_time) * track.time_charge / 100.00) + track.Fixed_amount).ToString();//分转元
+                output.rental_time = ctm;
+            }
+            
+
+
+
+            if (ctm <= track.Free_time)
+            {
+                output.allpay = track.Fixed_amount.ToString("F");
+            }
+            //else if (ctm > track.Free_time && day == 0)
+            //{
+            //    var tpay = (ctm - track.Free_time)*track.time_charge/100.00 + track.Fixed_amount;
+            //    output.allpay = tpay <= track.Top_amount ? tpay.ToString() : track.Top_amount.ToString();
+            //}
+            else
+            {
+                //TimeSpan fcosttime = DateTime.Parse(track.Start_time.ToString()).Date.AddDays(1) - DateTime.Parse(track.Start_time.ToString());
+                //TimeSpan ecosttime = (track.End_time == null ? end_time : DateTime.Parse(track.End_time.ToString())) -
+                //                     (track.End_time == null ? end_time.Date : DateTime.Parse(track.End_time.ToString())).Date;
+
+                //var ftpay = ((int)Math.Ceiling(fcosttime.TotalMinutes) - track.Free_time) * track.time_charge / 100.00 + track.Fixed_amount;//分转元
+                //var etpay = ((int)Math.Ceiling(ecosttime.TotalMinutes) - track.Free_time) * track.time_charge / 100.00 + track.Fixed_amount;//分转元
+                //var firstpay = ftpay <= track.Top_amount ? ftpay : track.Top_amount;
+                //var endpay = (int)Math.Ceiling(ecosttime.TotalMinutes) > track.Free_time ? track.Top_amount : etpay;
+
+
+                //output.allpay = (firstpay + track.Top_amount*day + endpay).ToString();
+                output.allpay = (((ctm - track.Free_time) * track.time_charge / 100.00) + track.Fixed_amount).ToString("F");//分转元
             }
             return output;
         }
@@ -360,33 +427,95 @@ namespace ASBicycle.Bike
             {
                 throw new UserFriendlyException("被租赁中!");
             }
-            //蓝牙锁密码逻辑//ble_searl  后2位 第一位转换10进制  *2，再除16 取余，第二位同
-            var ts = bike.Ble_serial.Substring(bike.Ble_serial.Length - 2, 2);
-            var first = (Int32.Parse(ts.Substring(0, 1), System.Globalization.NumberStyles.AllowHexSpecifier) * 2) % 16;
-            var second = (Int32.Parse(ts.Substring(1, 1), System.Globalization.NumberStyles.AllowHexSpecifier) * 2) % 16;
-            var bluetoothpwd = first.ToString() + second.ToString();
+            string bluetoothpwd = "";
+            if (bike.Ble_type == 3)
+            {
+                //蓝牙锁密码逻辑//ble_searl  后2位 第一位转换10进制  *2，再除16 取余 再转16进制，第二位同
+                var ts = bike.Ble_serial.Substring(bike.Ble_serial.Length - 2, 2);
+                var first = ((int.Parse(ts.Substring(0, 1), System.Globalization.NumberStyles.AllowHexSpecifier) * 2) % 16).ToString("X");
+                var second = ((int.Parse(ts.Substring(1, 1), System.Globalization.NumberStyles.AllowHexSpecifier) * 2) % 16).ToString("X");
+                bluetoothpwd = first + second;
+            }
 
             //var track = await _trackRepository.FirstOrDefaultAsync(t => t.User_id == input.user_id && t.Pay_status < 3);
             //if (track != null)
             //{
             //    throw new UserFriendlyException("请先把租赁的自行车归还或者结算，再进行租车!");
             //}
-            var gpsinput = input.gps_point.Split(',');
-            var ip_lon = double.Parse(gpsinput[0]);
-            var ip_lat = double.Parse(gpsinput[1]);
+            //LogHelper.Logger.Info(input.gps_point + "---" + input.Ble_name + "---" + input.user_id + "---" + input.lon + "---" + input.lat);
+
+            //bool flag = !(input.lon > 0 && input.lon.ToString().IndexOf(',') > 0);//默认小数点是.    
+
+            var gpsinput = input.gps_point.Trim().Split(',');
+
+            double ip_lon = 0;
+            
+            double ip_lat = 0;
+
+            if (gpsinput.Length == 2)
+            {
+                ip_lon = double.Parse(gpsinput[0].Trim(), NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+                //LogHelper.Logger.Info(ip_lon.ToString);
+                ip_lat = double.Parse(gpsinput[1].Trim(), NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+            }
+            //LogHelper.Logger.Info(ip_lat.ToString);
+            //if (flag)
+            //{
+            //    ip_lon = double.Parse(gpsinput[0].Trim());
+            //    LogHelper.Logger.Info(ip_lon.ToString);
+            //    ip_lat = double.Parse(gpsinput[1].Trim());
+            //    LogHelper.Logger.Info(ip_lat.ToString);
+            //}
+            //else
+            //{
+            //    ip_lon = double.Parse(gpsinput[0].Replace('.', ',').Trim());
+            //    LogHelper.Logger.Info(ip_lon.ToString);
+            //    ip_lat = double.Parse(gpsinput[1].Replace('.', ',').Trim());
+            //    LogHelper.Logger.Info(ip_lat.ToString);
+            //}
+
 
             var bikesitelist = await _bikesiteRepository.GetAllListAsync(t => t.School_id == bike.School_id && t.Enable && t.Type == 3);
 
             Entities.Bikesite bsite = null;
             //Dictionary<string,string> temp = new Dictionary<string, string>();
             double mindistance = 99999999;
+            //LogHelper.Logger.Info(mindistance.ToString);
             foreach (var bikesite in bikesitelist)
             {
                 var bikesitegps = bikesite.Gps_point.Split(',');
-                var bs_lon = double.Parse(bikesitegps[0]);
-                var bs_lat = double.Parse(bikesitegps[1]);
+                double bs_lon = 0;
+                double bs_lat = 0;
+                if (bikesitegps.Length == 2)
+                {
+                    bs_lon = double.Parse(bikesitegps[0].Trim(), NumberStyles.Any,
+                        CultureInfo.CreateSpecificCulture("zh-cn"));
+                    bs_lat = double.Parse(bikesitegps[1].Trim(), NumberStyles.Any,
+                        CultureInfo.CreateSpecificCulture("zh-cn"));
+                }
+                else
+                {
+                    Logger.Debug("RentalBiketemp-490-"+ bikesite.Id);
+                }
+                //if (flag)
+                //{
+                //    ip_lon = double.Parse(bikesitegps[0].Trim());
+                //    //LogHelper.Logger.Info(bs_lon.ToString);
+                //    ip_lat = double.Parse(bikesitegps[1].Trim());
+                //    //LogHelper.Logger.Info(bs_lat.ToString);
+                //}
+                //else
+                //{
+                //    ip_lon = double.Parse(bikesitegps[0].Replace('.', ',').Trim());
+                //    //LogHelper.Logger.Info(bs_lon.ToString);
+                //    ip_lat = double.Parse(bikesitegps[1].Replace('.', ',').Trim());
+                //    //LogHelper.Logger.Info(bs_lat.ToString);
+                //}
 
                 var distance = LatlonHelper.GetDistance(ip_lat, ip_lon, bs_lat, bs_lon) * 1000;//KM->M
+                
+                //LogHelper.Logger.Info(distance.ToString);
+
                 if (distance < mindistance && distance <= bikesite.Radius)//
                 {
                     mindistance = distance;
@@ -410,18 +539,30 @@ namespace ASBicycle.Bike
 
             var gps = bsite.Gps_point;
             var gpss = gps.Split(',');
+            double gpss1 = 0;
+            double gpss2 = 0;
+            if (gpss.Length == 2)
+            {
+                gpss1 = double.Parse(gpss[0], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+                gpss2 = double.Parse(gpss[1], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+            }
             var output = new RentalBikeOutput
             {
                 out_trade_no = paydocno,
-                lon = double.Parse(gpss[0]),
-                lat = double.Parse(gpss[1]),
+                lon = gpss1,
+                lat = gpss2,
                 start_site_name = bsite.Name,
                 ble_name = input.Ble_name,
+                ble_serial = bike.Ble_serial,
                 start_time = startdate.ToString("yyyy/MM/dd HH:mm:ss"),
                 pwd = bike.Ble_type == 3 ? bluetoothpwd : bike.Lock_pwd,
                 BikesiteList = bikesitelist.MapTo<List<BikesiteEntity>>()
             };
             bike.Bike_status = 0; //出租中
+
+            if (input.battery > 0)
+                bike.Battery = input.battery;
+
             await _bikeRepository.UpdateAsync(bike);
             bsite.Available_count = bsite.Available_count - 1;
             await _bikesiteRepository.UpdateAsync(bsite);
@@ -436,11 +577,18 @@ namespace ASBicycle.Bike
             {
                 throw new UserFriendlyException("无该订单号!");
             }
+
             var bike = await _bikeRepository.FirstOrDefaultAsync(t => t.Ble_name == input.Ble_name);
 
             var gpsinput = input.gps_point.Split(',');
-            var ip_lon = double.Parse(gpsinput[0]);
-            var ip_lat = double.Parse(gpsinput[1]);
+            double ip_lon = 0;
+            double ip_lat = 0;
+            if (gpsinput.Length == 2)
+            {
+                ip_lon = double.Parse(gpsinput[0], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+                ip_lat = double.Parse(gpsinput[1], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+            }
+            
             var bikesitelist = await _bikesiteRepository.GetAllListAsync(t => t.School_id == bike.School_id && t.Enable && t.Type == 3);
 
             Entities.Bikesite bsite = null;
@@ -448,9 +596,19 @@ namespace ASBicycle.Bike
             foreach (var bikesite in bikesitelist)
             {
                 var bikesitegps = bikesite.Gps_point.Split(',');
-                var bs_lon = double.Parse(bikesitegps[0]);
-                var bs_lat = double.Parse(bikesitegps[1]);
-
+                double bs_lon = 0;
+                double bs_lat = 0;
+                if (bikesitegps.Length == 2)
+                {
+                    bs_lon = double.Parse(bikesitegps[0], NumberStyles.Any,
+                        CultureInfo.CreateSpecificCulture("zh-cn"));
+                    bs_lat = double.Parse(bikesitegps[1], NumberStyles.Any,
+                        CultureInfo.CreateSpecificCulture("zh-cn"));
+                }
+                else
+                {
+                    Logger.Debug("RentalBikeFinishtemp-602-"+bikesite.Id);
+                }
                 var distance = LatlonHelper.GetDistance(ip_lat, ip_lon, bs_lat, bs_lon) * 1000;//KM->M
                 if (distance < mindistance && distance <= bikesite.Radius)//
                 {
@@ -483,7 +641,7 @@ namespace ASBicycle.Bike
             sb.Append(
                 "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id" +
                 ",a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,d.`name` as end_site_name" +
-                ",a.start_point, c.`name` as school_name,c.time_charge, e.Lock_pwd, c.free_time, c.fixed_amount");
+                ",a.start_point, c.`name` as school_name,c.time_charge, e.Lock_pwd, c.free_time, c.fixed_amount, c.top_amount, e.ble_type, e.ble_serial");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
@@ -505,21 +663,70 @@ namespace ASBicycle.Bike
             output.end_site_name = tracktemp.End_site_name;
             output.end_time = tracktemp.End_time.ToString();
             output.school_name = tracktemp.School_name;
+            output.ble_type = tracktemp.Ble_type;
+            output.ble_serial = tracktemp.Ble_serial;
+            //var recharge = await _rechargeWriteRepository.FirstOrDefaultAsync(t => t.User_id == track.User_id);
+            //if (recharge == null)
+            //{
+            //    output.recharge_count = "0.00";
+            //}
+            //else
+            //{
+            //    if (recharge.Recharge_count != null)
+            //    {
+            //        output.recharge_count = ((double) recharge.Recharge_count).ToString("F");
+            //    }
+            //    else
+            //    {
+            //        output.recharge_count = "0.00";
+            //    }
+            //}
 
-            
 
             TimeSpan costtime = endtime - DateTime.Parse(tracktemp.Start_time.ToString());
+            TimeSpan costday = endtime.Date - DateTime.Parse(tracktemp.Start_time.ToString()).Date;
 
-            var ctm = (int)costtime.TotalMinutes;//去掉多余的零头
-            output.rental_time = ctm;
-            if (ctm < tracktemp.Free_time)
+            //var ctm = (int)Math.Ceiling(costtime.TotalMinutes);//去掉多余的零头
+            //var day = (int)Math.Ceiling(costday.TotalDays);
+
+            //output.rental_time = ctm;
+
+            var ctm = (int)Math.Floor(costtime.TotalMinutes);//去掉多余的零头
+            var day = (int)Math.Ceiling(costday.TotalDays);
+            if (costtime.TotalMinutes < 1)
             {
-                output.allpay = tracktemp.Fixed_amount.ToString();
-                track.Should_pay = tracktemp.Fixed_amount;
+                output.rental_time = Math.Ceiling(costtime.TotalSeconds) / 100;
             }
             else
             {
-                output.allpay = (((ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00) + tracktemp.Fixed_amount).ToString();//分转元
+                output.rental_time = ctm;
+            }
+
+            if (ctm < tracktemp.Free_time)
+            {
+                output.allpay = tracktemp.Fixed_amount.ToString("F");
+                track.Should_pay = tracktemp.Fixed_amount;
+            }
+            //else if (ctm > tracktemp.Free_time && day == 0)
+            //{
+            //    var tpay = (ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00 + tracktemp.Fixed_amount;
+            //    output.allpay = tpay <= tracktemp.Top_amount ? tpay.ToString() : tracktemp.Top_amount.ToString();
+            //    track.Should_pay = tpay <= tracktemp.Top_amount ? tpay : tracktemp.Top_amount;
+            //}
+            else
+            {
+                //TimeSpan fcosttime = DateTime.Parse(tracktemp.Start_time.ToString()).Date.AddDays(1) - DateTime.Parse(tracktemp.Start_time.ToString());
+                //TimeSpan ecosttime = endtime - endtime.Date;
+
+                //var ftpay = ((int)Math.Ceiling(fcosttime.TotalMinutes) - tracktemp.Free_time) * tracktemp.time_charge / 100.00 + tracktemp.Fixed_amount;//分转元
+                //var etpay = ((int)Math.Ceiling(ecosttime.TotalMinutes) - tracktemp.Free_time) * tracktemp.time_charge / 100.00 + tracktemp.Fixed_amount;//分转元
+                //var firstpay = ftpay <= tracktemp.Top_amount ? ftpay : tracktemp.Top_amount;
+                //var endpay = (int)Math.Ceiling(ecosttime.TotalMinutes) > tracktemp.Free_time ? tracktemp.Top_amount : etpay;
+
+                //output.allpay = (firstpay + tracktemp.Top_amount * day + endpay).ToString();//分转元
+                //track.Should_pay = firstpay + tracktemp.Top_amount * day + endpay;//分转元
+
+                output.allpay = (((ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00) + tracktemp.Fixed_amount).ToString("F");//分转元
                 track.Should_pay = ((ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00) + tracktemp.Fixed_amount;//分转元
             }
             await _trackRepository.UpdateAsync(track);
@@ -535,32 +742,7 @@ namespace ASBicycle.Bike
                 throw new UserFriendlyException("无该订单号!");
             }
             var bike = await _bikeRepository.FirstOrDefaultAsync(t => t.Ble_name == input.Ble_name);
-
-            //var gpsinput = input.gps_point.Split(',');
-            //var ip_lon = double.Parse(gpsinput[0]);
-            //var ip_lat = double.Parse(gpsinput[1]);
-            //var bikesitelist = await _bikesiteRepository.GetAllListAsync(t => t.School_id == bike.School_id && t.Enable && t.Type == 3);
-
-            //Entities.Bikesite bsite = null;
-            //double mindistance = 99999999;
-            //foreach (var bikesite in bikesitelist)
-            //{
-            //    var bikesitegps = bikesite.Gps_point.Split(',');
-            //    var bs_lon = double.Parse(bikesitegps[0]);
-            //    var bs_lat = double.Parse(bikesitegps[1]);
-
-            //    var distance = LatlonHelper.GetDistance(ip_lat, ip_lon, bs_lat, bs_lon) * 1000;//KM->M
-            //    if (distance < mindistance && distance <= bikesite.Radius)//
-            //    {
-            //        mindistance = distance;
-            //        bsite = bikesite;
-            //    }
-            //}
-
-            //if (bsite == null)
-            //{
-            //    throw new UserFriendlyException("范围内没有桩点");
-            //}
+            
             var endtime = DateTime.Now;
             track.End_point = input.gps_point;
             track.End_site_id = 0;
@@ -581,7 +763,7 @@ namespace ASBicycle.Bike
             sb.Append(
                 "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id" +
                 ",a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,b.`name` as start_site_name,d.`name` as end_site_name" +
-                ",a.start_point, c.`name` as school_name,c.time_charge, c.free_time");
+                ",a.start_point, c.`name` as school_name,c.time_charge, c.free_time, c.fixed_amount, c.top_amount, e.ble_type, e.ble_serial");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
@@ -603,21 +785,57 @@ namespace ASBicycle.Bike
             output.end_site_name = tracktemp.End_site_name;
             output.end_time = tracktemp.End_time.ToString();
             output.school_name = tracktemp.School_name;
-
-
+            output.ble_type = tracktemp.Ble_type;
+            output.ble_serial = tracktemp.Ble_serial;
+            //var recharge = await _rechargeWriteRepository.FirstOrDefaultAsync(t => t.User_id == track.User_id);
+            //if (recharge == null)
+            //{
+            //    output.recharge_count = "0.00";
+            //}
+            //else
+            //{
+            //    if (recharge.Recharge_count != null)
+            //    {
+            //        output.recharge_count = ((double)recharge.Recharge_count).ToString("F");
+            //    }
+            //    else
+            //    {
+            //        output.recharge_count = "0.00";
+            //    }
+            //}
 
             TimeSpan costtime = endtime - DateTime.Parse(tracktemp.Start_time.ToString());
+            TimeSpan costday = endtime.Date - DateTime.Parse(tracktemp.Start_time.ToString()).Date;
 
-            var ctm = (int)costtime.TotalMinutes;//去掉多余的零头
+            var ctm = (int)Math.Ceiling(costtime.TotalMinutes);//去掉多余的零头
+            var day = (int)Math.Ceiling(costday.TotalDays);
+
+
             output.rental_time = ctm;
             if (ctm < tracktemp.Free_time)
             {
-                output.allpay = "0";
-                track.Should_pay = 0;
+                output.allpay = tracktemp.Fixed_amount.ToString("F");
+                track.Should_pay = tracktemp.Fixed_amount;
             }
+            //else if (ctm > tracktemp.Free_time && day == 0)
+            //{
+            //    var tpay = (ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00 + tracktemp.Fixed_amount;
+            //    output.allpay = tpay <= tracktemp.Top_amount ? tpay.ToString() : tracktemp.Top_amount.ToString();
+            //    track.Should_pay = tpay <= tracktemp.Top_amount ? tpay : tracktemp.Top_amount;
+            //}
             else
             {
-                output.allpay = ((ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00).ToString();//分转元
+                //TimeSpan fcosttime = DateTime.Parse(tracktemp.Start_time.ToString()).Date.AddDays(1) - DateTime.Parse(tracktemp.Start_time.ToString());
+                //TimeSpan ecosttime = endtime - endtime.Date;
+
+                //var ftpay = ((int)Math.Ceiling(fcosttime.TotalMinutes) - tracktemp.Free_time) * tracktemp.time_charge / 100.00 + tracktemp.Fixed_amount;//分转元
+                //var etpay = ((int)Math.Ceiling(ecosttime.TotalMinutes) - tracktemp.Free_time) * tracktemp.time_charge / 100.00 + tracktemp.Fixed_amount;//分转元
+                //var firstpay = ftpay <= tracktemp.Top_amount ? ftpay : tracktemp.Top_amount;
+                //var endpay = (int)Math.Ceiling(ecosttime.TotalMinutes) > tracktemp.Free_time ? tracktemp.Top_amount : etpay;
+
+                //output.allpay = (firstpay + tracktemp.Top_amount * day + endpay).ToString();//分转元
+                //track.Should_pay = firstpay + tracktemp.Top_amount * day + endpay;//分转元
+                output.allpay = ((ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00).ToString("F");//分转元
                 track.Should_pay = (ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00;//分转元
             }
             await _trackRepository.UpdateAsync(track);
@@ -631,7 +849,7 @@ namespace ASBicycle.Bike
                 "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id" +
                 ",a.start_time,a.end_time,a.payment,a.should_pay,a.pay_status,a.pay_method,a.pay_docno,a.remark" +
                 ",b.`name` as start_site_name,b.gps_point as start_gps_point,d.`name` as end_site_name,a.start_point,b.school_id,c.`name` as school_name" +
-                ",c.time_charge,e.Lock_pwd, c.free_time");
+                ",c.time_charge,e.Lock_pwd, c.free_time, e.ble_type, e.ble_serial");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
@@ -651,8 +869,17 @@ namespace ASBicycle.Bike
                 throw new UserFriendlyException("没有行程单!");
             }
             var gpsinput = input.gps_point.Split(',');
-            var ip_lon = double.Parse(gpsinput[0]);
-            var ip_lat = double.Parse(gpsinput[1]);
+            double ip_lon = 0;
+            double ip_lat = 0;
+            if (gpsinput.Length == 2)
+            {
+                ip_lon = double.Parse(gpsinput[0], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+                ip_lat = double.Parse(gpsinput[1], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+            }
+            else
+            {
+                Logger.Error("RefreshBiketemp-794");
+            }
             var bikesitelist = await _bikesiteReadRepository.GetAllListAsync(t => t.School_id == track.School_id && t.Enable && t.Type == 3);
 
             Entities.Bikesite bsite = null;
@@ -660,8 +887,17 @@ namespace ASBicycle.Bike
             foreach (var bikesite in bikesitelist)
             {
                 var bikesitegps = bikesite.Gps_point.Split(',');
-                var bs_lon = double.Parse(bikesitegps[0]);
-                var bs_lat = double.Parse(bikesitegps[1]);
+                double bs_lon = 0;
+                double bs_lat = 0;
+                if (bikesitegps.Length == 2)
+                {
+                    bs_lon = double.Parse(bikesitegps[0], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+                    bs_lat = double.Parse(bikesitegps[1], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+                }
+                else
+                {
+                    Logger.Error("RefreshBiketemp-803-"+ bikesite.Id);
+                }
 
                 var distance = LatlonHelper.GetDistance(ip_lat, ip_lon, bs_lat, bs_lon) * 1000;//KM->M
                 if (distance < mindistance && distance <= bikesite.Radius)//
@@ -676,14 +912,30 @@ namespace ASBicycle.Bike
             {
                 var gps = bsite.Gps_point;
                 var gpss = gps.Split(',');
-                output.lon_end = double.Parse(gpss[0]);
-                output.lat_end = double.Parse(gpss[1]);
+                if (gpss.Length == 2)
+                {
+                    output.lon_end = double.Parse(gpss[0], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+                    output.lat_end = double.Parse(gpss[1], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+                }
+                else
+                {
+                    Logger.Error("RefreshBiketemp-825");
+                }
             }
             var gpsstart = track.Start_gps_point.Split(',');
-            output.lon = double.Parse(gpsstart[0]);
-            output.lat = double.Parse(gpsstart[1]);
+            if (gpsstart.Length == 2)
+            {
+                output.lon = double.Parse(gpsstart[0], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+                output.lat = double.Parse(gpsstart[1], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
+            }
+            else
+            {
+                Logger.Error("RefreshBiketemp-837");
+            }
 
             output.out_trade_no = track.Pay_docno;
+            output.ble_type = track.Ble_type;
+            output.ble_serial = track.Ble_serial;
             output.start_site_name = track.Start_site_name;
             output.ble_name = track.Ble_name;
             output.start_time = track.Start_time.ToString();
@@ -703,13 +955,14 @@ namespace ASBicycle.Bike
                 "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id" +
                 ",a.start_time,a.end_time,a.payment,a.should_pay,a.pay_status,a.pay_method,a.pay_docno,a.remark" +
                 ",b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name" +
-                ",c.time_charge,e.Lock_pwd, c.free_time, c.fixed_amount");
+                ",c.time_charge,e.Lock_pwd, c.free_time, c.fixed_amount, c.top_amount, f.recharge_count");
             sb.Append(" from track as a left join bikesite as b on a.start_site_id = b.id");
             sb.Append(" left join school as c on b.school_id = c.id");
             sb.Append(" left join bikesite as d on a.end_site_id = d.id");
             sb.Append(" left join bike as e on a.bike_id = e.id");
+            sb.Append(" left join recharge as f on a.user_id = f.user_id");
             sb.AppendFormat(" where a.pay_docno='{0}'", input.out_trade_no);
-            var track = _sqlReadExecuter.SqlQuery<TrackEntity>(sb.ToString()).ToList().FirstOrDefault();
+            var track = _sqlReadExecuter.SqlQuery<TrackEntity>(sb.ToString()).FirstOrDefault();
             
             if (track == null)
             {
@@ -725,22 +978,50 @@ namespace ASBicycle.Bike
             output.school_name = track.School_name;
             output.remark = track.Remark;
             output.pay_method = track.Pay_method;
-
+            output.recharge_count = track.Recharge_count?.ToString("F") ?? "0.00";
 
             TimeSpan costtime = DateTime.Parse(track.End_time.ToString()) - DateTime.Parse(track.Start_time.ToString());
+            TimeSpan costday = DateTime.Parse(track.End_time.ToString()).Date - DateTime.Parse(track.Start_time.ToString()).Date;
 
-            var ctm = (int)costtime.TotalMinutes;//去掉多余的零头
-
-            if (ctm < track.Free_time)
+            //var ctm = (int)Math.Ceiling(costtime.TotalMinutes);//去掉多余的零头
+            //var day = (int)Math.Ceiling(costday.TotalDays);
+            var ctm = (int)Math.Floor(costtime.TotalMinutes);//去掉多余的零头
+            var day = (int)Math.Ceiling(costday.TotalDays);
+            if (costtime.TotalMinutes < 1)
             {
-                output.allpay = track.Fixed_amount.ToString();
+                output.rental_time = Math.Ceiling(costtime.TotalSeconds) / 100;
             }
             else
             {
-                output.allpay = track.Payment == null ? (((ctm - track.Free_time) * track.time_charge / 100.00) + track.Fixed_amount).ToString() : track.Payment.ToString();//分转元
+                output.rental_time = ctm;
             }
 
-            output.rental_time = ctm;
+            if (track.Payment != null)
+            {
+                output.allpay = ((double) track.Payment).ToString("F");
+            }
+            else if (ctm < track.Free_time)
+            {
+                output.allpay = track.Fixed_amount.ToString("F");
+            }
+            //else if (ctm > track.Free_time && day == 0)
+            //{
+            //    var tpay = (ctm - track.Free_time) * track.time_charge / 100.00 + track.Fixed_amount;
+            //    output.allpay = tpay <= track.Top_amount ? tpay.ToString() : track.Top_amount.ToString();
+            //}
+            else
+            {
+                //TimeSpan fcosttime = DateTime.Parse(track.Start_time.ToString()).Date.AddDays(1) - DateTime.Parse(track.Start_time.ToString());
+                //TimeSpan ecosttime = DateTime.Parse(track.End_time.ToString()) - DateTime.Parse(track.End_time.ToString()).Date;
+
+                //var ftpay = ((int)Math.Ceiling(fcosttime.TotalMinutes) - track.Free_time) * track.time_charge / 100.00 + track.Fixed_amount;//分转元
+                //var etpay = ((int)Math.Ceiling(ecosttime.TotalMinutes) - track.Free_time) * track.time_charge / 100.00 + track.Fixed_amount;//分转元
+                //var firstpay = ftpay <= track.Top_amount ? ftpay : track.Top_amount;
+                //var endpay = (int)Math.Ceiling(ecosttime.TotalMinutes) > track.Free_time ? track.Top_amount : etpay;
+
+                //output.allpay = track.Payment == null ? (firstpay + track.Top_amount * day + endpay).ToString() : track.Payment.ToString();//分转元
+                output.allpay = (((ctm - track.Free_time) * track.time_charge / 100.00) + track.Fixed_amount).ToString("F");//分转元
+            }
 
             return output;
         }
@@ -771,8 +1052,8 @@ namespace ASBicycle.Bike
             var bike =
                 await
                     _bikeReadRepository.FirstOrDefaultAsync(
-                        t => t.Ble_name == input.Ble_name && t.rent_type == 1 && t.Ble_type == 4);
-            if (bike == null)
+                        t => t.Ble_name == input.Ble_name && t.rent_type == 1);
+            if (bike == null || bike.Ble_type < 3)
             {
                 throw new UserFriendlyException("车辆编号错误或该车不可租");
             }
@@ -780,7 +1061,6 @@ namespace ASBicycle.Bike
             {
                 throw new UserFriendlyException("该车辆出租中");
             }
-
             if (bike.Bike_status == 0)
             {
                 throw new UserFriendlyException("请先把租赁的自行车归还，再进行租车!");
@@ -788,7 +1068,44 @@ namespace ASBicycle.Bike
             var school = bike.School;
             decimal timecharge = school.Time_charge == null ? 0 :(decimal) school.Time_charge;
             var msg = $"{school.Free_time}分钟内{school.Fixed_amount}元，超出部分每分钟{timecharge/100}元";
-            return new CanRentalOutput {charge = msg };
+            return new CanRentalOutput {charge = msg , type = bike.Ble_type.Value, serial = bike.Ble_serial};
+        }
+
+        public async Task CostByRecharge(RentalRechargeInput input)
+        {
+            var track = await _trackRepository.FirstOrDefaultAsync(t => t.Pay_docno == input.out_trade_no);
+            if (track != null)
+            {
+                track.Pay_status = 3;
+                track.Trade_no = input.out_trade_no;
+                track.Pay_method = "余额";
+                track.Updated_at = DateTime.Now;
+                track.Payment = track.Should_pay;
+                track.Pay_time = DateTime.Now;
+                //LogHelper.Logger.Info(Request.Form["total_fee"]);
+                await _trackRepository.UpdateAsync(track);
+
+                var recharge = await _rechargeWriteRepository.FirstOrDefaultAsync(t => t.User_id == track.User_id);
+                if (recharge != null)
+                {
+                    if (track.Should_pay > recharge.Recharge_count)
+                    {
+                        throw new UserFriendlyException("预充值额不足,请先进行充值,或用别的方式付款");
+                    }
+                    recharge.Recharge_count = recharge.Recharge_count - track.Should_pay;
+                    recharge.Updated_at = DateTime.Now;
+
+                    await _rechargeWriteRepository.UpdateAsync(recharge);
+                }
+                else
+                {
+                    throw new UserFriendlyException("没有预充值");
+                }
+            }
+            else
+            {
+                throw new UserFriendlyException("订单号错误");
+            }
         }
 
         /// <summary>

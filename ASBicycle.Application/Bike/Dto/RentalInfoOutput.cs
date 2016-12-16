@@ -17,7 +17,8 @@ namespace ASBicycle.Bike.Dto
 
         public string remark { get; set; }
 
-        public int rental_time { get; set; }
+        public double rental_time { get; set; }
         public string allpay { get; set; }
+        public string recharge_count { get; set; }
     }
 }

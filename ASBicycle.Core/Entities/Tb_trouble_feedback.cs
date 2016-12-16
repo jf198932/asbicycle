@@ -21,6 +21,10 @@ namespace ASBicycle.Entities
         /// </summary>
         public int? update_by { get; set; }
         /// <summary>
+        /// 车辆编号
+        /// </summary>
+        public string bike_number { get; set; }
+        /// <summary>
         /// 车辆损坏(坐垫损坏、链条损坏、踏脚损坏、龙头损坏、轮胎损坏、其他损坏)
         /// </summary>
         public string trouble1 { get; set; }

@@ -49,5 +49,8 @@ namespace ASBicycle.Bike
 
         [HttpGet]
         Task<CanRentalOutput> CanReantalBike([FromUri] RentalBikeInput input);
+
+        [HttpPost]
+        Task CostByRecharge(RentalRechargeInput input);
     }
 }
