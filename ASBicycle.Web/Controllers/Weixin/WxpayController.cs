@@ -123,7 +123,7 @@ namespace ASBicycle.Web.Controllers.Weixin
                     await _rechargeWriteRepository.GetAllListAsync(t => t.User_id == recharge_detail.User_id);
 
                 var recharge = recharges.FirstOrDefault();
-                recharge.Recharge_count = (recharge.Recharge_count ?? 0) + recharge_detail.Recharge_amount;
+                recharge.Recharge_count = (double)((decimal)(recharge.Recharge_count ?? 0) + (decimal)recharge_detail.Recharge_amount);
                 recharge.Updated_at = DateTime.Now;
 
                 await _rechargeWriteRepository.UpdateAsync(recharge);

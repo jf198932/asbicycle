@@ -44,5 +44,9 @@ namespace ASBicycle.User.Dto
         /// 追踪器名称
         /// </summary>
         public string Ble_name { get; set; }
+        /// <summary>
+        /// 优惠券张数
+        /// </summary>
+        public int Coupons { get; set; }
     }
 }

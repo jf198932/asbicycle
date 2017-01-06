@@ -16,12 +16,6 @@ namespace ASBicycle.Bike
 
         [HttpGet]
         Task<AlarmBikeOutput> GetAlarmBikeWay([FromUri] BikegetInput input);
-        [HttpPost]
-        Task<RentalBikeOutput> RentalBike(RentalBikeInput input);
-        [HttpPost]
-        Task<RentalFinishOutput> RentalBikeFinish(RentalBikeInput input);
-        [HttpPost]
-        Task<RentalBikeOutput> RefreshBike(RentalBikeInput input);
 
         [HttpPost]
         Task<RentalCostOutput> RentalCast(RentalBikeInput input);
@@ -52,5 +46,10 @@ namespace ASBicycle.Bike
 
         [HttpPost]
         Task CostByRecharge(RentalRechargeInput input);
+
+        [HttpPost]
+        Task<RentalBikeOutput> RentalBikeCreateTrack(RentalBikeInput input);
+        [HttpGet]
+        Task<BikeUsedOutput> GetBikeUsedInfo([FromUri]RentalBikeInput input);
     }
 }

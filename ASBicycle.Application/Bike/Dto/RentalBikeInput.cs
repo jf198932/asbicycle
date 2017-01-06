@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services.Dto;
 
 namespace ASBicycle.Bike.Dto
@@ -12,10 +13,7 @@ namespace ASBicycle.Bike.Dto
         public string out_trade_no { get; set; }
 
         public string gps_point { get; set; }
-
-        public double lon { get; set; }
-        public double lat { get; set; }
-
-        public int battery { get; set; }
+        
+        public string isrstr { get; set; }
     }
 }

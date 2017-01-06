@@ -95,6 +95,8 @@
     <Compile Include="Bikesite\IBikesiteWriteRepository.cs" />
     <Compile Include="Bike\IBikeReadRepository.cs" />
     <Compile Include="Bike\IBikeWriteRepository.cs" />
+    <Compile Include="Coupon\ICouponReadRepository.cs" />
+    <Compile Include="Coupon\ICouponWriteRepository.cs" />
     <Compile Include="Entities\Authen\BackUser.cs" />
     <Compile Include="Entities\Authen\Module.cs" />
     <Compile Include="Entities\Authen\ModulePermission.cs" />
@@ -104,6 +106,10 @@
     <Compile Include="Entities\Authen\UserRole.cs" />
     <Compile Include="Entities\Bike.cs" />
     <Compile Include="Entities\Bikesite.cs" />
+    <Compile Include="Entities\Coupon.cs" />
+    <Compile Include="Entities\CouponPackage.cs" />
+    <Compile Include="Entities\CouponPkgAss.cs" />
+    <Compile Include="Entities\CouponUserAss.cs" />
     <Compile Include="Entities\Credit.cs" />
     <Compile Include="Entities\Log.cs" />
     <Compile Include="Entities\Message.cs" />

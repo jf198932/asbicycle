@@ -125,6 +125,7 @@
     <Compile Include="Bike\Dto\BikeOutput.cs" />
     <Compile Include="Bike\Dto\BikeUploadInput.cs" />
     <Compile Include="Bike\Dto\BikeUploadOutput.cs" />
+    <Compile Include="Bike\Dto\BikeUsedOutput.cs" />
     <Compile Include="Bike\Dto\CanRentalOutput.cs" />
     <Compile Include="Bike\Dto\RentalBikeInput.cs" />
     <Compile Include="Bike\Dto\RentalBikeOutput.cs" />
@@ -138,6 +139,14 @@
     <Compile Include="Common\HttpHelper.cs" />
     <Compile Include="Common\LatlonHelper.cs" />
     <Compile Include="Common\PushMsgHelper.cs" />
+    <Compile Include="Coupon\CouponAppService.cs" />
+    <Compile Include="Coupon\Dto\CouPonInput.cs" />
+    <Compile Include="Coupon\Dto\CouponListOutput.cs" />
+    <Compile Include="Coupon\Dto\CouponOutput.cs" />
+    <Compile Include="Coupon\ICouponAppService.cs" />
+    <Compile Include="Log\Dto\LogInput.cs" />
+    <Compile Include="Log\ILogAppService.cs" />
+    <Compile Include="Log\LogAppService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Recharge\Dto\RechargeInput.cs" />
     <Compile Include="Recharge\Dto\RechargeOutput.cs" />
@@ -160,6 +169,7 @@
     <Compile Include="Track\Dto\TrackUpdateInput.cs" />
     <Compile Include="Track\ITrackAppService.cs" />
     <Compile Include="Track\TrackAppService.cs" />
+    <Compile Include="User\Dto\BillOutput.cs" />
     <Compile Include="User\Dto\CertificationOutput .cs" />
     <Compile Include="User\Dto\CheckCodeOutput.cs" />
     <Compile Include="User\Dto\DescriptionOutput.cs" />

@@ -309,8 +309,8 @@ namespace ASBicycle.Web.Controllers.Alipay
                             await _rechargeDetailWriteRepository.UpdateAsync(recharge_detail);
 
                             var recharge = await _rechargeWriteRepository.FirstOrDefaultAsync(t => t.User_id == recharge_detail.User_id);
-
-                            recharge.Recharge_count = (recharge.Recharge_count ?? 0) + recharge_detail.Recharge_amount; ;
+                            
+                            recharge.Recharge_count = (double)((decimal)(recharge.Recharge_count ?? 0) + (decimal)recharge_detail.Recharge_amount); ;
                             recharge.Updated_at = DateTime.Now;
 
                             await _rechargeWriteRepository.UpdateAsync(recharge);

@@ -19,6 +19,7 @@ using ASBicycle.Log;
 using ASBicycle.Recharge;
 using ASBicycle.Recharge_detail;
 using ASBicycle.School;
+using ASBicycle.Track;
 using ASBicycle.User.Dto;
 using AutoMapper;
 
@@ -39,6 +40,7 @@ namespace ASBicycle.User
         private readonly ISqlReadExecuter _sqlReadExecuter;
         private readonly IRecharge_detailReadRepository _rechargeDetailReadRepository;
         private readonly IRecharge_detailWriteRepository _rechargeDetailWriteRepository;
+        private readonly ITrackReadRepository _trackReadRepository;
 
         private readonly ISchoolReadRepository _schoolReadRepository;
         private readonly ISchoolWriteRepository _schoolWriteRepository;
@@ -55,6 +57,7 @@ namespace ASBicycle.User
             , ISqlReadExecuter sqlReadExecuter
             , IRecharge_detailReadRepository rechargeDetailReadRepository
             , IRecharge_detailWriteRepository rechargeDetailWriteRepository
+            , ITrackReadRepository trackReadRepository
             , ISchoolReadRepository schoolReadRepository
             , ISchoolWriteRepository schoolWriteRepository
             , IRechargeReadRepository rechargeReadRepository
@@ -72,6 +75,7 @@ namespace ASBicycle.User
             _sqlReadExecuter = sqlReadExecuter;
             _rechargeDetailReadRepository = rechargeDetailReadRepository;
             _rechargeDetailWriteRepository = rechargeDetailWriteRepository;
+            _trackReadRepository = trackReadRepository;
 
             _schoolReadRepository = schoolReadRepository;
             _schoolWriteRepository = schoolWriteRepository;
@@ -726,8 +730,8 @@ namespace ASBicycle.User
             {
                 xxx.UserDto.Payed = 0;
             }
-
-
+            //todo 优惠券张数
+            xxx.UserDto.Coupons = 3;
             return xxx;
         }
         [HttpGet]
@@ -949,6 +953,78 @@ namespace ASBicycle.User
             list.Add(new DescriptionOutput { name = "用户注册协议", url = "https://api.isriding.com/app/Uploads/mianze.html" });
             list.Add(new DescriptionOutput { name = "充值协议", url = "https://api.isriding.com/app/Uploads/chongzhixieyi.html"});
             return list;
+        }
+
+        public async Task<List<BillOutput>> GetUserBillList(UserBikeInput input)
+        {
+            var billList = new List<BillOutput>();
+
+            var track =
+                await _trackReadRepository.GetAllListAsync(t => t.User_id == input.User_id && t.Payment > 0);
+            var recharge_detail =
+                await _rechargeDetailReadRepository.GetAllListAsync(t => t.User_id == input.User_id && t.doc_no != null);
+
+            billList.AddRange(
+                track.Select(
+                    t =>
+                        new BillOutput
+                        {
+                            Docno = t.Pay_docno,
+                            Payment = (t.Payment ?? 0).ToString("F"),
+                            PayMethod = t.Pay_method,
+                            PayTime = t.Pay_time.ToString(),
+                            TypeName = "租车费用"
+                        }));
+            billList.AddRange(
+                recharge_detail.Select(
+                    t =>
+                        new BillOutput
+                        {
+                            Docno = t.recharge_docno,
+                            Payment = (t.Recharge_amount ?? 0).ToString("F"),
+                            PayMethod = Rechargemethod(t.Recharge_method),
+                            PayTime = t.Created_at.ToString(),
+                            TypeName = TypeName(t.Type, t.Recharge_type)
+                        }));
+            var rlist = billList.OrderByDescending(t => t.PayTime).ToList();
+            return rlist;
+        }
+
+        public string Rechargemethod(int? input)
+        {
+            if (input == null)
+            {
+                return "未知";
+            }
+            if (input == 1)
+            {
+                return "支付宝";
+            }
+            if (input == 2)
+            {
+                return "微信";
+            }
+            return "未知";
+        }
+
+        public string TypeName(int? type, int? Recharge_type)
+        {
+            if (type == 2)
+            {
+                return "押金退款";
+            }
+            else
+            {
+                if (Recharge_type == 1)
+                {
+                    return "押金缴纳";
+                }
+                if (Recharge_type == 2)
+                {
+                    return "余额充值";
+                }
+                return "未知";
+            }
         }
     }
 }

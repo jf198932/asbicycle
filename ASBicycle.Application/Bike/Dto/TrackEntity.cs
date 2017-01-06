@@ -13,6 +13,7 @@ namespace ASBicycle.Bike.Dto
         public int? End_site_id { get; set; }
         public DateTime? Start_time { get; set; }
         public DateTime? End_time { get; set; }
+        public DateTime? Pay_time { get; set; }
         public double? Payment { get; set; }
         public double? Should_pay { get; set; }
         public int? Pay_status { get; set; }

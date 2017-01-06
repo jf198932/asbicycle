@@ -109,8 +109,6 @@ namespace ASBicycle.User
         [HttpGet]
         MianzeOutput Czxy();
 
-
-
         [HttpGet]
         Task<UserOutput> GetUserInfo([FromUri] PhoneNumInput phoneNumInput);
 
@@ -128,5 +126,8 @@ namespace ASBicycle.User
 
         [HttpGet]
         List<DescriptionOutput> GetDescriptionList();
+
+        [HttpGet]
+        Task<List<BillOutput>> GetUserBillList([FromUri] UserBikeInput input);
     }
 }
