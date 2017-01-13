@@ -15,6 +15,7 @@ using Abp.Extensions;
 using Abp.Logging;
 using ASBicycle.Bikesite;
 using ASBicycle.Common;
+using ASBicycle.Coupon;
 using ASBicycle.Recharge;
 using ASBicycle.Track;
 
@@ -31,16 +32,18 @@ namespace ASBicycle.Bike
         private readonly ISqlReadExecuter _sqlReadExecuter;
         private readonly IBikesiteWriteRepository _bikesiteRepository;
         private readonly IBikesiteReadRepository _bikesiteReadRepository;
+        private readonly ICouponUserAssReadRepository _couponUserAssReadRepository;
+        private readonly ICouponUserAssWriteRepository _couponUserAssWriteRepository;
+        private readonly ICouponPkgAssReadRepository _couponPkgAssReadRepository;
+        private readonly ICouponPkgAssWriteRepository _couponPkgAssWriteRepository;
 
-        public BikeAppService(IBikeWriteRepository bikeRepository
-            , ITrackWriteRepository trackRepository
-            , ITrackReadRepository trackReadRepository
-            , ISqlExecuter sqlExecuter
-            , IBikesiteWriteRepository bikesiteRepository
-            , IBikeReadRepository bikeReadRepository
+        public BikeAppService(IBikeWriteRepository bikeRepository, IBikeReadRepository bikeReadRepository
+            , ITrackWriteRepository trackRepository, ITrackReadRepository trackReadRepository
+            , ISqlExecuter sqlExecuter, ISqlReadExecuter sqlReadExecuter
+            , IBikesiteWriteRepository bikesiteRepository, IBikesiteReadRepository bikesiteReadRepository
             , IRechargeWriteRepository rechargeWriteRepository
-            , ISqlReadExecuter sqlReadExecuter
-            , IBikesiteReadRepository bikesiteReadRepository)
+            , ICouponPkgAssReadRepository couponPkgAssReadRepository, ICouponPkgAssWriteRepository couponPkgAssWriteRepository
+            , ICouponUserAssReadRepository couponUserAssReadRepository, ICouponUserAssWriteRepository couponUserAssWriteRepository)
         {
             _bikeRepository = bikeRepository;
             _trackRepository = trackRepository;
@@ -51,6 +54,10 @@ namespace ASBicycle.Bike
             _rechargeWriteRepository = rechargeWriteRepository;
             _sqlReadExecuter = sqlReadExecuter;
             _bikesiteReadRepository = bikesiteReadRepository;
+            _couponUserAssReadRepository = couponUserAssReadRepository;
+            _couponUserAssWriteRepository = couponUserAssWriteRepository;
+            _couponPkgAssReadRepository = couponPkgAssReadRepository;
+            _couponPkgAssWriteRepository = couponPkgAssWriteRepository;
         }
         [HttpGet]
         public async Task<AlarmBikeOutput> GetAlarmBikeWay([FromUri] BikegetInput input)
@@ -196,10 +203,7 @@ namespace ASBicycle.Bike
             output.end_time = end_time.ToString("yyyy/MM/dd HH:mm:ss");
             output.school_name = track.School_name;
             output.recharge_count = track.Recharge_count?.ToString("F") ?? "0.00";
-            //todo coupon
-            output.Coupon.Type = 1;
-            output.Coupon.Value = 0.1;
-            output.Coupon.CouponUserid = 1;
+            
             TimeSpan costtime = (track.End_time == null ? end_time : DateTime.Parse(track.End_time.ToString())) -
                                 DateTime.Parse(track.Start_time.ToString());
 
@@ -222,6 +226,7 @@ namespace ASBicycle.Bike
 
             if (ctm <= track.Free_time)
             {
+                output.shouldpay = track.Fixed_amount.ToString("F");
                 output.allpay = track.Fixed_amount.ToString("F");
             }
             //else if (ctm > track.Free_time && day == 0)
@@ -242,7 +247,66 @@ namespace ASBicycle.Bike
 
 
                 //output.allpay = (firstpay + track.Top_amount*day + endpay).ToString();
-                output.allpay = (((ctm - track.Free_time) * track.time_charge / 100.00) + track.Fixed_amount).ToString("F");//分转元
+                output.shouldpay = (((ctm - track.Free_time) * track.time_charge / 100.00) + track.Fixed_amount).ToString("F");//分转元
+                output.allpay= (((ctm - track.Free_time) * track.time_charge / 100.00) + track.Fixed_amount).ToString("F");//分转元
+            }
+
+            //todo coupon
+            var coupons = new List<CouponDto>();
+            //获取用户没有使用过的优惠券信息
+            var couponlist = await _couponUserAssReadRepository.GetAllListAsync(t => t.user_id == input.user_id && t.coupon_use_time == null);
+            //用户的优惠券包集合
+            var couponpkgass_couponpkgids = couponlist.Select(t => t.coupon_pkg_id ?? 0).ToList();
+            //优惠券包 下面的优惠券信息
+            var couponpkgasslist =
+                await
+                    _couponPkgAssReadRepository.GetAllListAsync(
+                        t => couponpkgass_couponpkgids.Contains(t.coupon_pkg_id ?? 0));
+            foreach (var item in couponlist)
+            {
+                var temp =
+                    couponpkgasslist.FirstOrDefault(
+                        t => t.coupon_pkg_id == item.coupon_pkg_id && t.coupon_id == item.coupon_id);
+                if (temp != null && temp.coupon_pkg_disable_time >= DateTime.Now)
+                {
+                    coupons.Add(new CouponDto
+                    {
+                        CouponUserid = item.Id.ToString(),
+                        Type = item.Coupon.coupon_type.ToString(),
+                        Value = item.Coupon.coupon_value.ToString("F"),
+                        UsedTime = item.coupon_use_time.ToString(),
+                        Display = item.Coupon.coupon_rule,
+                        Couponpkgname = item.CouponPackage.coupon_pkg_name
+                    });
+                }
+            }
+            CommonHelper.OrderByRule(coupons, double.Parse(output.shouldpay));
+            var cp = coupons.FirstOrDefault();
+            if (cp != null)
+            {
+                output.Coupon = new CouponDto();
+                output.Coupon.Type = cp.Type;
+                output.Coupon.Value = cp.Value;
+                output.Coupon.CouponUserid = cp.CouponUserid;
+                output.Coupon.Couponpkgname = cp.Couponpkgname;
+                if (cp.Type == "1")
+                {
+                    //output.allpay =
+                    //    (((decimal) double.Parse(output.shouldpay) - (decimal) cp.Value) < 0
+                    //        ? 0
+                    //        : ((decimal) double.Parse(output.shouldpay) - (decimal) cp.Value)).ToString("F");
+                    output.allpay = (Math.Floor(((decimal)double.Parse(output.shouldpay) - decimal.Parse(cp.Value)) * 100) < 0
+                                ? 0
+                                : Math.Floor((decimal.Parse(output.shouldpay) - decimal.Parse(cp.Value)) * 100) / 100).ToString("F");
+                    output.discountamount =
+                        ((decimal) double.Parse(output.shouldpay) - (decimal) double.Parse(output.allpay)).ToString("F");
+                }
+                else if (cp.Type == "2")
+                {
+                    output.allpay = (Math.Floor((decimal) double.Parse(output.shouldpay) * decimal.Parse(cp.Value) * 100)/100).ToString("F");
+                    output.discountamount =
+                        ((decimal) double.Parse(output.shouldpay) - (decimal) double.Parse(output.allpay)).ToString("F");
+                }
             }
             return output;
         }
@@ -329,41 +393,42 @@ namespace ASBicycle.Bike
                 bluetoothpwd = first + second;
 
                 var endtime = DateTime.Now;
-
+                string ly_lock = "";
+                string ctm = "";
                 if (!input.isrstr.IsNullOrEmpty())
                 {
-                    var ly_work = input.isrstr.Substring(15, 1);//作状态指示字符（N/S），日常状态；S表示selected，选择状态
-                    var ly_lock = input.isrstr.Substring(16, 1);//车锁状态指示字符（L/O/M）L表示locked，锁闭状态；O表示opened，打开状态；M表示malfunction，异常状态
+                    //var ly_work = input.isrstr.Substring(15, 1);//作状态指示字符（N/S），日常状态；S表示selected，选择状态
+                    ly_lock = input.isrstr.Substring(16, 1);//车锁状态指示字符（L/O/M）L表示locked，锁闭状态；O表示opened，打开状态；M表示malfunction，异常状态
                     var battery = input.isrstr.Substring(17, 2);//电量
-                    var ctm = int.Parse(input.isrstr.Substring(19, 4), System.Globalization.NumberStyles.AllowHexSpecifier);//时间 分钟 
+                    ctm = input.isrstr.Substring(19, 4);//时间 分钟 
                     bike.Battery = int.Parse(battery);
-
-                    //结算没完成的订单
-                    var no_pay_track =
-                        await _trackRepository.FirstOrDefaultAsync(t => t.Bike_id == bike.Id && t.Pay_status == 1);
-                    if (no_pay_track != null)
-                    {
-                        if (ly_lock.ToUpper() == "L")
-                        {
-                            endtime = no_pay_track.Start_time.Value.AddMinutes(ctm);
-                        }
-
-                        no_pay_track.End_point = input.gps_point;
-                        no_pay_track.End_site_id = bsite.Id;
-                        no_pay_track.End_time = endtime;
-                        no_pay_track.Updated_at = endtime;
-                        no_pay_track.Pay_status = 2; //还车未支付
-                        await _trackRepository.UpdateAsync(no_pay_track);
-
-                        bike.Bike_status = 1;
-                        await _bikeRepository.UpdateAsync(bike);
-
-                        bsite.Available_count = bsite.Available_count + 1;
-                        await _bikesiteRepository.UpdateAsync(bsite);
-
-                        await CurrentUnitOfWork.SaveChangesAsync();
-                    }
                 }
+                //结算没完成的订单
+                var no_pay_track =
+                    await _trackRepository.FirstOrDefaultAsync(t => t.Bike_id == bike.Id && t.Pay_status == 1);
+                if (no_pay_track != null)
+                {
+                    if (ly_lock != "" && ly_lock.ToUpper() == "L" && ctm != "")
+                    {
+                        endtime = no_pay_track.Start_time.Value.AddMinutes(int.Parse(ctm, System.Globalization.NumberStyles.AllowHexSpecifier));
+                    }
+
+                    no_pay_track.End_point = input.gps_point;
+                    no_pay_track.End_site_id = bsite.Id;
+                    no_pay_track.End_time = endtime;
+                    no_pay_track.Updated_at = endtime;
+                    no_pay_track.Pay_status = 2; //还车未支付
+                    await _trackRepository.UpdateAsync(no_pay_track);
+
+                    bike.Bike_status = 1;
+                    await _bikeRepository.UpdateAsync(bike);
+
+                    bsite.Available_count = bsite.Available_count + 1;
+                    await _bikesiteRepository.UpdateAsync(bsite);
+
+                    await CurrentUnitOfWork.SaveChangesAsync();
+                }
+
                 return new RentalBikeOutput
                 {
                     ble_name = input.Ble_name,
@@ -420,6 +485,10 @@ namespace ASBicycle.Bike
             if (track == null)
             {
                 throw new UserFriendlyException("无该订单号!");
+            }
+            if (track.Pay_status > 1)
+            {
+                throw new UserFriendlyException("已经还过车了!");
             }
 
             var bike = await _bikeRepository.FirstOrDefaultAsync(t => t.Ble_name == input.Ble_name);
@@ -509,10 +578,7 @@ namespace ASBicycle.Bike
             output.school_name = tracktemp.School_name;
             output.ble_type = tracktemp.Ble_type;
             output.ble_serial = tracktemp.Ble_serial;
-            //todo coupon
-            output.Coupon.Type = 1;
-            output.Coupon.Value = 0.1;
-            output.Coupon.CouponUserid = 1;
+            
             //var recharge = await _rechargeWriteRepository.FirstOrDefaultAsync(t => t.User_id == track.User_id);
             //if (recharge == null)
             //{
@@ -552,6 +618,7 @@ namespace ASBicycle.Bike
 
             if (ctm < tracktemp.Free_time)
             {
+                output.shouldpay = tracktemp.Fixed_amount.ToString("F");
                 output.allpay = tracktemp.Fixed_amount.ToString("F");
                 track.Should_pay = tracktemp.Fixed_amount;
             }
@@ -574,8 +641,71 @@ namespace ASBicycle.Bike
                 //output.allpay = (firstpay + tracktemp.Top_amount * day + endpay).ToString();//分转元
                 //track.Should_pay = firstpay + tracktemp.Top_amount * day + endpay;//分转元
 
+                output.shouldpay = (((ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00) + tracktemp.Fixed_amount).ToString("F");//分转元
                 output.allpay = (((ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00) + tracktemp.Fixed_amount).ToString("F");//分转元
                 track.Should_pay = ((ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00) + tracktemp.Fixed_amount;//分转元
+            }
+
+            var coupons = new List<CouponDto>();
+            //获取用户没有使用过的优惠券信息
+            var couponlist = await _couponUserAssWriteRepository.GetAllListAsync(t => t.user_id == input.user_id && t.coupon_use_time == null);
+            //用户的优惠券包集合
+            var couponpkgass_couponpkgids = couponlist.Select(t => t.coupon_pkg_id ?? 0).ToList();
+            //优惠券包 下面的优惠券信息
+            var couponpkgasslist =
+                await
+                    _couponPkgAssWriteRepository.GetAllListAsync(
+                        t => couponpkgass_couponpkgids.Contains(t.coupon_pkg_id ?? 0));
+            foreach (var item in couponlist)
+            {
+                var temp =
+                    couponpkgasslist.FirstOrDefault(
+                        t => t.coupon_pkg_id == item.coupon_pkg_id && t.coupon_id == item.coupon_id);
+                if (temp != null && temp.coupon_pkg_disable_time >= DateTime.Now)
+                {
+                    coupons.Add(new CouponDto
+                    {
+                        CouponUserid = item.Id.ToString(),
+                        Type = item.Coupon.coupon_type.ToString(),
+                        Value = item.Coupon.coupon_value.ToString("F"),
+                        UsedTime = item.coupon_use_time.ToString(),
+                        Display = item.Coupon.coupon_rule,
+                        Couponpkgname = item.CouponPackage.coupon_pkg_name
+                    });
+                }
+            }
+            CommonHelper.OrderByRule(coupons, double.Parse(output.shouldpay));
+            var cp = coupons.FirstOrDefault();
+            if (cp != null)
+            {
+                output.Coupon = new CouponDto();
+                output.Coupon.Type = cp.Type;
+                output.Coupon.Value = cp.Value;
+                output.Coupon.CouponUserid = cp.CouponUserid;
+                output.Coupon.Couponpkgname = cp.Couponpkgname;
+                if (cp.Type == "1")
+                {
+                    //output.allpay =
+                    //    (((decimal) double.Parse(output.shouldpay) - (decimal) cp.Value) < 0
+                    //        ? 0
+                    //        : ((decimal) double.Parse(output.shouldpay) - (decimal) cp.Value)).ToString("F");
+                    output.allpay = (Math.Floor(((decimal)double.Parse(output.shouldpay) - decimal.Parse(cp.Value)) * 100) < 0
+                                ? 0
+                                : Math.Floor((decimal.Parse(output.shouldpay) - decimal.Parse(cp.Value)) * 100) / 100).ToString("F");
+                    output.discountamount =
+                        ((decimal) double.Parse(output.shouldpay) - (decimal) double.Parse(output.allpay)).ToString("F");
+                    //track.discount_amount =
+                    //    (double) ((decimal) double.Parse(output.shouldpay) - (decimal) double.Parse(output.allpay));
+                }
+                else if (cp.Type == "2")
+                {
+                    //output.allpay = ((decimal) double.Parse(output.shouldpay)*(decimal) cp.Value).ToString("F");
+                    output.allpay = (Math.Floor((decimal)double.Parse(output.shouldpay) * decimal.Parse(cp.Value) * 100) / 100).ToString("F");
+                    output.discountamount =
+                        ((decimal) double.Parse(output.shouldpay) - (decimal) double.Parse(output.allpay)).ToString("F");
+                    //track.discount_amount =
+                    //    (double) ((decimal) double.Parse(output.shouldpay) - (decimal) double.Parse(output.allpay));
+                }
             }
             await _trackRepository.UpdateAsync(track);
             return output;
@@ -655,17 +785,15 @@ namespace ASBicycle.Bike
             TimeSpan costtime = endtime - DateTime.Parse(tracktemp.Start_time.ToString());
             TimeSpan costday = endtime.Date - DateTime.Parse(tracktemp.Start_time.ToString()).Date;
 
-            var ctm = (int)Math.Ceiling(costtime.TotalMinutes);//去掉多余的零头
+            var ctm = (int)Math.Floor(costtime.TotalMinutes);//去掉多余的零头
             var day = (int)Math.Ceiling(costday.TotalDays);
 
-            //todo coupon
-            output.Coupon.Type = 1;
-            output.Coupon.Value = 0.1;
-            output.Coupon.CouponUserid = 1;
+            
             output.rental_time = ctm;
             if (ctm < tracktemp.Free_time)
             {
                 output.allpay = tracktemp.Fixed_amount.ToString("F");
+                output.shouldpay = tracktemp.Fixed_amount.ToString("F");
                 track.Should_pay = tracktemp.Fixed_amount;
             }
             //else if (ctm > tracktemp.Free_time && day == 0)
@@ -687,8 +815,73 @@ namespace ASBicycle.Bike
                 //output.allpay = (firstpay + tracktemp.Top_amount * day + endpay).ToString();//分转元
                 //track.Should_pay = firstpay + tracktemp.Top_amount * day + endpay;//分转元
                 output.allpay = ((ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00).ToString("F");//分转元
+                output.shouldpay = ((ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00).ToString("F");//分转元
                 track.Should_pay = (ctm - tracktemp.Free_time) * tracktemp.time_charge / 100.00;//分转元
             }
+
+            var coupons = new List<CouponDto>();
+            //获取用户没有使用过的优惠券信息
+            var couponlist = await _couponUserAssWriteRepository.GetAllListAsync(t => t.user_id == input.user_id && t.coupon_use_time == null);
+            //用户的优惠券包集合
+            var couponpkgass_couponpkgids = couponlist.Select(t => t.coupon_pkg_id ?? 0).ToList();
+            //优惠券包 下面的优惠券信息
+            var couponpkgasslist =
+                await
+                    _couponPkgAssWriteRepository.GetAllListAsync(
+                        t => couponpkgass_couponpkgids.Contains(t.coupon_pkg_id ?? 0));
+            foreach (var item in couponlist)
+            {
+                var temp =
+                    couponpkgasslist.FirstOrDefault(
+                        t => t.coupon_pkg_id == item.coupon_pkg_id && t.coupon_id == item.coupon_id);
+                if (temp != null && temp.coupon_pkg_disable_time >= DateTime.Now)
+                {
+                    coupons.Add(new CouponDto
+                    {
+                        CouponUserid = item.Id.ToString(),
+                        Type = item.Coupon.coupon_type.ToString(),
+                        Value = item.Coupon.coupon_value.ToString("F"),
+                        UsedTime = item.coupon_use_time.ToString(),
+                        Display = item.Coupon.coupon_rule,
+                        Couponpkgname = item.CouponPackage.coupon_pkg_name
+                    });
+                }
+            }
+            CommonHelper.OrderByRule(coupons, double.Parse(output.shouldpay));
+            var cp = coupons.FirstOrDefault();
+            if (cp != null)
+            {
+                output.Coupon = new CouponDto();
+                output.Coupon.Type = cp.Type;
+                output.Coupon.Value = cp.Value;
+                output.Coupon.CouponUserid = cp.CouponUserid;
+                output.Coupon.Couponpkgname = cp.Couponpkgname;
+                if (cp.Type == "1")
+                {
+                    //output.allpay =
+                    //    (((decimal)double.Parse(output.shouldpay) - decimal.Parse(cp.Value)) < 0
+                    //        ? 0
+                    //        : ((decimal)double.Parse(output.shouldpay) - decimal.Parse(cp.Value))).ToString("F");
+                    output.allpay = (Math.Floor(((decimal)double.Parse(output.shouldpay) - decimal.Parse(cp.Value)) * 100) < 0
+                                ? 0
+                                : Math.Floor((decimal.Parse(output.shouldpay) - decimal.Parse(cp.Value)) * 100) / 100).ToString("F");
+
+                    output.discountamount =
+                        ((decimal)double.Parse(output.shouldpay) - (decimal)double.Parse(output.allpay)).ToString("F");
+                    //track.discount_amount =
+                    //    (double) ((decimal) double.Parse(output.shouldpay) - (decimal) double.Parse(output.allpay));
+                }
+                else if (cp.Type == "2")
+                {
+                    //output.allpay = ((decimal)double.Parse(output.shouldpay) * decimal.Parse(cp.Value)).ToString("F");
+                    output.allpay = (Math.Floor((decimal)double.Parse(output.shouldpay) * decimal.Parse(cp.Value) * 100) / 100).ToString("F");
+                    output.discountamount =
+                        ((decimal)double.Parse(output.shouldpay) - (decimal)double.Parse(output.allpay)).ToString("F");
+                    //track.discount_amount =
+                    //    (double) ((decimal) double.Parse(output.shouldpay) - (decimal) double.Parse(output.allpay));
+                }
+            }
+
             await _trackRepository.UpdateAsync(track);
             return output;
         }
@@ -803,7 +996,7 @@ namespace ASBicycle.Bike
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(
-                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id" +
+                "select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,e.ble_name,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.coupon_id,a.discount_amount" +
                 ",a.start_time,a.end_time,a.payment,a.should_pay,a.pay_status,a.pay_method,a.pay_docno,a.remark,a.pay_time" +
                 ",b.`name` as start_site_name,d.`name` as end_site_name,a.start_point, c.`name` as school_name" +
                 ",c.time_charge,e.Lock_pwd, c.free_time, c.fixed_amount, c.top_amount, f.recharge_count");
@@ -831,11 +1024,7 @@ namespace ASBicycle.Bike
             output.pay_method = track.Pay_method;
             output.recharge_count = track.Recharge_count?.ToString("F") ?? "0.00";
             output.pay_time = track.Pay_time.ToString();
-            //todo coupon
-            output.Coupon.Type = 1;
-            output.Coupon.Value = 0.1;
-            output.Coupon.CouponUserid = 1;
-
+            
             TimeSpan costtime = DateTime.Parse(track.End_time.ToString()) - DateTime.Parse(track.Start_time.ToString());
             TimeSpan costday = DateTime.Parse(track.End_time.ToString()).Date - DateTime.Parse(track.Start_time.ToString()).Date;
 
@@ -855,10 +1044,12 @@ namespace ASBicycle.Bike
             if (track.Payment != null)
             {
                 output.allpay = ((double) track.Payment).ToString("F");
+                output.shouldpay = (track.Should_pay??0).ToString("F");
             }
             else if (ctm < track.Free_time)
             {
                 output.allpay = track.Fixed_amount.ToString("F");
+                output.shouldpay = track.Fixed_amount.ToString("F");
             }
             //else if (ctm > track.Free_time && day == 0)
             //{
@@ -877,8 +1068,111 @@ namespace ASBicycle.Bike
 
                 //output.allpay = track.Payment == null ? (firstpay + track.Top_amount * day + endpay).ToString() : track.Payment.ToString();//分转元
                 output.allpay = (((ctm - track.Free_time) * track.time_charge / 100.00) + track.Fixed_amount).ToString("F");//分转元
+                output.shouldpay = (((ctm - track.Free_time) * track.time_charge / 100.00) + track.Fixed_amount).ToString("F");//分转元
             }
 
+            if (track.coupon_id != null)
+            {
+                //获取用户没有使用过的优惠券信息
+                var couponuserass = await _couponUserAssReadRepository.FirstOrDefaultAsync(t => t.Id == track.coupon_id);
+
+                if (couponuserass != null)
+                {
+                    var cp = new CouponDto
+                    {
+                        CouponUserid = couponuserass.Id.ToString(),
+                        Type = couponuserass.Coupon.coupon_type.ToString(),
+                        Value = couponuserass.Coupon.coupon_value.ToString("F"),
+                        UsedTime = couponuserass.coupon_use_time.ToString(),
+                        Display = couponuserass.Coupon.coupon_rule,
+                        Couponpkgname = couponuserass.CouponPackage.coupon_pkg_name
+                    };
+                    output.Coupon = new CouponDto();
+                    output.Coupon.Type = cp.Type;
+                    output.Coupon.Value = cp.Value;
+                    output.Coupon.CouponUserid = cp.CouponUserid;
+                    output.Coupon.Couponpkgname = cp.Couponpkgname;
+                    if (cp.Type == "1")
+                    {
+                        output.allpay =
+                            (Math.Floor((decimal.Parse(output.shouldpay) - decimal.Parse(cp.Value)) *100) < 0
+                                ? 0
+                                : Math.Floor((decimal.Parse(output.shouldpay) - decimal.Parse(cp.Value)) * 100) / 100).ToString("F");
+                        output.discountamount =
+                            ((decimal) double.Parse(output.shouldpay) - (decimal) double.Parse(output.allpay)).ToString(
+                                "F");
+                    }
+                    else if (cp.Type == "2")
+                    {
+                        //output.allpay = ((decimal) double.Parse(output.shouldpay)*(decimal) cp.Value).ToString("F");
+                        output.allpay = (Math.Floor((decimal)double.Parse(output.shouldpay) * decimal.Parse(cp.Value) * 100) / 100).ToString("F");
+                        output.discountamount =
+                            ((decimal) double.Parse(output.shouldpay) - (decimal) double.Parse(output.allpay)).ToString(
+                                "F");
+                    }
+
+                }
+            }
+            else
+            {
+                var coupons = new List<CouponDto>();
+                //获取用户没有使用过的优惠券信息
+                var couponlist = await _couponUserAssReadRepository.GetAllListAsync(t => t.user_id == input.user_id && t.coupon_use_time == null);
+                //用户的优惠券包集合
+                var couponpkgass_couponpkgids = couponlist.Select(t => t.coupon_pkg_id ?? 0).ToList();
+                //优惠券包 下面的优惠券信息
+                var couponpkgasslist =
+                    await
+                        _couponPkgAssReadRepository.GetAllListAsync(
+                            t => couponpkgass_couponpkgids.Contains(t.coupon_pkg_id ?? 0));
+                foreach (var item in couponlist)
+                {
+                    var temp =
+                        couponpkgasslist.FirstOrDefault(
+                            t => t.coupon_pkg_id == item.coupon_pkg_id && t.coupon_id == item.coupon_id);
+                    if (temp != null && temp.coupon_pkg_disable_time >= DateTime.Now)
+                    {
+                        coupons.Add(new CouponDto
+                        {
+                            CouponUserid = item.Id.ToString(),
+                            Type = item.Coupon.coupon_type.ToString(),
+                            Value = item.Coupon.coupon_value.ToString("F"),
+                            UsedTime = item.coupon_use_time.ToString(),
+                            Display = item.Coupon.coupon_rule,
+                            Couponpkgname = item.CouponPackage.coupon_pkg_name
+                        });
+                    }
+                }
+                CommonHelper.OrderByRule(coupons, double.Parse(output.shouldpay));
+                var cp = coupons.FirstOrDefault();
+                if (cp != null)
+                {
+                    output.Coupon = new CouponDto();
+                    output.Coupon.Type = cp.Type;
+                    output.Coupon.Value = cp.Value;
+                    output.Coupon.CouponUserid = cp.CouponUserid;
+                    output.Coupon.Couponpkgname = cp.Couponpkgname;
+                    if (cp.Type == "1")
+                    {
+                        //output.allpay =
+                        //    (((decimal)double.Parse(output.shouldpay) - decimal.Parse(cp.Value)) < 0
+                        //        ? 0
+                        //        : ((decimal)double.Parse(output.shouldpay) - decimal.Parse(cp.Value))).ToString("F");
+                        output.allpay = (Math.Floor((decimal.Parse(output.shouldpay) - decimal.Parse(cp.Value)) * 100) < 0
+                                ? 0
+                                : Math.Floor((decimal.Parse(output.shouldpay) - decimal.Parse(cp.Value)) * 100) / 100).ToString("F");
+                        output.discountamount =
+                            (decimal.Parse(output.shouldpay) - decimal.Parse(output.allpay)).ToString("F");
+                    }
+                    else if (cp.Type == "2")
+                    {
+                        //output.allpay = ((decimal)double.Parse(output.shouldpay) * decimal.Parse(cp.Value)).ToString("F");
+                        output.allpay = (Math.Floor(decimal.Parse(output.shouldpay) * decimal.Parse(cp.Value) * 100) / 100).ToString("F");
+                        output.discountamount =
+                            (decimal.Parse(output.shouldpay) - decimal.Parse(output.allpay)).ToString("F");
+                    }
+                }
+            }
             return output;
         }
         /// <summary>
@@ -889,17 +1183,18 @@ namespace ASBicycle.Bike
         public async Task<TrackInfoOutput> RentalTrackInfo([FromUri] RentalBikeInput input)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,a.start_point");
+            sb.Append("select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,a.start_point,b.ble_type");
             sb.Append(" from track as a");
+            sb.Append(" left join bike as b on a.bike_id = b.id");
             sb.AppendFormat(" where a.user_id={0} and a.pay_status < 3", input.user_id);
             sb.Append(" order by a.updated_at desc LIMIT 1");
 
             var track = _sqlReadExecuter.SqlQuery<TrackEntity>(sb.ToString()).FirstOrDefault();
             if (track == null)
             {
-                return new TrackInfoOutput {out_trade_no = "", pay_status = 0};
+                return new TrackInfoOutput {out_trade_no = "", pay_status = 0, ble_type = 0};
             }
-            var result = new TrackInfoOutput {out_trade_no = track.Pay_docno, pay_status = track.Pay_status};
+            var result = new TrackInfoOutput {out_trade_no = track.Pay_docno, pay_status = track.Pay_status, ble_type = track.Ble_type};
             return result;
         }
 
@@ -936,6 +1231,23 @@ namespace ASBicycle.Bike
                 track.Payment = track.Should_pay;
                 track.Pay_time = DateTime.Now;
                 //LogHelper.Logger.Info(Request.Form["total_fee"]);
+
+                if (input.coupon_id != null)
+                {
+                    var couponuserass =
+                        await _couponUserAssWriteRepository.FirstOrDefaultAsync(t => t.Id == input.coupon_id);
+                    if (couponuserass != null)
+                    {
+                        couponuserass.coupon_use_time = DateTime.Now;
+                        couponuserass.update_time =DateTime.Now;
+                        await _couponUserAssWriteRepository.UpdateAsync(couponuserass);
+
+                        track.coupon_id = input.coupon_id;
+                        track.discount_amount = input.disamount;
+                        track.Payment = (double) ((decimal) (track.Should_pay ?? 0) - (decimal) (input.disamount ?? 0));
+                    }
+                }
+
                 await _trackRepository.UpdateAsync(track);
 
                 var recharge = await _rechargeWriteRepository.FirstOrDefaultAsync(t => t.User_id == track.User_id);
@@ -946,7 +1258,7 @@ namespace ASBicycle.Bike
                         throw new UserFriendlyException("预充值额不足,请先进行充值,或用别的方式付款");
                     }
                     recharge.Recharge_count =
-                        (double) ((decimal) recharge.Recharge_count - (decimal) (track.Should_pay ?? 0));
+                        (double) ((decimal) recharge.Recharge_count - (decimal) (track.Payment ?? 0));
                     recharge.Updated_at = DateTime.Now;
 
                     await _rechargeWriteRepository.UpdateAsync(recharge);
@@ -1119,6 +1431,21 @@ namespace ASBicycle.Bike
             track.Pay_method = "免费";
             track.Pay_time = DateTime.Now;
             track.Pay_status = 3;//免费，直接结束
+
+            if (input.coupon_id != null)
+            {
+                var couponuserass =
+                    await _couponUserAssWriteRepository.FirstOrDefaultAsync(t => t.Id == input.coupon_id);
+                if (couponuserass != null)
+                {
+                    couponuserass.coupon_use_time = DateTime.Now;
+                    couponuserass.update_time = DateTime.Now;
+                    await _couponUserAssWriteRepository.UpdateAsync(couponuserass);
+
+                    track.coupon_id = input.coupon_id;
+                    track.discount_amount = input.disamount;
+                }
+            }
 
             await _trackRepository.UpdateAsync(track);
 

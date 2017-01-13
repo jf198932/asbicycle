@@ -15,5 +15,8 @@ namespace ASBicycle.Bike.Dto
         public string gps_point { get; set; }
         
         public string isrstr { get; set; }
+
+        public int? coupon_id { get; set; }
+        public double? disamount { get; set; }
     }
 }

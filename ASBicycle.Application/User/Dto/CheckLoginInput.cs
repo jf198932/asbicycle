@@ -10,6 +10,27 @@ namespace ASBicycle.User.Dto
         [Required]
         public string CheckCode { get; set; }
         public int? device_os { get; set; }
+
+        /// <summary>
+        /// 品牌
+        /// </summary>
+        public string mobile_brand { get; set; }
+        /// <summary>
+        /// 机型
+        /// </summary>
+        public string mobile_model { get; set; }
+        /// <summary>
+        /// 系统版本
+        /// </summary>
+        public string os_version { get; set; }
+        /// <summary>
+        /// app版本号
+        /// </summary>
+        public string app_version { get; set; }
+        /// <summary>
+        /// 设备串号
+        /// </summary>
+        public string device_id { get; set; }
     }
 
     public class CheckIdentityInput : IInputDto
@@ -19,6 +40,26 @@ namespace ASBicycle.User.Dto
         [Required]
         public string Token { get; set; }
         public int? device_os { get; set; }
+        /// <summary>
+        /// 品牌
+        /// </summary>
+        public string mobile_brand { get; set; }
+        /// <summary>
+        /// 机型
+        /// </summary>
+        public string mobile_model { get; set; }
+        /// <summary>
+        /// 系统版本
+        /// </summary>
+        public string os_version { get; set; }
+        /// <summary>
+        /// app版本号
+        /// </summary>
+        public string app_version { get; set; }
+        /// <summary>
+        /// 设备串号
+        /// </summary>
+        public string device_id { get; set; }
     }
 
     public class RegisterUserInput : IInputDto

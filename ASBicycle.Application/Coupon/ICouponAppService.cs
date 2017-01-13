@@ -31,5 +31,19 @@ namespace ASBicycle.Coupon
         /// <returns></returns>
         [HttpPost]
         Task GetCouponByCode(CouPonInput input);
+        /// <summary>
+        /// 刷新新的价格
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost]
+        RefreshCouponOutput RefreshByCode(RefreshCouponInput input);
+        /// <summary>
+        /// 使用优惠券
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost]
+        Task UseCoupon(UseCouponInput input);
     }
 }

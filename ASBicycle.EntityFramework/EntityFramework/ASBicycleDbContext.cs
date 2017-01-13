@@ -23,6 +23,12 @@ namespace ASBicycle.EntityFramework
         public virtual IDbSet<Entities.VersionUpdate> VersionUpdates { get; set; }
         public virtual IDbSet<Entities.Parameter> Parameters { get; set; } 
         public virtual IDbSet<Entities.Tb_trouble_feedback> TbTroubleFeedbacks { get; set; }
+        public virtual IDbSet<Entities.Coupon> Coupons { get; set; }
+        public virtual IDbSet<Entities.CouponPackage> CouponPackages { get; set; }
+        public virtual IDbSet<Entities.CouponPkgAss> CouponPkgAsses { get; set; }
+        public virtual IDbSet<Entities.CouponUserAss> CouponUserAsses { get; set; } 
+
+        public virtual IDbSet<Entities.UserDevice> UserDevices { get; set; } 
         //权限
         //public virtual IDbSet<Entities.Authen.BackUser> BackUsers { get; set; }
         //public virtual IDbSet<Entities.Authen.Role> Roles { get; set; }

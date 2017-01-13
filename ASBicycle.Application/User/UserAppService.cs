@@ -15,6 +15,8 @@ using Abp.UI;
 using ASBicycle.Bike;
 using ASBicycle.Bike.Dto;
 using ASBicycle.Common;
+using ASBicycle.Coupon;
+using ASBicycle.Entities;
 using ASBicycle.Log;
 using ASBicycle.Recharge;
 using ASBicycle.Recharge_detail;
@@ -45,6 +47,8 @@ namespace ASBicycle.User
         private readonly ISchoolReadRepository _schoolReadRepository;
         private readonly ISchoolWriteRepository _schoolWriteRepository;
         private readonly IRechargeReadRepository _rechargeReadRepository;
+        private readonly ICouponUserAssReadRepository _couponUserAssReadRepository;
+        private readonly IUserDeviceWriteRepository _userDeviceWriteRepository;
 
         public UserAppService(ICacheManager cacheManager
             , IUnitOfWorkManager unitOfWorkManager
@@ -61,6 +65,8 @@ namespace ASBicycle.User
             , ISchoolReadRepository schoolReadRepository
             , ISchoolWriteRepository schoolWriteRepository
             , IRechargeReadRepository rechargeReadRepository
+            , ICouponUserAssReadRepository couponUserAssReadRepository
+            , IUserDeviceWriteRepository userDeviceWriteRepository
             )
         {
             _userRepository = userRepository;
@@ -80,6 +86,9 @@ namespace ASBicycle.User
             _schoolReadRepository = schoolReadRepository;
             _schoolWriteRepository = schoolWriteRepository;
             _rechargeReadRepository = rechargeReadRepository;
+
+            _couponUserAssReadRepository = couponUserAssReadRepository;
+            _userDeviceWriteRepository = userDeviceWriteRepository;
         }
 
         [HttpPost]
@@ -113,8 +122,45 @@ namespace ASBicycle.User
                 if (checkIdentityInput.device_os != null)
                 {
                     result.Device_os = checkIdentityInput.device_os;
+                    result.Device_id = checkIdentityInput.device_id;
                     await _userRepository.UpdateAsync(result);
-                    
+
+                    var ud =
+                        await
+                            _userDeviceWriteRepository.FirstOrDefaultAsync(
+                                t => t.user_id == result.Id 
+                                && t.mobile_brand == checkIdentityInput.mobile_brand
+                                && t.mobile_model == checkIdentityInput.mobile_model
+                                && t.app_version == checkIdentityInput.app_version
+                                && t.os_version == checkIdentityInput.os_version);
+
+                    if (ud == null)
+                    {
+                        if (!checkIdentityInput.app_version.IsNullOrEmpty() || !checkIdentityInput.device_id.IsNullOrEmpty() ||
+                        !checkIdentityInput.mobile_model.IsNullOrEmpty() || !checkIdentityInput.mobile_brand.IsNullOrEmpty() ||
+                        !checkIdentityInput.os_version.IsNullOrEmpty())
+                        {
+                            await _userDeviceWriteRepository.InsertAsync(new UserDevice
+                            {
+                                app_version = checkIdentityInput.app_version,
+                                create_date = DateTime.Now,
+                                update_date = DateTime.Now,
+                                device_id = checkIdentityInput.device_id,
+                                last_use_date = DateTime.Now,
+                                mobile_model = checkIdentityInput.mobile_model,
+                                mobile_brand = checkIdentityInput.mobile_brand,
+                                os_version = checkIdentityInput.os_version,
+                                user_id = result.Id
+                            });
+                        }
+                    }
+                    else
+                    {
+                        ud.last_use_date = DateTime.Now;
+                        ud.update_date = DateTime.Now;
+                        await _userDeviceWriteRepository.UpdateAsync(ud);
+                    }
+
                     var xxx = new UserOutput { UserDto = Mapper.Map<UserDto>(result) };
                     var recharge = result.Recharges.FirstOrDefault();
                     if (recharge != null)
@@ -507,6 +553,44 @@ namespace ASBicycle.User
                 result.Updated_at = DateTime.Now;
                 result = await _userRepository.UpdateAsync(result);
 
+                var ud =
+                        await
+                            _userDeviceWriteRepository.FirstOrDefaultAsync(
+                                t => t.user_id == result.Id
+                                && t.mobile_brand == checkLoginInput.mobile_brand
+                                && t.mobile_model == checkLoginInput.mobile_model
+                                && t.app_version == checkLoginInput.app_version
+                                && t.os_version == checkLoginInput.os_version);
+
+                if (ud == null)
+                {
+                    if (!checkLoginInput.app_version.IsNullOrEmpty() || !checkLoginInput.device_id.IsNullOrEmpty() ||
+                        !checkLoginInput.mobile_model.IsNullOrEmpty() || !checkLoginInput.mobile_brand.IsNullOrEmpty() ||
+                        !checkLoginInput.os_version.IsNullOrEmpty())
+                    {
+                        await _userDeviceWriteRepository.InsertAsync(new UserDevice
+                        {
+                            app_version = checkLoginInput.app_version,
+                            create_date = DateTime.Now,
+                            update_date = DateTime.Now,
+                            device_id = checkLoginInput.device_id,
+                            last_use_date = DateTime.Now,
+                            mobile_model = checkLoginInput.mobile_model,
+                            mobile_brand = checkLoginInput.mobile_brand,
+                            os_version = checkLoginInput.os_version,
+                            user_id = result.Id
+                        });
+                    }
+                    
+                }
+                else
+                {
+                    ud.last_use_date = DateTime.Now;
+                    ud.update_date = DateTime.Now;
+                    await _userDeviceWriteRepository.UpdateAsync(ud);
+                }
+
+
                 var xxx = new UserOutput {UserDto = Mapper.Map<UserDto>(result)};
                 var recharge = result.Recharges.FirstOrDefault();
                 if (recharge != null)
@@ -731,7 +815,8 @@ namespace ASBicycle.User
                 xxx.UserDto.Payed = 0;
             }
             //todo 优惠券张数
-            xxx.UserDto.Coupons = 3;
+            var couponlist = await _couponUserAssReadRepository.GetAllListAsync(t => t.user_id == result.Id && t.coupon_use_time == null);
+            xxx.UserDto.Coupons = couponlist.Count;
             return xxx;
         }
         [HttpGet]
@@ -986,7 +1071,7 @@ namespace ASBicycle.User
                             PayTime = t.Created_at.ToString(),
                             TypeName = TypeName(t.Type, t.Recharge_type)
                         }));
-            var rlist = billList.OrderByDescending(t => t.PayTime).ToList();
+            var rlist = billList.OrderByDescending(t => DateTime.Parse(t.PayTime)).ToList();
             return rlist;
         }
 

@@ -75,8 +75,19 @@ namespace ASBicycle.Entities
         /// 结束桩点GPS
         /// </summary>
         public int? End_site_id { get; set; }
-
+        /// <summary>
+        /// 支付时间
+        /// </summary>
         public DateTime? Pay_time { get; set; }
+        /// <summary>
+        /// 优惠券ID
+        /// </summary>
+        public int? coupon_id { get; set; }
+        /// <summary>
+        /// 优惠金额
+        /// </summary>
+        public double? discount_amount { get; set; }
+
         //[ForeignKey("User_id")]
         //public virtual User User { get; set; }
         [ForeignKey("Bike_id")]

@@ -14,8 +14,8 @@ namespace ASBicycle.Track.Dto
         public string End_site_name { get; set; }
         public string Start_time { get; set; }
         public string End_time { get; set; }
-        public double? Payment { get; set; }
-        public double? Should_pay { get; set; }
+        public double Payment { get; set; }
+        public double Should_pay { get; set; }
         public int? Pay_status { get; set; }
         public string Remark { get; set; }
         public int? Remarkstatus { get; set; }

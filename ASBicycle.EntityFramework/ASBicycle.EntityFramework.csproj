@@ -109,6 +109,14 @@
     <Compile Include="EntityFramework\Repositories\Bikesite\BikesiteWriteRepository.cs" />
     <Compile Include="EntityFramework\Repositories\Bike\BikeReadRepository.cs" />
     <Compile Include="EntityFramework\Repositories\Bike\BikeWriteRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\Coupon\CouponPkgAssReadRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\Coupon\CouponPkgAssWriteRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\Coupon\CouponPkgReadRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\Coupon\CouponUserAssReadRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\Coupon\CouponReadRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\Coupon\CouponUserAssWriteRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\Coupon\CouponWriteRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\Coupon\CouponPkgWriteRepository.cs" />
     <Compile Include="EntityFramework\Repositories\Log\LogReadRepository.cs" />
     <Compile Include="EntityFramework\Repositories\Log\LogWriteRepository.cs" />
     <Compile Include="EntityFramework\Repositories\Parameter\ParameterReadRepository.cs" />
@@ -127,6 +135,8 @@
     <Compile Include="EntityFramework\Repositories\TbTroubleFeedback\TbTroubleFeedbackWriteRepository.cs" />
     <Compile Include="EntityFramework\Repositories\Track\TrackReadRepository.cs" />
     <Compile Include="EntityFramework\Repositories\Track\TrackWriteRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\User\UserDeviceReadRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\User\UserDeviceWriteRepository.cs" />
     <Compile Include="EntityFramework\Repositories\User\UserReadRepository.cs" />
     <Compile Include="EntityFramework\Repositories\User\UserWriteRepository.cs" />
     <Compile Include="EntityFramework\Repositories\VersionUpdate\VersionUpdateReadRepository.cs" />

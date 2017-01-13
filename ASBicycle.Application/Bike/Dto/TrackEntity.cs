@@ -42,5 +42,8 @@ namespace ASBicycle.Bike.Dto
         public int Ble_type { get; set; }
 
         public string Ble_serial { get; set; }
+
+        public int? coupon_id { get; set; }
+        public double? discount_amount { get; set; }
     }
 }

@@ -5,13 +5,13 @@ namespace ASBicycle.Bike.Dto
 {
     public class RentalCostOutput : IOutputDto
     {
-        public RentalCostOutput()
-        {
-            Coupon = new CouponDto();
-            allpay = "0.00";
-            discountamount = "0.00";
-            shouldpay = "0.00";
-        }
+        //public RentalCostOutput()
+        //{
+        //    Coupon = new CouponDto();
+        //    allpay = "0.00";
+        //    discountamount = "0.00";
+        //    shouldpay = "0.00";
+        //}
 
         public string out_trade_no { get; set; }
         public string start_site_name { get; set; }
@@ -36,15 +36,27 @@ namespace ASBicycle.Bike.Dto
 
     public class CouponDto
     {
+        public CouponDto()
+        {
+            CouponUserid = "";
+            Type = "";
+            Value = "";
+            Display = "";
+            StartTime = "";
+            EndTime = "";
+            UsedTime = "";
+            Couponpkgname = "";
+        }
+
         /// <summary>
         /// 优惠券ID
         /// </summary>
-        public int CouponUserid { get; set; }
+        public string CouponUserid { get; set; }
         /// <summary>
         /// 1,抵用券 2,折扣券
         /// </summary>
-        public int Type { get; set; }
-        public double Value { get; set; }
+        public string Type { get; set; }
+        public string Value { get; set; }
         public string Display { get; set; }
         public string StartTime { get; set; }
         public string EndTime { get; set; }

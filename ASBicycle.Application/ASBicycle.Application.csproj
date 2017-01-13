@@ -136,6 +136,7 @@
     <Compile Include="Bike\Dto\TrackEntity.cs" />
     <Compile Include="Bike\Dto\TrackInfoOutput.cs" />
     <Compile Include="Bike\IBikeAppService.cs" />
+    <Compile Include="Common\CommonHelper.cs" />
     <Compile Include="Common\HttpHelper.cs" />
     <Compile Include="Common\LatlonHelper.cs" />
     <Compile Include="Common\PushMsgHelper.cs" />
@@ -143,6 +144,9 @@
     <Compile Include="Coupon\Dto\CouPonInput.cs" />
     <Compile Include="Coupon\Dto\CouponListOutput.cs" />
     <Compile Include="Coupon\Dto\CouponOutput.cs" />
+    <Compile Include="Coupon\Dto\RefreshCouponInput.cs" />
+    <Compile Include="Coupon\Dto\RefreshCouponOutput.cs" />
+    <Compile Include="Coupon\Dto\UseCouponInput.cs" />
     <Compile Include="Coupon\ICouponAppService.cs" />
     <Compile Include="Log\Dto\LogInput.cs" />
     <Compile Include="Log\ILogAppService.cs" />
