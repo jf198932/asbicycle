@@ -1,0 +1,58 @@
+﻿@using Abp.Extensions
+@model ASBicycle.Web.Models.Share.ShareModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>尚骑单车</title>
+    <link href="~/Content/share/css/reset.css" rel="stylesheet" />
+    <link href="~/Content/share/css/tour_share.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="box">
+        <div class="bg"></div>
+        <div class="content">
+            <img src="~/Content/share/img/words_bg1.png" />
+            <div class="head">
+                <p>致.亲爱的你</p>
+                <p><span class="year">@Model.Year</span>年<span class="month">@Model.Month</span>月<span class="day">@Model.Day</span>日我在<span class="area">@Model.Place</span>体</p>
+                <p>验尚骑单车
+                @{
+                    if (Model.HH > 0)
+                    {
+                        <text><span class="times">@Model.HH</span>小时</text>
+                    }
+                }
+                <span class="times">@Model.MM</span>分钟</p>
+            </div>
+            <div class="cross"></div>
+            <div class="head_img">
+                @if (!Model.HeadImg.IsNullOrEmpty())
+                {
+                    <img src='@Model.HeadImg' />
+                }
+            </div>
+            <div class="deci">
+                <p class="pp">曾经，我们用双足记录脚下的校园...</p>
+                <p class="pp">现在，解放双脚，让尚骑单车闪耀的双</p>
+                <p class="pp">轮来带你绘制自己的轨迹吧！</p>
+            </div>
+            <div class="load">
+                <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.aishang.bms"><img src="~/Content/share/img/downlod_icon.png" /></a>
+                <a id="loading" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.aishang.bms">下载尚骑APP</a>
+            </div>
+        </div>
+        <div class="fly">
+            <img src="~/Content/share/img/plane.png" />
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="~/Content/share/js/jquery-3.1.1.min.js"></script>
+<script src="~/Content/share/js/tour_share.js"></script>
+</html>

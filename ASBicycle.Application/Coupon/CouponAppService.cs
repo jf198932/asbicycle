@@ -79,12 +79,12 @@ namespace ASBicycle.Coupon
 
             output.Beused = coupons.Where(t => t.UsedTime != "").OrderByDescending(t => t.UsedTime).Take(20).ToList();
             output.Canuse =
-                coupons.Where(t => t.UsedTime == "" && DateTime.Parse(t.EndTime) >= DateTime.Now)
+                coupons.Where(t => t.UsedTime == "" && DateTime.Parse(t.EndTime).AddDays(1) >= DateTime.Now)
                     .OrderBy(t => t.EndTime)
                     .Skip((input.index - 1)*20)
                     .Take(20)
                     .ToList();
-            output.Overdue = coupons.Where(t => t.UsedTime == "" && DateTime.Parse(t.EndTime) < DateTime.Now).OrderByDescending(t => t.EndTime).Take(20).ToList();
+            output.Overdue = coupons.Where(t => t.UsedTime == "" && DateTime.Parse(t.EndTime).AddDays(1) < DateTime.Now).OrderByDescending(t => t.EndTime).Take(20).ToList();
             //output.Canuse.Add(new CouponDto
             //{
             //    CouponUserid = 1,
@@ -125,7 +125,7 @@ namespace ASBicycle.Coupon
                 var temp =
                     couponpkgasslist.FirstOrDefault(
                         t => t.coupon_pkg_id == item.coupon_pkg_id && t.coupon_id == item.coupon_id);
-                if (temp != null && temp.coupon_pkg_disable_time >= DateTime.Now)
+                if (temp != null && temp.coupon_pkg_disable_time.Value.AddDays(1) >= DateTime.Now)
                 {
                     alllist.Add(new CouponDto
                     {
@@ -168,7 +168,7 @@ namespace ASBicycle.Coupon
             {
                 throw new UserFriendlyException("礼包不可用");
             }
-            if (couponpkg.expire_date < DateTime.Now)
+            if (couponpkg.expire_date.Value.AddDays(1) < DateTime.Now)
             {
                 throw new UserFriendlyException("礼包已过期");
             }

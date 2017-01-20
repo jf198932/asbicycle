@@ -22,16 +22,13 @@ namespace ASBicycle.Bikesite
             _bikesiteReadRepository = bikesiteReadRepository;
             _bikeReadRepository = bikeReadRepository;
         }
-
+        /// <summary>
+        /// 获取桩点车辆列表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task<BikesiteOutput> GetOneBikesiteInfo([FromUri]BikesitePageInput input)
         {
-            //var bikesite = await _bikesiteRepository.GetAsync(id);
-            //var bikes = _bikeRepository.GetAll();
-            
-           // var bike = bikesite.Bikes.OrderBy(b => b.Id).Skip(pagesize*(index - 1)).Take(pagesize);
-            //var result = bikesite.MapTo<BikesiteOutput>();
-            //result.Bikes = bike.MapTo<List<BikeDto>>();
-            //return result;
             var bike =
                 _bikeReadRepository.GetAll()
                     .Where(b => b.Bikesite_id == input.id)
@@ -41,7 +38,11 @@ namespace ASBicycle.Bikesite
 
             return new BikesiteOutput {Bikes = bike.MapTo<List<BikeDto>>()};
         }
-
+        /// <summary>
+        /// 根据经纬度获取10公里之内的桩点信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task<List<BikesiteListOutput>> GetNearbyBikesites([FromUri]BikesiteInput input)
         {
             var model = await _bikesiteReadRepository.GetAllListAsync(t=> !string.IsNullOrEmpty(t.Gps_point) && t.School != null && t.Enable);
@@ -70,6 +71,45 @@ namespace ASBicycle.Bikesite
 
             var res = result.Where(r => r.Distance < 10).ToList();
             return res;
+        }
+        /// <summary>
+        /// 根据经纬度获取1公里之内的车辆信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<List<BikegpsOutput>> GetNearbyBikes(BikesiteInput input)
+        {
+            var model = await _bikeReadRepository.GetAllListAsync(t => t.Position != null && t.Position != "" && t.Bike_status == 1);
+
+            var result = new List<BikegpsOutput>();
+
+            foreach (var item in model)
+            {
+                var temp = new BikegpsOutput();
+                temp.ble_name = item.Ble_name;
+                temp.gps = item.Position;
+
+                string gps = item.Position;
+                var gpss = gps.Split(',');
+                if (gpss.Length == 2)
+                {
+                    double _lon = 0;
+                    double.TryParse(gpss[0], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"),
+                        out _lon);
+                    double _lat = 0;
+                    double.TryParse(gpss[1], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"),
+                        out _lat);
+                    temp.distance = LatlonHelper.GetDistance(input.lat, input.lon, _lat, _lon);
+                    result.Add(temp);
+                }
+                else
+                {
+                    Logger.Debug("GetNearbyBikesites-104-" + item.Id);
+                }
+            }
+            var res = result.Where(r => r.distance <= 1).ToList();
+            return res;
+            throw new System.NotImplementedException();
         }
     }
 }
