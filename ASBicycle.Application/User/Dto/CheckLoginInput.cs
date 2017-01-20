@@ -69,5 +69,10 @@ namespace ASBicycle.User.Dto
         [Required]
         public string CheckCode { get; set; }
         public int? device_os { get; set; }
+        /// <summary>
+        /// 设备串号
+        /// </summary>
+        public string device_id { get; set; }
+
     }
 }

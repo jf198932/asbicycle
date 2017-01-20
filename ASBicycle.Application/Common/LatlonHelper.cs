@@ -5,7 +5,7 @@ namespace ASBicycle.Common
 {
     public static class LatlonHelper
     {
-        private const double EARTH_RADIUS = 6378.137;//地球半径 
+        private const double EARTH_RADIUS = 6378.137;//地球半径  KM
         private static double Rad(double d)
         {
             return d * Math.PI / 180.0;

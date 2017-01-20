@@ -2031,6 +2031,16 @@
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\global.css" />
+    <Content Include="Content\share\css\reset.css" />
+    <Content Include="Content\share\css\tour_share.css" />
+    <Content Include="Content\share\css\tour_share.min.css" />
+    <Content Include="Content\share\img\bg.png" />
+    <Content Include="Content\share\img\downlod_icon.png" />
+    <Content Include="Content\share\img\plane.png" />
+    <Content Include="Content\share\img\words_bg1.png" />
+    <Content Include="Content\share\img\words_bg2.png" />
+    <Content Include="Content\share\js\jquery-3.1.1.min.js" />
+    <Content Include="Content\share\js\tour_share.js" />
     <Content Include="Content\site.css" />
     <Content Include="Content\site.response.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -2420,6 +2430,7 @@
     <Content Include="Views\Share\Index.cshtml" />
     <Content Include="Views\Wxpay\Notify2.cshtml" />
     <Content Include="Views\Alipay\Notify2.cshtml" />
+    <Content Include="Views\Share\New.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

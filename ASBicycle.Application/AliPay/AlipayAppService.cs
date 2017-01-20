@@ -11,6 +11,11 @@ namespace ASBicycle.AliPay
 {
     public class AlipayAppService : ASBicycleAppServiceBase, IAlipayAppService
     {
+        /// <summary>
+        /// 支付宝签名
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         [HttpPost]
         public AlipayOutput signatures(SignaturesInput input)
         {
