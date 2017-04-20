@@ -36,30 +36,31 @@ namespace ASBicycle.Recharge
 
         public async Task<RechargeOutput> CreateRecharge(RechargeInput input)
         {
-            var recharge = await _rechargeWriteRepository.GetAllListAsync(t => t.User_id == input.user_id);
-            if (recharge == null || recharge.Count == 0)
-            {
-                await _rechargeWriteRepository.InsertAsync(new Entities.Recharge
-                {
-                    Created_at = DateTime.Now,
-                    Updated_at = DateTime.Now,
-                    User_id = input.user_id,
-                    //Deposit = input.deposit
-                });
-            }
-            
-            var paydocno = DateTime.Now.ToString("yyyyMMddHHmmss") + new Random().Next(1000, 9999);
-            await _rechargeDetailWriteRepository.InsertAsync(new Entities.Recharge_detail
-            {
-                Created_at = DateTime.Now,
-                Updated_at = DateTime.Now,
-                User_id = input.user_id,
-                recharge_docno = paydocno,
-                Type = input.type,
-                status = 0,
-                Recharge_type = input.recharge_type,
-            });
-            return new RechargeOutput {out_trade_no = paydocno};
+            throw new UserFriendlyException("不再提供充值服务");
+            //var recharge = await _rechargeWriteRepository.GetAllListAsync(t => t.User_id == input.user_id);
+            //if (recharge == null || recharge.Count == 0)
+            //{
+            //    await _rechargeWriteRepository.InsertAsync(new Entities.Recharge
+            //    {
+            //        Created_at = DateTime.Now,
+            //        Updated_at = DateTime.Now,
+            //        User_id = input.user_id,
+            //        //Deposit = input.deposit
+            //    });
+            //}
+
+            //var paydocno = DateTime.Now.ToString("yyyyMMddHHmmss") + new Random().Next(1000, 9999);
+            //await _rechargeDetailWriteRepository.InsertAsync(new Entities.Recharge_detail
+            //{
+            //    Created_at = DateTime.Now,
+            //    Updated_at = DateTime.Now,
+            //    User_id = input.user_id,
+            //    recharge_docno = paydocno,
+            //    Type = input.type,
+            //    status = 0,
+            //    Recharge_type = input.recharge_type,
+            //});
+            //return new RechargeOutput { out_trade_no = paydocno };
         }
 
         public async Task ApplyRefound(RefoundInput input)
@@ -118,6 +119,7 @@ namespace ASBicycle.Recharge
 
         public async Task<RefoundOutput> ApplyRefoundTimely(RefoundInput input)
         {
+            throw new UserFriendlyException("不再提供退款服务");
             var detail = await _rechargeDetailWriteRepository.FirstOrDefaultAsync(t => t.User_id == input.User_id && t.Recharge_type == 1 && t.Type == 1 && t.status == 0 && t.doc_no != null);
             if(detail == null)
                 throw new UserFriendlyException("没有可以退款的订单");

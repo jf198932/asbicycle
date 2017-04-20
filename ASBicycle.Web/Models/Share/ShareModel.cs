@@ -8,6 +8,7 @@
         public int Day { get; set; }
         public int HH { get; set; }
         public int MM { get; set; }
+        public int SS { get; set; }
         
 
         public string Place { get; set; }

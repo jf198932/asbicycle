@@ -30,7 +30,7 @@ using ASBicycle.Track;
 /// </summary>
 public partial class notify_url : System.Web.UI.Page
 {
-    private IRepository<ASBicycle.Entities.Track> _trackRepository;
+    //private IRepository<ASBicycle.Entities.Track> _trackRepository;
     protected void Page_Load(object sender, EventArgs e)
     {
         //Dictionary<string, string> sPara = GetRequestPost();

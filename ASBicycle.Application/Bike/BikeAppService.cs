@@ -195,7 +195,7 @@ namespace ASBicycle.Bike
                     _bikeRepository.FirstOrDefaultAsync(
                         t => t.Ble_name == input.Ble_name && t.rent_type == 1);
             
-            if (bike == null || bike.Ble_type < 3)
+            if (bike == null || bike.Ble_type < 2)
             {
                 throw new UserFriendlyException("没有该车辆或该车不可租!");
             }
@@ -224,45 +224,56 @@ namespace ASBicycle.Bike
             var bikesitelist = await _bikesiteRepository.GetAllListAsync(t => t.School_id == bike.School_id && t.Enable && t.Type == 3);
 
             Entities.Bikesite bsite = null;
-            //Dictionary<string,string> temp = new Dictionary<string, string>();
-            double mindistance = 99999999;
-            //LogHelper.Logger.Info(mindistance.ToString);
-            foreach (var bikesite in bikesitelist)
+
+            if (bike.Ble_type != 2)
             {
-                var bikesitegps = bikesite.Gps_point.Split(',');
-                double bs_lon = 0;
-                double bs_lat = 0;
-                if (bikesitegps.Length == 2)
+                //Dictionary<string,string> temp = new Dictionary<string, string>();
+                double mindistance = 99999999;
+                //LogHelper.Logger.Info(mindistance.ToString);
+                foreach (var bikesite in bikesitelist)
                 {
-                    bs_lon = double.Parse(bikesitegps[0].Trim(), NumberStyles.Any,
-                        CultureInfo.CreateSpecificCulture("zh-cn"));
-                    bs_lat = double.Parse(bikesitegps[1].Trim(), NumberStyles.Any,
-                        CultureInfo.CreateSpecificCulture("zh-cn"));
+                    var bikesitegps = bikesite.Gps_point.Split(',');
+                    double bs_lon = 0;
+                    double bs_lat = 0;
+                    if (bikesitegps.Length == 2)
+                    {
+                        bs_lon = double.Parse(bikesitegps[0].Trim(), NumberStyles.Any,
+                            CultureInfo.CreateSpecificCulture("zh-cn"));
+                        bs_lat = double.Parse(bikesitegps[1].Trim(), NumberStyles.Any,
+                            CultureInfo.CreateSpecificCulture("zh-cn"));
+                    }
+                    else
+                    {
+                        Logger.Debug("RentalBiketemp-490-" + bikesite.Id);
+                    }
+
+                    var distance = LatlonHelper.GetDistance(ip_lat, ip_lon, bs_lat, bs_lon)*1000; //KM->M
+
+                    //LogHelper.Logger.Info(distance.ToString);
+
+                    if (distance < mindistance && distance <= bikesite.Radius) //
+                    {
+                        mindistance = distance;
+                        bsite = bikesite;
+                    }
                 }
-                else
+
+                if (bsite == null)
                 {
-                    Logger.Debug("RentalBiketemp-490-" + bikesite.Id);
-                }
-
-                var distance = LatlonHelper.GetDistance(ip_lat, ip_lon, bs_lat, bs_lon) * 1000;//KM->M
-
-                //LogHelper.Logger.Info(distance.ToString);
-
-                if (distance < mindistance && distance <= bikesite.Radius)//
-                {
-                    mindistance = distance;
-                    bsite = bikesite;
+                    throw new UserFriendlyException("范围内没有桩点");
                 }
             }
-
-            if (bsite == null)
+            else
             {
-                throw new UserFriendlyException("范围内没有桩点");
+                if (bike.Bikesite_id == null)
+                {
+                    throw new UserFriendlyException("范围内没有桩点");
+                }
+                bsite = await _bikesiteRepository.FirstOrDefaultAsync(t => t.Id == bike.Bikesite_id.Value);
             }
-
 
             string bluetoothpwd = "";
-            if (bike.Ble_type == 3)
+            if (bike.Ble_type == 3 || bike.Ble_type == 2)
             {
                 //蓝牙锁密码逻辑//ble_searl  后2位 第一位转换10进制  *2，再除16 取余 再转16进制，第二位同
                 var ts = bike.Ble_serial.Substring(bike.Ble_serial.Length - 2, 2);
@@ -306,12 +317,12 @@ namespace ASBicycle.Bike
 
                     await CurrentUnitOfWork.SaveChangesAsync();
                 }
-
+                bool flag = bike.Ble_type == 3 || bike.Ble_type == 2;
                 return new RentalBikeOutput
                 {
                     ble_name = input.Ble_name,
                     ble_serial = bike.Ble_serial,
-                    pwd = bike.Ble_type == 3 ? bluetoothpwd : bike.Lock_pwd,
+                    pwd = flag ? bluetoothpwd : bike.Lock_pwd,
                     BikesiteList = bikesitelist.MapTo<List<BikesiteEntity>>()
                 };
             }
@@ -375,6 +386,12 @@ namespace ASBicycle.Bike
 
             var bike = await _bikeRepository.FirstOrDefaultAsync(t => t.Ble_name == input.Ble_name);
 
+            if (bike.Ble_type == 2 && bike.Bikesite_id == null)
+            {
+                throw new UserFriendlyException("范围内没有桩点!");
+            }
+
+
             var gpsinput = input.gps_point.Split(',');
             double ip_lon = 0;
             double ip_lat = 0;
@@ -383,7 +400,7 @@ namespace ASBicycle.Bike
                 ip_lon = double.Parse(gpsinput[0], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
                 ip_lat = double.Parse(gpsinput[1], NumberStyles.Any, CultureInfo.CreateSpecificCulture("zh-cn"));
             }
-            
+
             var bikesitelist = await _bikesiteRepository.GetAllListAsync(t => t.School_id == bike.School_id && t.Enable && t.Type == 3);
 
             Entities.Bikesite bsite = null;
@@ -1105,7 +1122,7 @@ namespace ASBicycle.Bike
         public async Task<TrackInfoOutput> RentalTrackInfo([FromUri] RentalBikeInput input)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,a.start_point,b.ble_type");
+            sb.Append("select a.id,a.created_at,a.updated_at,a.user_id,a.bike_id,a.start_point,a.end_point,a.start_site_id,a.end_site_id,a.start_time,a.end_time,a.payment,a.pay_status,a.pay_method,a.pay_docno,a.remark,a.start_point,b.ble_type,b.Ble_serial,b.Ble_name");
             sb.Append(" from track as a");
             sb.Append(" left join bike as b on a.bike_id = b.id");
             sb.AppendFormat(" where a.user_id={0} and a.pay_status < 3", input.user_id);
@@ -1114,9 +1131,9 @@ namespace ASBicycle.Bike
             var track = _sqlReadExecuter.SqlQuery<TrackEntity>(sb.ToString()).FirstOrDefault();
             if (track == null)
             {
-                return new TrackInfoOutput {out_trade_no = "", pay_status = 0, ble_type = 0};
+                return new TrackInfoOutput {out_trade_no = "", pay_status = 0, ble_type = 0, ble_serial=""};
             }
-            var result = new TrackInfoOutput {out_trade_no = track.Pay_docno, pay_status = track.Pay_status, ble_type = track.Ble_type};
+            var result = new TrackInfoOutput {out_trade_no = track.Pay_docno, pay_status = track.Pay_status, ble_type = track.Ble_type, ble_serial = track.Ble_serial, ble_name = track.Ble_name};
             return result;
         }
         /// <summary>
@@ -1130,7 +1147,7 @@ namespace ASBicycle.Bike
                 await
                     _bikeReadRepository.FirstOrDefaultAsync(
                         t => t.Ble_name == input.Ble_name && t.rent_type == 1);
-            if (bike == null || bike.Ble_type < 3)
+            if (bike == null || bike.Ble_type < 2)
             {
                 throw new UserFriendlyException("车辆编号错误或该车不可租");
             }
@@ -1214,7 +1231,7 @@ namespace ASBicycle.Bike
                     _bikeRepository.FirstOrDefaultAsync(
                         t => t.Ble_name == input.Ble_name && t.rent_type == 1);
 
-            if (bike == null || bike.Ble_type < 3)
+            if (bike == null || bike.Ble_type < 2)
             {
                 throw new UserFriendlyException("没有该车辆或该车不可租!");
             }
@@ -1389,7 +1406,7 @@ namespace ASBicycle.Bike
             //bike.Bike_status = 1;
             //await _bikeRepository.UpdateAsync(bike);
 
-            return new RentalFinishOutput { end_time = track.End_time.ToString(), out_trade_no = track.Pay_docno };
+            return new RentalFinishOutput { end_time = ((DateTime)track.End_time).ToString("yyyy-MM-dd HH:mm:ss"), out_trade_no = track.Pay_docno };
         }
     }
 }

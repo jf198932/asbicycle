@@ -7,5 +7,7 @@ namespace ASBicycle.Bike.Dto
         public string out_trade_no { get; set; }
         public int? pay_status { get; set; }
         public int ble_type { get; set; }
+        public string ble_serial { get; set; }
+        public string ble_name { get; set; }
     }
 }

@@ -5,279 +5,63 @@
 }
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-    <!--<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />-->
-    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="format-detection" content="telephone=no">
-
-    <style>
-        img {
-            max-width: 100%;
-        }
-
-        .to {
-            float: left;
-            position: relative;
-            width: 19.167vw;
-            height: 19.167vw;
-            border-radius: 19.167vw;
-            background: white;
-            border: 1.389vw solid #ffffff;
-            background-color: #bbbbbb;
-            text-align: center;
-            line-height: 19.167vw;
-            right: 50%;
-        }
-
-        .toimg {
-            width: 19.167vw;
-            height: 19.167vw;
-            border-radius: 19.167vw;
-            text-align: center;
-            line-height: 19.167vw;
-        }
-
-        .test {
-            margin: 0 auto;
-            float: left;
-            position: relative;
-            left: 50%;
-            list-style: none;
-            padding: 0;
-            top: -9.583vw;
-        }
-
-        .top {
-            float: left;
-            top: 0;
-            left: 0;
-            background-color: #ffffff;
-            height: 8.889vw;
-            width: 100%;
-            padding: 3.333vw 0;
-            position: fixed;
-            z-index: 999;
-        }
-
-        .shadow {
-            /*box-shadow: 0 0 10vw rgba(0, 0, 0, .8);*/
-            box-shadow: 0 2.5vw 2.5vw rgba(0, 0, 0, .2);
-        }
-
-        .top_left {
-            margin: 0;
-            height: 100%;
-            text-align: center;
-            width: 15.556vw;
-            /*float: left;*/
-        }
-
-        .top_center {
-            margin-left: 0;
-            height: 100%;
-            padding: 0;
-            width: 58.333vw;
-            /*float: left;*/
-        }
-
-        .top_right {
-            margin-left: 0;
-            height: 100%;
-            padding: 0;
-            width: 24.444vw;
-            vertical-align: middle;
-            /*float: left;*/
-        }
-
-        .p1 {
-            font-size: 3.889vw;
-            color: #000000;
-            padding: 0;
-            margin: 0;
-            line-height: 3.889vw;
-        }
-
-        .p2 {
-            font-size: 3.889vw;
-            color: #8b8b8b;
-            padding: 0;
-            margin: 0;
-            line-height: 3.889vw;
-        }
-
-        .p3 {
-            font-size: 17.778vw;
-            color: #f58400;
-            padding: 0;
-            margin: 0;
-            line-height: 17.778vw;
-        }
-
-        .p4 {
-            font-size: 6.667vw;
-            color: #8b8b8b;
-            padding: 0;
-            margin: 0;
-            line-height: 6.667vw;
-        }
-
-        .p5 {
-            font-size: 3.889vw;
-            color: #2da1e6;
-            padding: 0;
-            margin: 0;
-            line-height: 3.889vw;
-        }
-
-
-        .btn {
-            text-align: center;
-            width: 17.778vw;
-            height: 6.667vw;
-            border-radius: 0.694vw;
-            margin-left: 3.333vw;
-            font-size: 3.333vw;
-            background-color: #f58400;
-            color: #ffffff;
-            border: 0;
-        }
-
-            .btn:active {
-                background-color: #c46a00;
-            }
-
-        .middle {
-            width: 83.333vw;
-            background-color: #ffffff;
-            margin: 34.028vw auto 0 auto;
-            padding-top: 13.333vw;
-            padding-bottom: 7.5vw;
-        }
-
-        .middle_top {
-            width: 100%;
-        }
-
-        .middle_top_center {
-            margin-left: 7.5vw;
-        }
-
-        .middle_middle {
-            margin-top: 6.667vw;
-            width: 100%;
-            vertical-align: bottom;
-            text-align: center;
-        }
-
-        .middle_bottom {
-            margin-top: 3.333vw;
-            width: 100%;
-            vertical-align: bottom;
-            text-align: center;
-        }
-
-        .middle_footer {
-            margin-top: 4.444vw;
-            margin-left: 5vw;
-            margin-right: 5vw;
-            vertical-align: bottom;
-            text-align: left;
-        }
-
-        .line_01 {
-            border-bottom: 0.278vw solid #d3d4d8;
-            margin-top: 7.5vw;
-        }
-    </style>
-
-    @*<script src="Script/jquery-1.8.2.min.js"></script>*@
-    <script type="text/javascript">
-        //$(function () {
-        //    GetData();
-        //});
-
-        //// 依照订单获取数据
-        //function GetData() {
-        //    var paydocno = GetQueryString("paydocno");
-        //    var result;
-        //    $.ajax({
-        //        url: 'Handle/ISRshare.ashx', type: 'POST',
-        //        data: { 'type': '1', 'paydocno': paydocno },
-        //        dataType: 'json', timeout: 50000,  //contentType: 'application/json;charset=utf-8',
-        //        async: false,
-        //        success: function (data) {
-        //            result = data;
-        //        }
-        //    });
-        //    $("#sumTime").html(data.SumTime);
-        //    $("#school").html(data.School);
-        //    $("#user").html("<img src='" + data.Img + "' />");
-        //}
-
-        //// 获取页面传值
-        //function GetQueryString(name) {
-        //    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-        //    var r = window.location.search.substr(1).match(reg);
-        //    if (r != null) return unescape(r[2]); return null;
-        //}
-
-        function RedirectUrl() {
-            location.href = "https://api.isriding.com/app/Uploads/isr_bms.apk";
-        }
-    </script>
-
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <title>尚骑单车</title>
+    <link href="~/Content/share/css/reset.css" rel="stylesheet" />
+    <link href="~/Content/share/css/tour_share.min.css" rel="stylesheet" />
 </head>
-<body style="background-color: #f0f2f4; width: 100%;margin: 0;">
-    <table class="top shadow">
-        <!--<table>-->
-        <tr>
-            <!--<div style="clear:both;"></div>
-                <div class="top_left"><img src="Image/share_icon_logo_normal.png" /></div>
-                <div class="top_center"><span class="p1">下载尚骑APP</span><br /><span class="p2">绘制属于自己的骑行轨迹</span></div>
-                <div class="top_right"><input onclick="RedirectUrl()" class="btn" value="下  载" /></div>-->
-            <td class="top_left"><img style="width: 10.556vw;" src="~/Image/share_icon_logo_normal.png" /></td>
-            <td class="top_center"><span class="p1">下载尚骑APP</span><br /><span class="p2">绘制属于自己的骑行轨迹</span></td>
-            <td class="top_right"><input type="button" onclick="RedirectUrl()" class="btn" value="下  载" /></td>
-        </tr>
-        <!--</table>-->
-    </table>
-    <div style="clear: both; display: none;"></div>
-    <div class="test">
-        <div id="user" class="to">
-            @if (!Model.HeadImg.IsNullOrEmpty())
-            {
-                <img src='@Model.HeadImg' class="toimg"/>
-            }
-            else
-            {
-                <img src="~/Image/menu_photo_default_normal.png" class="toimg"/>
-            }
+
+<body>
+    <div id="box">
+        <div class="bg"></div>
+        <div class="content">
+            <img src="~/Content/share/img/words_bg1.png" />
+            <div class="head">
+                <p>致.亲爱的你</p>
+                <p><span class="year">@Model.Year</span>年<span class="month">@Model.Month</span>月<span class="day">@Model.Day</span>日我在<span class="area">@Model.Place</span>体</p>
+                <p>
+                    验尚骑单车
+                    @{
+                        if (Model.HH > 0)
+                        {
+                            <text><span class="times">@Model.HH</span>小时</text>
+                        }
+                        if (Model.MM > 0)
+                        {
+                            <text><span class="times">@Model.MM</span>分钟</text>
+                        }
+                        if (Model.SS > 0)
+                        {
+                            <text><span class="times">@Model.SS</span>秒</text>
+                        }
+                    }
+                </p>
+            </div>
+            <div class="cross"></div>
+            <div class="head_img">
+                @if (!Model.HeadImg.IsNullOrEmpty())
+                {
+                    <img src='@Model.HeadImg' />
+                }
+            </div>
+            <div class="deci">
+                <p class="pp">曾经，我们用双足记录脚下的校园...</p>
+                <p class="pp">现在，解放双脚，让尚骑单车闪耀的双</p>
+                <p class="pp">轮来带你绘制自己的轨迹吧！</p>
+            </div>
+            <div class="load">
+                <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.aishang.bms"><img src="~/Content/share/img/downlod_icon.png" /></a>
+                <a id="loading" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.aishang.bms">下载尚骑APP</a>
+            </div>
         </div>
-    </div>
-    <div style="clear: both;display: none;"></div>
-    <div class="middle shadow">
-        <div class="middle_top"><span class="p2">我用尚骑单车骑行了</span></div>
-        <div class="middle_middle">
-            @if (Model.HH > 0)
-            {
-                <span class="p3">@Model.HH</span><span class="p4">小时</span>
-            }
-            <span class="p3">@Model.MM</span><span class="p4">分钟</span>
-        </div>
-        <div class="middle_bottom"><span class="p5"><img style="height: 5.833vw;" src="~/Image/share_icon_school_normal.png" /><span id="school">@Model.Place</span></span></div>
-        <div class="line_01"></div>
-        <div class="middle_footer">
-            <span class="p2">曾经,我们用双足记录脚下的校园......</span>
-            <br />
-            <span class="p2">现在,解放双脚,让尚骑单车闪耀的双轮</span>
-            <br />
-            <span class="p2">来带你绘制自己的轨迹吧!</span>
+        <div class="fly">
+            <img src="~/Content/share/img/plane.png" />
         </div>
     </div>
 </body>
+<script type="text/javascript" src="~/Content/share/js/jquery-3.1.1.min.js"></script>
+<script src="~/Content/share/js/tour_share.js"></script>
 </html>
-
